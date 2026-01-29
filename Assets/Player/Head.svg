@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="32.424 1.548 33.3158 32.8603" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<filter color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" height="17.8859" id="Filter" width="12.4905" x="52.7098" y="10.0687">
+<feGaussianBlur in="SourceGraphic" result="Blur" stdDeviation="1"/>
+</filter>
+</defs>
+<clipPath id="ArtboardFrame">
+<rect height="32.8603" width="33.3158" x="32.424" y="1.548"/>
+</clipPath>
+<g clip-path="url(#ArtboardFrame)" id="Layer" vectornator:layerName="Layer">
+<g opacity="1" vectornator:layerName="Group 8">
+<path d="M32.924 20.6195C32.924 16.5465 37.1086 10.3593 39.3379 7.54267C41.9241 4.27517 46.9291 2.048 51.1178 2.048C57.4933 2.048 62.882 6.81377 64.6371 13.3595C65.0291 14.8213 65.2398 16.372 65.2398 17.9782C65.2398 26.7762 58.9172 33.9083 51.1178 33.9083C43.3185 33.9083 36.1309 30.8791 32.924 20.6195Z" fill="#313d52" fill-rule="nonzero" opacity="1" stroke="#121b2b" stroke-linecap="butt" stroke-linejoin="round" stroke-width="1" vectornator:layerName="Oval 1"/>
+<path d="M57.8165 6.70647C53.731 6.70647 50.4433 12.4717 50.4433 19.5884C50.4433 26.2783 53.3671 31.7223 57.1103 32.3574C60.7759 30.4028 63.0011 26.3636 64.1102 21.8855C64.3333 20.8319 64.6182 18.618 64.6187 18.6086C64.4227 11.7966 61.7758 6.70648 57.8165 6.70647Z" fill="#11181c" fill-rule="nonzero" opacity="1" stroke="none"/>
+<path d="M55.2098 19.0117C55.2098 15.4533 56.8866 12.5687 58.955 12.5687C61.0235 12.5687 62.7003 15.4533 62.7003 19.0117C62.7003 22.57 61.0235 25.4546 58.955 25.4546C56.8866 25.4546 55.2098 22.57 55.2098 19.0117Z" fill="#c7e8fc" fill-rule="nonzero" filter="url(#Filter)" opacity="1" stroke="none" vectornator:blur="2" vectornator:layerName="Oval 2"/>
+<path d="M55.2098 19.0117C55.2098 15.4533 56.8866 12.5687 58.955 12.5687C61.0235 12.5687 62.7003 15.4533 62.7003 19.0117C62.7003 22.57 61.0235 25.4546 58.955 25.4546C56.8866 25.4546 55.2098 22.57 55.2098 19.0117Z" fill="#9fdbff" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="Oval 3"/>
+</g>
+</g>
+</svg>

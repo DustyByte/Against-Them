@@ -1,0 +1,146 @@
+[gd_scene load_steps=8 format=3 uid="uid://c10qrgvxew4by"]
+
+[ext_resource type="Script" uid="uid://d0pixss4yegvk" path="res://Scripts/enemy_1.gd" id="1_jwqgc"]
+[ext_resource type="Texture2D" uid="uid://dhm640jinvkmw" path="res://Assets/Enemies/Enemy Type 1/Tentacles.png" id="2_lssre"]
+[ext_resource type="Texture2D" uid="uid://ekw46iq3a8kp" path="res://Assets/Enemies/Enemy Type 1/Head.png" id="3_wlnc2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lssre"]
+radius = 48.010414
+
+[sub_resource type="Animation" id="Animation_arec4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpritesWrapper/Head:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpritesWrapper/Tentacles:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-2, 93)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpritesWrapper/Tentacles:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpritesWrapper/Head:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_hmo6u"]
+resource_name = "follow"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpritesWrapper/Head:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -144), Vector2(0, -140.25), Vector2(0, -144)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpritesWrapper/Tentacles:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-2, -51), Vector2(-2, -69.25), Vector2(-2, -51)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpritesWrapper/Tentacles:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpritesWrapper/Head:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.875), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v73nf"]
+_data = {
+&"RESET": SubResource("Animation_arec4"),
+&"follow": SubResource("Animation_hmo6u")
+}
+
+[node name="Enemy1" type="CharacterBody2D" groups=["attackable", "enemy"]]
+y_sort_enabled = true
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_jwqgc")
+metadata/_edit_vertical_guides_ = [137.0]
+metadata/_edit_horizontal_guides_ = [-2.0]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_lssre")
+
+[node name="SpritesWrapper" type="Node2D" parent="."]
+position = Vector2(0, 136)
+
+[node name="Tentacles" type="Sprite2D" parent="SpritesWrapper"]
+position = Vector2(-2, 93)
+texture = ExtResource("2_lssre")
+
+[node name="Head" type="Sprite2D" parent="SpritesWrapper"]
+use_parent_material = true
+texture = ExtResource("3_wlnc2")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_v73nf")
+}
+autoplay = "follow"

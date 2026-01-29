@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccmbnuntae3lt"]
+
+[ext_resource type="Script" uid="uid://bjyk7i28ylq4x" path="res://Scripts/grass.gd" id="2_hh5uf"]
+
+[node name="Node2D" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Grass" type="Node2D" parent="."]
+y_sort_enabled = true
+script = ExtResource("2_hh5uf")

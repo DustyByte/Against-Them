@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dtuj11o4my4yp"]
+
+[ext_resource type="Script" uid="uid://bjtt5c6usrghg" path="res://Scripts/joy_stick.gd" id="1_8nmaa"]
+
+[node name="JoyStick" type="Node2D"]
+script = ExtResource("1_8nmaa")

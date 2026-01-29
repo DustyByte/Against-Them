@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://dfa3l71bm4uqk"]
+
+[ext_resource type="Texture2D" uid="uid://b47ndk4ysb6pw" path="res://Assets/ParticleWhite.png" id="1_cv16v"]
+[ext_resource type="Script" uid="uid://d1625uacuyty6" path="res://Scripts/lightning_particles.gd" id="2_cv16v"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cv16v"]
+resource_local_to_scene = true
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 60.0
+initial_velocity_min = 141.73999
+initial_velocity_max = 287.41
+gravity = Vector3(0, 300, 0)
+scale_min = 0.099999994
+scale_max = 0.25
+color = Color(0.85882354, 0.6784314, 0.9411765, 1)
+hue_variation_min = -0.010000022
+hue_variation_max = 0.009999977
+turbulence_noise_strength = 0.3
+
+[node name="GPUParticles2D" type="GPUParticles2D"]
+emitting = false
+amount = 2
+texture = ExtResource("1_cv16v")
+one_shot = true
+speed_scale = 2.0
+explosiveness = 0.85
+process_material = SubResource("ParticleProcessMaterial_cv16v")
+script = ExtResource("2_cv16v")

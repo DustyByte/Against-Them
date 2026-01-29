@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3fyxqk784dc"]
+
+[ext_resource type="Script" uid="uid://bt076xednynpv" path="res://Scripts/progression_choice_system.gd" id="1_qo6s4"]
+
+[node name="ProgressionChoiceSystem" type="Node2D"]
+script = ExtResource("1_qo6s4")

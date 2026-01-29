@@ -1,0 +1,46 @@
+class_name Option
+
+var name: String = ""
+var description: String = ""
+var modifiers: Dictionary = {}
+var isAvailable: bool = false
+var children: Array[Option] = []
+
+
+func _init(givenName: String, givenModifiers: Dictionary, givenDescription: String, initAsAvailable = false) -> void:
+	name = givenName
+	modifiers = givenModifiers
+	description = givenDescription
+	isAvailable = initAsAvailable
+
+
+func augment_child(childToAugment: Option) -> void:
+	children.append(childToAugment)
+
+
+func augment_children(childrenToAugment: Array[Option]) -> void:
+	children += childrenToAugment
+
+
+func make_immediate_children_available() -> void:
+	for child in children:
+		child.isAvailable = true
+
+
+func duplicate_deep() -> Option:
+	var option: Option = Option.new('', {}, '')
+	var duplicatedChildren : Array[Option] = []
+	
+	option.name = name
+	option.description = description
+	option.modifiers = modifiers.duplicate(true)
+	option.isAvailable = isAvailable
+	for child in children:
+		duplicatedChildren.append(child.duplicate_deep())
+	option.children = duplicatedChildren
+	
+	return option
+
+
+func _to_string() -> String:
+	return name
