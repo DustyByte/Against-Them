@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://m3ndgb30u84w"]
+
+[ext_resource type="Texture2D" uid="uid://dogyjeppaharc" path="res://Assets/World Objects/Rock 3.png" id="1_apob2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_46qiv"]
+radius = 44.011364
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_832ty"]
+radius = 21.0
+
+[node name="Rock3" type="StaticBody2D"]
+
+[node name="Rock3" type="Sprite2D" parent="."]
+texture = ExtResource("1_apob2")
+offset = Vector2(-11, -24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-15, -2)
+shape = SubResource("CircleShape2D_46qiv")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2(57, -8)
+shape = SubResource("CircleShape2D_832ty")

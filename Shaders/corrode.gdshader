@@ -14,16 +14,13 @@ void fragment() {
     vec4 base_col = texture(base_image, uv);
 
 
-    // 1. If noise is below the threshold, show the image normally
     if (noise_val < threshold) {
         COLOR = base_col;
     }
-    // 2. If noise is just slightly above the threshold, show the crimson outline
     else if (noise_val < threshold + outline_width) {
         COLOR = outline_color * base_col.a;
     }
-    // 3. Otherwise, make it invisible
     else {
-        discard; // More efficient than setting alpha to 0
+        discard;
     }
 }

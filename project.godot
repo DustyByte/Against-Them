@@ -21,10 +21,19 @@ global="*res://Scripts/global.gd"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=1600
+window/size/viewport_height=900
 window/size/mode=1
 window/stretch/mode="viewport"
+
+[file_customization]
+
+folder_colors={
+"res://Assets/": "green",
+"res://Scenes/": "blue",
+"res://Scripts/": "red",
+"res://Shaders/": "purple"
+}
 
 [global_group]
 

@@ -1,0 +1,185 @@
+[gd_scene load_steps=12 format=3 uid="uid://dyyrf3nllah8t"]
+
+[ext_resource type="Script" uid="uid://boq4qi8x5arwn" path="res://Scripts/hexa_snail.gd" id="1_dxqw1"]
+[ext_resource type="Texture2D" uid="uid://cxaeusx7wb61o" path="res://Assets/Alles&Summons/HexaSnail/Shadow.png" id="2_rf45v"]
+[ext_resource type="Texture2D" uid="uid://doikbxjmse7pe" path="res://Assets/Alles&Summons/HexaSnail/Tail.png" id="3_nixdr"]
+[ext_resource type="Texture2D" uid="uid://dodakhv7tuehv" path="res://Assets/Alles&Summons/HexaSnail/Head.png" id="4_3iwce"]
+[ext_resource type="Texture2D" uid="uid://dk3c5hcmm1yns" path="res://Assets/Shader Textures/GlowEllipse.jpeg" id="6_3iwce"]
+
+[sub_resource type="Curve" id="Curve_htmk6"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0.35303265), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3jbqw"]
+resource_local_to_scene = true
+
+[sub_resource type="Animation" id="Animation_3jbqw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Tail:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1.275, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Tail:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-7.5, -10)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Shadow:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1.2567567, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Shadow:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-4.500001, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Head:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(6, -51)]
+}
+
+[sub_resource type="Animation" id="Animation_htmk6"]
+resource_name = "crawl"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Tail:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-2, -10), Vector2(-7.5, -10), Vector2(-2, -10)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Tail:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.275, 1), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Shadow:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2567567, 1), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Shadow:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-4.500001, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dxqw1"]
+resource_name = "idle"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(6, -51), Vector2(6, -49), Vector2(6, -51), Vector2(6, -53), Vector2(6, -51)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hy8kj"]
+_data = {
+&"RESET": SubResource("Animation_3jbqw"),
+&"crawl": SubResource("Animation_htmk6"),
+&"idle": SubResource("Animation_dxqw1")
+}
+
+[node name="HexaSnail" type="Node2D"]
+script = ExtResource("1_dxqw1")
+speed = 100.0
+curve = SubResource("Curve_htmk6")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+position = Vector2(-4.500001, 0)
+scale = Vector2(1.2567567, 1)
+texture = ExtResource("2_rf45v")
+
+[node name="Tail" type="Sprite2D" parent="."]
+position = Vector2(-7.5, -10)
+scale = Vector2(1.275, 1)
+texture = ExtResource("3_nixdr")
+
+[node name="Head" type="Sprite2D" parent="."]
+position = Vector2(6, -51)
+texture = ExtResource("4_3iwce")
+
+[node name="PreStrikeEffect" type="Sprite2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_3jbqw")
+position = Vector2(1, -75)
+scale = Vector2(2, 1.2928572)
+texture = ExtResource("6_3iwce")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_hy8kj")
+}
+autoplay = "crawl"

@@ -47,14 +47,14 @@ var f := Option.new("Aura", {
 	}
 }, "Gain an aura that deals 10 Exotic damage to all nearby enemies.", true)
 
-var g := Option.new("Anomaly", {
-	wellAmount = 1,
-	summonStats = {
+var g := Option.new("Miniature Star", {
+	orbAmount = 1,
+	starStats = {
 		damage = 30,
 		baseCD = 4,
-		attackSpeed = 0.0
+		attackSpeed = 1.0
 	}
-}, "Summon a gravity orb that orbits around you that deals 30 Exotic Daamge.", true)
+}, "Summon a gravity orb that orbits around you and deals 30 Exotic Daamge.", true)
 
 var h := Option.new("Laser Drone", {
 	droneAmount = 1,
@@ -72,7 +72,7 @@ var ba := Option.new("Hexa Snail", {
 		isSummon = true,
 		damage = 20,
 		baseCD = 3,
-		attackSpeed = 0.0
+		attackSpeed = 1.0
 	}
 }, "Summon a snail friend that strikes a random enemy with lightning every 3 seconds dealing 20 Electro Damage.")
 

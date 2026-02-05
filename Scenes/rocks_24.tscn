@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://v3ib10w1ev0r"]
+
+[ext_resource type="PackedScene" uid="uid://dp6sef4nl7bjo" path="res://Scenes/rock_2.tscn" id="1_8dfu5"]
+[ext_resource type="PackedScene" uid="uid://b42e16b0dhesb" path="res://Scenes/rock_4.tscn" id="2_mc6yu"]
+
+[node name="Rocks24" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Rock2" parent="." instance=ExtResource("1_8dfu5")]
+position = Vector2(7, -64)
+
+[node name="Rock4" parent="." instance=ExtResource("2_mc6yu")]
+modulate = Color(0.8862616, 0.88626146, 0.8862615, 1)

@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://btjw5oc720cgt"]
+[gd_scene load_steps=6 format=3 uid="uid://btjw5oc720cgt"]
 
-[ext_resource type="PackedScene" uid="uid://ccmbnuntae3lt" path="res://Scenes/node_2d.tscn" id="1_5a7ea"]
+[ext_resource type="PackedScene" uid="uid://ccmbnuntae3lt" path="res://Scenes/world_map.tscn" id="1_5a7ea"]
 [ext_resource type="Script" uid="uid://c7mxlei8x31sn" path="res://Scripts/world.gd" id="1_5ukr8"]
 [ext_resource type="PackedScene" uid="uid://dtuj11o4my4yp" path="res://Scenes/joy_stick.tscn" id="2_5a7ea"]
-[ext_resource type="Texture2D" uid="uid://b8bgtxnh87apa" path="res://Assets/Map Base.PNG" id="2_8j60k"]
 [ext_resource type="PackedScene" uid="uid://q0mcklnmoqmf" path="res://Scenes/player.tscn" id="2_go701"]
 [ext_resource type="PackedScene" uid="uid://d3fyxqk784dc" path="res://Scenes/progression_choice_system.tscn" id="5_fo5ed"]
 
@@ -13,19 +12,13 @@ script = ExtResource("1_5ukr8")
 
 [node name="Node2D" parent="." instance=ExtResource("1_5a7ea")]
 
-[node name="MapBase2" type="Sprite2D" parent="Node2D"]
-z_index = -1
-position = Vector2(2.4999695, 2.9999695)
-scale = Vector2(9.098, 3.753)
-texture = ExtResource("2_8j60k")
-
 [node name="Player" parent="." instance=ExtResource("2_go701")]
 y_sort_enabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="JoyStick" parent="CanvasLayer" instance=ExtResource("2_5a7ea")]
-position = Vector2(187, 546)
+position = Vector2(215, 719)
 knobColor = Color(0.8745098, 0.7490196, 0.91764706, 0.5019608)
 
 [node name="ProgressionChoiceSystem" parent="." instance=ExtResource("5_fo5ed")]

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccmbnuntae3lt"]
+
+[ext_resource type="Script" uid="uid://bjyk7i28ylq4x" path="res://Scripts/grass.gd" id="1_5gg28"]
+[ext_resource type="Texture2D" uid="uid://b8bgtxnh87apa" path="res://Assets/Map Base.PNG" id="2_b7gke"]
+
+[node name="WorldMap" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_5gg28")
+
+[node name="Grass" type="CanvasGroup" parent="."]
+y_sort_enabled = true
+
+[node name="PointyPlants" type="CanvasGroup" parent="."]
+y_sort_enabled = true
+
+[node name="Rocks" type="CanvasGroup" parent="."]
+y_sort_enabled = true
+
+[node name="MapBase" type="Sprite2D" parent="."]
+z_index = -1
+scale = Vector2(25.984682, 11.223913)
+texture = ExtResource("2_b7gke")

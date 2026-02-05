@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cy2ddepdplxwh"]
+
+[ext_resource type="PackedScene" uid="uid://cncg2pgbcjiwc" path="res://Scenes/rock_1.tscn" id="1_eq5bi"]
+[ext_resource type="PackedScene" uid="uid://dp6sef4nl7bjo" path="res://Scenes/rock_2.tscn" id="2_pk3r7"]
+[ext_resource type="PackedScene" uid="uid://m3ndgb30u84w" path="res://Scenes/rock_3.tscn" id="3_adguo"]
+
+[node name="Rocks123" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Rock1" parent="." instance=ExtResource("1_eq5bi")]
+modulate = Color(0.8862616, 0.88626146, 0.8862615, 1)
+
+[node name="Rock2" parent="." instance=ExtResource("2_pk3r7")]
+position = Vector2(137, 73)
+
+[node name="Rock3" parent="." instance=ExtResource("3_adguo")]
+position = Vector2(-296, 47)

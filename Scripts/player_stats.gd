@@ -7,10 +7,6 @@ var currentExp: float = 0
 
 
 var activeModifiers: Dictionary = {
-	L_StrikeOnShoot = true, # remove all these later.
-	L_StrikeDamage = 20,
-	L_StrikeAfterAmmo = 1,
-	L_StrikeAmount = 2
 }
 
 

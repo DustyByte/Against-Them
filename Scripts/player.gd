@@ -33,18 +33,17 @@ func take_hit(incomingDamage) -> float:
 
 func handle_death() -> void:
 	pass # take care of animation and all here
-	var worldNode: Node2D = get_node("/root/World")
 	var newCamera: Camera2D = Camera2D.new()
 	newCamera.global_position = global.activeCamera.global_position
 	newCamera.set_script(load("res://Scripts/on_run_camera.gd"))
-	worldNode.add_child(newCamera)
+	global.WORLD.add_child(newCamera)
 	queue_free()
 
 
 func _ready() -> void:
 	joyStick = get_node("/root/World/CanvasLayer/JoyStick")
 	enemySpawner = EnemySpawner.new($"..", self)
-	init_spawner()
+	#init_spawner()
 	global.PLAYER = self
 
 

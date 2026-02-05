@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://q0mcklnmoqmf"]
+[gd_scene load_steps=13 format=3 uid="uid://q0mcklnmoqmf"]
 
 [ext_resource type="Script" uid="uid://dfkowy554grup" path="res://Scripts/player.gd" id="1_v0iea"]
 [ext_resource type="PackedScene" uid="uid://b70qtk3vfuglf" path="res://Scenes/spriteand_player_animations.tscn" id="2_6t5aa"]
@@ -7,10 +7,9 @@
 [ext_resource type="Script" uid="uid://cdecv7i3coobq" path="res://Scripts/exp_pick_up_system.gd" id="5_fkybt"]
 [ext_resource type="Script" uid="uid://w0ofbwgn0f7i" path="res://Scripts/on_run_camera.gd" id="6_x3wgy"]
 [ext_resource type="Script" uid="uid://rik4mkjyngdk" path="res://Scripts/featuresand_summon_management_system.gd" id="7_3smsa"]
+[ext_resource type="Script" uid="uid://42lqnifquph3" path="res://Scripts/summon_flags.gd" id="8_8erm5"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6t5aa"]
-radius = 32.0
-height = 142.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8erm5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fkybt"]
 radius = 1000.0
@@ -18,12 +17,18 @@ radius = 1000.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_x3wgy"]
 radius = 76.0
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6t5aa"]
+radius = 21.0
+height = 142.0
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_v0iea")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_6t5aa")
+position = Vector2(0, 47.000004)
+scale = Vector2(2.295857, 1.2721517)
+shape = SubResource("RectangleShape2D_8erm5")
 
 [node name="SpriteandPlayerAnimations" parent="." instance=ExtResource("2_6t5aa")]
 position = Vector2(0, 46)
@@ -36,6 +41,7 @@ script = ExtResource("3_vgqql")
 position = Vector2(10, 0)
 
 [node name="EnemyDetectionRange" type="Area2D" parent="WeaponSystem"]
+visible = false
 collision_layer = 0
 collision_mask = 12
 
@@ -62,10 +68,15 @@ collision_mask = 4
 shape = SubResource("CapsuleShape2D_6t5aa")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.165, 0.165)
 script = ExtResource("6_x3wgy")
 
 [node name="FeaturesandSummonManagementSystem" type="Node2D" parent="."]
 script = ExtResource("7_3smsa")
+
+[node name="SummonFlags" type="Node2D" parent="."]
+position = Vector2(0, 44.91)
+script = ExtResource("8_8erm5")
 
 [connection signal="area_entered" from="ExpPickUpSystem" to="ExpPickUpSystem" method="_on_area_entered"]
 [connection signal="body_entered" from="HitDetectionArea" to="." method="_on_hit_detection_area_body_entered"]

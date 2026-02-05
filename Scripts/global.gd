@@ -30,6 +30,10 @@ const SHAKE_AMOUNTS: Dictionary = {
 	LIGHTNING_STRIKE = 7
 }
 
+const FREQUENT_EFFECTS_BLUEPRINTS: Dictionary = {
+	LIGHTNING_BLUEPRINT = preload("res://Scenes/lightning.tscn")
+}
+
 var PLAYER: CharacterBody2D = null
 var WORLD: Node2D = null
 const EXP_DROP_SIZE: float = 10.0

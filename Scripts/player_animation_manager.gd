@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var player: CharacterBody2D = $".."
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
+var hitAnimationShader := preload("res://Shaders/hit.gdshader")
 var isHitAnimationPlaying: bool = false
 var hitShaderSlider: float = 0.0
 var hitAnimationDelta: float = 0.2 * 5 / 12
@@ -14,7 +15,7 @@ func reset_hit_animation_leftovers() -> void:
 
 func handle_hit_animation() -> void:
 	var shaderMaterial: ShaderMaterial = ShaderMaterial.new()
-	shaderMaterial.set_shader(load("res://Shaders/hit.gdshader"))
+	shaderMaterial.set_shader(hitAnimationShader)
 	set_material(shaderMaterial)
 	isHitAnimationPlaying = true
 

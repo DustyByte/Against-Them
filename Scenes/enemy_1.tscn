@@ -1,8 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://c10qrgvxew4by"]
+[gd_scene load_steps=10 format=3 uid="uid://c10qrgvxew4by"]
 
 [ext_resource type="Script" uid="uid://d0pixss4yegvk" path="res://Scripts/enemy_1.gd" id="1_jwqgc"]
 [ext_resource type="Texture2D" uid="uid://dhm640jinvkmw" path="res://Assets/Enemies/Enemy Type 1/Tentacles.png" id="2_lssre"]
+[ext_resource type="Texture2D" uid="uid://cxaeusx7wb61o" path="res://Assets/Alles&Summons/HexaSnail/Shadow.png" id="2_wlnc2"]
 [ext_resource type="Texture2D" uid="uid://ekw46iq3a8kp" path="res://Assets/Enemies/Enemy Type 1/Head.png" id="3_wlnc2"]
+
+[sub_resource type="Curve" id="Curve_wlnc2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.75373137, 0), -3.7186034, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lssre"]
 radius = 48.010414
@@ -121,6 +126,7 @@ y_sort_enabled = true
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_jwqgc")
+curve = SubResource("Curve_wlnc2")
 metadata/_edit_vertical_guides_ = [137.0]
 metadata/_edit_horizontal_guides_ = [-2.0]
 
@@ -130,6 +136,11 @@ shape = SubResource("CircleShape2D_lssre")
 
 [node name="SpritesWrapper" type="Node2D" parent="."]
 position = Vector2(0, 136)
+
+[node name="Shadow" type="Sprite2D" parent="SpritesWrapper"]
+position = Vector2(0, 13)
+scale = Vector2(2.442838, 2.442838)
+texture = ExtResource("2_wlnc2")
 
 [node name="Tentacles" type="Sprite2D" parent="SpritesWrapper"]
 position = Vector2(-2, 93)

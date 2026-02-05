@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://vdhwdsjviwkj"]
+
+[ext_resource type="Texture2D" uid="uid://cxaeusx7wb61o" path="res://Assets/Alles&Summons/HexaSnail/Shadow.png" id="1_gadh7"]
+[ext_resource type="Texture2D" uid="uid://brf36echl4k40" path="res://Assets/World Objects/PointyPlant3Branch.png" id="1_o1waa"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o1waa"]
+
+[node name="PointyPlant3Branch" type="StaticBody2D"]
+collision_mask = 0
+
+[node name="Shadow" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, 16)
+scale = Vector2(21.85798, 14.584045)
+texture = ExtResource("1_gadh7")
+
+[node name="PointyPlant3Branch" type="Sprite2D" parent="."]
+texture = ExtResource("1_o1waa")
+offset = Vector2(-21, -244)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(6.6332235, 2.624721)
+shape = SubResource("RectangleShape2D_o1waa")
