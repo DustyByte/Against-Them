@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://bdq3oh8v7ls18"]
+
+[ext_resource type="Script" uid="uid://bmt7pm44u6wfv" path="res://Scripts/bleed.gd" id="1_okolv"]
+
+[sub_resource type="Gradient" id="Gradient_4rvv2"]
+offsets = PackedFloat32Array(0.7386935, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_w1le3"]
+gradient = SubResource("Gradient_4rvv2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k3n55"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 16.12
+gravity = Vector3(0, 98, 0)
+scale_min = 2.0
+scale_max = 4.0
+color_ramp = SubResource("GradientTexture1D_w1le3")
+
+[node name="Bleed" type="GPUParticles2D"]
+modulate = Color(1, 0.120000005, 0.120000005, 1)
+amount = 11
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_k3n55")
+script = ExtResource("1_okolv")

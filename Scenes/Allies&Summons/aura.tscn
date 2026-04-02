@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1m5gdu04vrve"]
+
+[ext_resource type="Script" uid="uid://bohf3tb4k0a5t" path="res://Scripts/aura.gd" id="1_xncvk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xmgal"]
+radius = 150.0
+
+[node name="Aura" type="Area2D"]
+collision_layer = 0
+collision_mask = 4
+input_pickable = false
+monitorable = false
+script = ExtResource("1_xncvk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_xmgal")
+
+[node name="Timer" type="Timer" parent="."]

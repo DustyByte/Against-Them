@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dp6sef4nl7bjo"]
+
+[ext_resource type="Texture2D" uid="uid://bvqr5j8hfol2q" path="res://Assets/World Objects/Rock 2.png" id="1_p2sd6"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6yfv2"]
+radius = 39.0
+height = 276.0
+
+[node name="Rock2" type="StaticBody2D" groups=["world_object"]]
+metadata/avgColor = Color(0.78039217, 0.9137255, 1, 1)
+
+[node name="Rock2" type="Sprite2D" parent="."]
+texture = ExtResource("1_p2sd6")
+offset = Vector2(-13, -35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-21, 1)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_6yfv2")

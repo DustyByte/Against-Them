@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var player: CharacterBody2D = $".."
+@onready var player: CharacterBody2D = get_node("/root/World/Player")
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
 var hitAnimationShader := preload("res://Shaders/hit.gdshader")
 var isHitAnimationPlaying: bool = false
@@ -10,13 +10,11 @@ var hitAnimationDelta: float = 0.2 * 5 / 12
 # call this function when another "animation interrupting event" other than "hit" has occured. 
 func reset_hit_animation_leftovers() -> void:
 	hitShaderSlider = 0.0
-	set_material(null)
+	material.set_shader(null)
 
 
 func handle_hit_animation() -> void:
-	var shaderMaterial: ShaderMaterial = ShaderMaterial.new()
-	shaderMaterial.set_shader(hitAnimationShader)
-	set_material(shaderMaterial)
+	material.set_shader(hitAnimationShader)
 	isHitAnimationPlaying = true
 
 
@@ -27,8 +25,7 @@ func _process(_delta: float) -> void:
 		
 		if hitShaderSlider > 1.0:
 			isHitAnimationPlaying = false
-			set_material(null)
-			hitShaderSlider = 0.0
+			reset_hit_animation_leftovers()
 		return
 	
 	if player.velocity:

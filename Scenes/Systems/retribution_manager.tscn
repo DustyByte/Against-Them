@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://0bbx0wwcwhdp"]
+
+[ext_resource type="Script" uid="uid://b6xvdyqla3hma" path="res://Scripts/retribution_manager.gd" id="1_u272r"]
+[ext_resource type="Texture2D" uid="uid://b47ndk4ysb6pw" path="res://Assets/ParticleWhite.png" id="3_irft5"]
+
+[sub_resource type="Curve" id="Curve_ci2dt"]
+bake_resolution = 30
+_data = [Vector2(0.006880734, 0), 0.0, 0.0, 0, 0, Vector2(0.37155962, 1), 1.8236814, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="QuadMesh" id="QuadMesh_h7vua"]
+size = Vector2(35, -35)
+
+[sub_resource type="MultiMesh" id="MultiMesh_ci2dt"]
+visible_instance_count = 0
+mesh = SubResource("QuadMesh_h7vua")
+
+[node name="RetributionManager" type="Node2D"]
+script = ExtResource("1_u272r")
+animFirstStepCurve = SubResource("Curve_ci2dt")
+
+[node name="MultiMeshInstance2D" type="MultiMeshInstance2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+z_index = 1
+position = Vector2(-10, -30)
+multimesh = SubResource("MultiMesh_ci2dt")
+texture = ExtResource("3_irft5")

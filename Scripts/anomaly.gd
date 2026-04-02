@@ -1,10 +1,26 @@
-extends Node2D
+class_name Anomaly
+extends Area2D
 
-@onready var pullRange: Area2D = $EnemyDetectionRange
+
+@export var curve: Curve = null
 
 
-func _process(_delta: float) -> void:
-	var enemies: Array = pullRange.get_overlapping_bodies()
+func on_hit_connect(body: Node2D) -> void:
+	if body.shrinking:
+		return
 	
-	for body in enemies:
-		body.shrinkand_die(self)
+	body.set_process(false)
+	var shrinkTween: Tween = get_tree().create_tween()
+	var method: Callable = func(value: float):
+		body.scale = Vector2.ONE * curve.sample(value)
+		body.global_position = body.global_position.move_toward(global_position, 10.0)
+	shrinkTween.tween_method(method,
+		0.0, 0.75, 0.15
+	)
+	shrinkTween.finished.connect(func():
+		body.handle_death()
+	)
+	
+	body.collision_layer = 0
+	body.collision_mask = 0
+	body.shrinking = true

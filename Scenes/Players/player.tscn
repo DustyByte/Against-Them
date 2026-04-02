@@ -1,0 +1,143 @@
+[gd_scene load_steps=19 format=3 uid="uid://q0mcklnmoqmf"]
+
+[ext_resource type="Script" uid="uid://dfkowy554grup" path="res://Scripts/player.gd" id="1_v0iea"]
+[ext_resource type="PackedScene" uid="uid://b70qtk3vfuglf" path="res://Scenes/Players/spriteand_player_animations.tscn" id="2_6t5aa"]
+[ext_resource type="Script" uid="uid://du7i5d2mmfny0" path="res://Scripts/weapon_system.gd" id="3_vgqql"]
+[ext_resource type="PackedScene" uid="uid://bi7qhq164iar7" path="res://Scenes/HUD/progress_bar_custom.tscn" id="4_gfkdj"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="4_xxqkx"]
+[ext_resource type="Script" uid="uid://cdecv7i3coobq" path="res://Scripts/exp_pick_up_system.gd" id="5_fkybt"]
+[ext_resource type="Texture2D" uid="uid://b84hqal87qite" path="res://Assets/Shader Textures/ExplosionLight16.png" id="5_gfkdj"]
+[ext_resource type="Script" uid="uid://w0ofbwgn0f7i" path="res://Scripts/on_run_camera.gd" id="6_x3wgy"]
+[ext_resource type="Script" uid="uid://jyihhchc5gmt" path="res://Scripts/muzzle_flash.gd" id="6_xxqkx"]
+[ext_resource type="Script" uid="uid://rik4mkjyngdk" path="res://Scripts/featuresand_summon_management_system.gd" id="7_3smsa"]
+[ext_resource type="Script" uid="uid://42lqnifquph3" path="res://Scripts/summon_flags.gd" id="8_8erm5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8erm5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8xm3"]
+bg_color = Color(0.8235294, 0.74509805, 0.9254902, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="Theme" id="Theme_r5bcf"]
+Label/colors/font_color = Color(0.74, 1, 0.96099997, 1)
+Label/font_sizes/font_size = 14
+Label/fonts/font = ExtResource("4_xxqkx")
+Panel/styles/panel = SubResource("StyleBoxFlat_j8xm3")
+
+[sub_resource type="Curve" id="Curve_j8xm3"]
+_limits = [0.0, 6.0, 0.0, 0.32839504]
+bake_resolution = 20
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.037299193, 6), -1.425696, -1.425696, 0, 0, Vector2(0.32839504, 0), -67.10795, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fkybt"]
+radius = 1000.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x3wgy"]
+radius = 76.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6t5aa"]
+radius = 21.0
+height = 84.0
+
+[node name="Player" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_layer = 2
+motion_mode = 1
+slide_on_ceiling = false
+script = ExtResource("1_v0iea")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4.9999995)
+scale = Vector2(2.295857, 1.2721517)
+shape = SubResource("RectangleShape2D_8erm5")
+
+[node name="VisualWrapper" type="Node2D" parent="."]
+
+[node name="SpriteandPlayerAnimations" parent="VisualWrapper" instance=ExtResource("2_6t5aa")]
+position = Vector2(0, -18)
+metadata/_edit_vertical_guides_ = [-2.0]
+metadata/_edit_horizontal_guides_ = [-27.0]
+
+[node name="WeaponSystem" type="Node2D" parent="VisualWrapper"]
+position = Vector2(1, -64)
+script = ExtResource("3_vgqql")
+
+[node name="Timer" type="Timer" parent="VisualWrapper/WeaponSystem"]
+
+[node name="AmmoIcon" type="Panel" parent="VisualWrapper/WeaponSystem"]
+offset_left = -11.0
+offset_top = -114.0
+offset_right = -6.0
+offset_bottom = -94.0
+theme = SubResource("Theme_r5bcf")
+
+[node name="AmmoIndicator" type="Label" parent="VisualWrapper/WeaponSystem"]
+offset_left = 3.0
+offset_top = -116.0
+offset_right = 43.0
+offset_bottom = -92.0
+theme = SubResource("Theme_r5bcf")
+text = "32"
+vertical_alignment = 1
+
+[node name="ReloadProgressBar" parent="VisualWrapper/WeaponSystem" instance=ExtResource("4_gfkdj")]
+position = Vector2(0, -104)
+
+[node name="PointLight2D" type="PointLight2D" parent="VisualWrapper/WeaponSystem"]
+visible = false
+position = Vector2(41, -7)
+color = Color(0.87058824, 0.93333334, 1, 1)
+energy = 0.0
+texture = ExtResource("5_gfkdj")
+texture_scale = 2.0
+script = ExtResource("6_xxqkx")
+energyCurve = SubResource("Curve_j8xm3")
+
+[node name="EnemyDetectionRange" type="Area2D" parent="."]
+visible = false
+position = Vector2(1, -64)
+collision_layer = 0
+collision_mask = 4
+input_pickable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetectionRange"]
+shape = SubResource("CircleShape2D_fkybt")
+
+[node name="ExpManagementSystem" type="Area2D" parent="."]
+visible = false
+position = Vector2(0, -64)
+collision_layer = 0
+collision_mask = 16
+input_pickable = false
+script = ExtResource("5_fkybt")
+
+[node name="Range" type="CollisionShape2D" parent="ExpManagementSystem"]
+shape = SubResource("CircleShape2D_x3wgy")
+
+[node name="HitDetectionArea" type="Area2D" parent="."]
+visible = false
+position = Vector2(0, -64)
+collision_layer = 0
+collision_mask = 4
+input_pickable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetectionArea"]
+position = Vector2(0, 30)
+shape = SubResource("CapsuleShape2D_6t5aa")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.6, 0.6)
+script = ExtResource("6_x3wgy")
+
+[node name="FeaturesandSummonManagementSystem" type="Node" parent="."]
+script = ExtResource("7_3smsa")
+
+[node name="SummonFlags" type="Node2D" parent="."]
+script = ExtResource("8_8erm5")
+
+[connection signal="area_entered" from="ExpManagementSystem" to="ExpManagementSystem" method="_on_area_entered"]
+[connection signal="body_entered" from="HitDetectionArea" to="." method="_on_hit_detection_area_body_entered"]

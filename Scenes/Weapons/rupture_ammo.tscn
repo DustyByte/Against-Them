@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7yvnfx7c8pcr"]
+
+[ext_resource type="Script" uid="uid://bu11ca8fwqp60" path="res://Scripts/rupture_ammo.gd" id="1_8f15v"]
+[ext_resource type="Texture2D" uid="uid://c0sib2jcg1hkq" path="res://Assets/Weapons/Rupture/ShotAmmo.png" id="2_k3lxa"]
+
+[node name="RuptureAmmo" type="Area2D"]
+collision_layer = 0
+collision_mask = 5
+input_pickable = false
+script = ExtResource("1_8f15v")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-31, 0)
+texture = ExtResource("2_k3lxa")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(-31, 0)
+polygon = PackedVector2Array(31, -3, 33, 0, 31, 3, -29, 0)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

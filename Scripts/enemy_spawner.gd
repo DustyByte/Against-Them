@@ -1,30 +1,41 @@
 class_name EnemySpawner
 
-var spawningIn
+var spawningIn: Node
 var player: CharacterBody2D
-var maxSpawn: int = 50
+var maxSpawn: int = 100
 var spawned: int = 0
-var enemy1BluePrint: PackedScene
 var spawnDistanceRange: Vector2 = Vector2(1000, 1500) # (from, to)
+var allEnemyBPs: Dictionary = {}
+var bp: PackedScene = preload("res://enemy.tscn")
+var kill_handle: Callable
 
 
 func _init(spawnEnemiesAsChildOf, playerRef: CharacterBody2D) -> void:
 	player = playerRef
 	spawningIn = spawnEnemiesAsChildOf
-	enemy1BluePrint = load("res://Scenes/enemy_1.tscn")
+	allEnemyBPs = global.ENEMY_BPS
+	kill_handle = global.FEATURE_AND_SUMMON_MANAGEMENT_SYSTEM.handle_kill
 
 
 func spawn() -> void:
-	if spawned == maxSpawn:
-		return
+	#if spawned == maxSpawn:
+		#return
 	# get a random enemy from enemy types
-	var enemy: CharacterBody2D = enemy1BluePrint.instantiate()
+	#var enemy: CharacterBody2D = allEnemyBPs['Type_4'].instantiate()
+	var enemy: CharacterBody2D = allEnemyBPs[allEnemyBPs.keys().pick_random()].instantiate()
 	
 	var enemyPosition = get_random_position_around_player()
 	enemy.position = enemyPosition
 	
-	spawningIn.add_child(enemy)
-	spawned += 1
+	spawningIn.add_child.call_deferred(enemy)
+	#spawned += 1
+	
+	enemy.tree_exited.connect(kill_handle)
+
+
+func spawn_horde(amount: int) -> void:
+	for i in range(amount):
+		spawn()
 
 
 func get_random_position_around_player() -> Vector2:

@@ -1,0 +1,133 @@
+[gd_scene load_steps=11 format=3 uid="uid://d7damgs4otc5"]
+
+[ext_resource type="Shader" uid="uid://c2r4o51m46eh4" path="res://Shaders/retri.gdshader" id="3_vhylm"]
+[ext_resource type="Texture2D" uid="uid://bk3ccu1f6tfm" path="res://Assets/Shader Textures/retri.jpg" id="4_fntcb"]
+[ext_resource type="Texture2D" uid="uid://dk3c5hcmm1yns" path="res://Assets/Shader Textures/GlowEllipse.jpeg" id="5_fntcb"]
+
+[sub_resource type="GDScript" id="GDScript_70mjv"]
+script/source = "class_name Retribution
+extends Node2D
+
+const MAX_SPEED: float = 25.0
+const SPIN_DURATION: float = 0.6
+
+@onready var mainEffect: Sprite2D = $Main
+@onready var spinner: Sprite2D = $Spinner
+@onready var light: PointLight2D = $PointLight2D
+@onready var mainEffectMat: ShaderMaterial = mainEffect.material
+@export var spinnerSpeedCurve: Curve = Curve.new()
+@export var lightEnergyCurve: Curve = Curve.new()
+var GPUParticleBP: PackedScene = preload(\"res://Scenes/Effects/particles_throw.tscn\")
+var speed: float = 0.0
+var displacement: float = 0.0
+var damage: float = 0.0
+var particleColor: Color = Color(0.741, 0.675, 0.867)
+
+
+func setup(givenDamage: float, givenParticleColor: Color = particleColor) -> void:
+	damage = givenDamage
+	particleColor = givenParticleColor
+
+
+func cleanup() -> void:
+	get_parent().get_hit(damage)
+	queue_free()
+
+
+func throw_particles() -> void:
+	var particles: GPUParticles2D = GPUParticleBP.instantiate()
+	
+	particles.global_position = global_position
+	global.WORLD.add_child(particles)
+	
+	particles.amount = 8
+	particles.z_index = 1
+	particles.modulate = particleColor
+	particles.finished.connect(particles.queue_free)
+	
+	particles.emitting = true
+
+
+func bring_down_beamand_illuminate(val: float) -> void:
+	mainEffectMat.set_shader_parameter('slider', val)
+	light.energy = lightEnergyCurve.sample(1-(val/10.0)) * 2.0
+
+
+func bam() -> void:
+	var tween: Tween = get_tree().create_tween()
+	
+	tween.tween_method(bring_down_beamand_illuminate, 10.0, 0.0, 0.5)
+	tween.finished.connect(cleanup)
+	
+	get_tree().create_timer(0.4).timeout.connect(throw_particles)
+
+
+func handle_spinnerand_main_alpha(val: float) -> void:
+	speed = MAX_SPEED*spinnerSpeedCurve.sample(val)
+	spinner.material.set_shader_parameter('radius', val*0.45)
+	mainEffectMat.set_shader_parameter('alpha', val)
+
+
+func _ready() -> void:
+	get_tree().create_timer(0.15).timeout.connect(bam) # 0.15 = SPIN_DURATION/4
+	
+	var tween: Tween = get_tree().create_tween()
+	tween.tween_method(handle_spinnerand_main_alpha, 0.0, 1.0, SPIN_DURATION)
+
+
+func _process(delta: float) -> void:
+	if speed:
+		displacement += speed * delta
+		spinner.material.set_shader_parameter('displacement', displacement)
+		print(spinner.material.get_shader_parameter(\"radius\"))
+"
+
+[sub_resource type="Curve" id="Curve_kv84y"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.49206352, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_7h4q3"]
+_data = [Vector2(0.03571429, 0), 0.0, 0.0, 0, 0, Vector2(0.92857146, 0.98907566), 2.2941191, 2.2941191, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vhylm"]
+resource_local_to_scene = true
+shader = ExtResource("3_vhylm")
+shader_parameter/slider = 0.5
+shader_parameter/alpha = 0.0
+shader_parameter/color = Color(0, 0, 0, 1)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_fntcb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7h4q3"]
+resource_local_to_scene = true
+shader = ExtResource("3_vhylm")
+shader_parameter/mask = ExtResource("4_fntcb")
+shader_parameter/slider = 10.0
+shader_parameter/alpha = 0.7550000358625
+shader_parameter/color = Color(0.8036667, 0.69, 1, 1)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_0wenb"]
+
+[node name="Retri" type="Node2D"]
+z_index = 1
+script = SubResource("GDScript_70mjv")
+spinnerSpeedCurve = SubResource("Curve_kv84y")
+lightEnergyCurve = SubResource("Curve_7h4q3")
+
+[node name="Spinner" type="Sprite2D" parent="."]
+modulate = Color(0.07058824, 0.07450981, 0.09019608, 1)
+material = SubResource("ShaderMaterial_vhylm")
+scale = Vector2(185.50278, 109.39876)
+texture = SubResource("CanvasTexture_fntcb")
+
+[node name="Main" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_7h4q3")
+position = Vector2(-3.9757379e-07, -45.670082)
+scale = Vector2(51.793133, 126.45497)
+texture = SubResource("CanvasTexture_0wenb")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(0.7411765, 0.6745098, 0.8666667, 1)
+energy = 0.0
+texture = ExtResource("5_fntcb")

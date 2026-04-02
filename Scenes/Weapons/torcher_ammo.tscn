@@ -1,0 +1,115 @@
+[gd_scene load_steps=23 format=3 uid="uid://df8ebnm3sp2jg"]
+
+[ext_resource type="Shader" uid="uid://c786u2ijroy8i" path="res://Shaders/fiery_bullet.gdshader" id="1_77nh4"]
+[ext_resource type="Script" uid="uid://cyck4plgnfukq" path="res://Scripts/torcher_ammo.gd" id="1_8547m"]
+[ext_resource type="Texture2D" uid="uid://b47ndk4ysb6pw" path="res://Assets/ParticleWhite.png" id="2_xyk5o"]
+[ext_resource type="Texture2D" uid="uid://cl8x5tjl2rv2u" path="res://Assets/Shader Textures/T_VFX_Noise_465.png" id="3_8547m"]
+[ext_resource type="Texture2D" uid="uid://bqaamaoic7hm7" path="res://Assets/Shader Textures/T_Gradient_circle22.jpg" id="3_xyk5o"]
+
+[sub_resource type="Curve" id="Curve_xyk5o"]
+bake_resolution = 20
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.000015, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_if3hd"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.8600614, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_21pnm"]
+curve = SubResource("Curve_if3hd")
+
+[sub_resource type="Gradient" id="Gradient_lw6wu"]
+offsets = PackedFloat32Array(0.1954023, 1)
+colors = PackedColorArray(0.8893001, 0, 0.1041474, 1, 1, 0.58400005, 0.48000002, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g28qu"]
+gradient = SubResource("Gradient_lw6wu")
+
+[sub_resource type="Curve" id="Curve_nwk8d"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.4136488, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_4vgxi"]
+curve = SubResource("Curve_nwk8d")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4gk1t"]
+resource_local_to_scene = true
+lifetime_randomness = 0.31
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 12.13
+direction = Vector3(-1, 0, 0)
+spread = 10.957
+initial_velocity_min = 126.06
+initial_velocity_max = 247.90999
+gravity = Vector3(0, 0, 0)
+damping_min = 49.58
+damping_max = 68.908005
+scale_min = 0.099999994
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_4vgxi")
+color_ramp = SubResource("GradientTexture1D_g28qu")
+alpha_curve = SubResource("CurveTexture_21pnm")
+turbulence_influence_min = 0.056
+turbulence_influence_max = 0.056
+
+[sub_resource type="Gradient" id="Gradient_if3hd"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_21pnm"]
+gradient = SubResource("Gradient_if3hd")
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_5c1c4"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lw6wu"]
+gradient = SubResource("Gradient_5c1c4")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_g28qu"]
+offsets = PackedFloat32Array(0.14516129, 0.32258064, 0.78494626)
+colors = PackedColorArray(0, 0, 0, 0, 1, 0.44847095, 0.50034934, 1, 0.9805321, 0, 0.12047375, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nwk8d"]
+gradient = SubResource("Gradient_g28qu")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4vgxi"]
+shader = ExtResource("1_77nh4")
+shader_parameter/texture1 = ExtResource("3_8547m")
+shader_parameter/texture2 = SubResource("GradientTexture2D_21pnm")
+shader_parameter/texture3 = ExtResource("3_xyk5o")
+shader_parameter/texture4 = SubResource("GradientTexture2D_lw6wu")
+shader_parameter/texture5 = SubResource("GradientTexture1D_nwk8d")
+shader_parameter/speed = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_4gk1t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_if3hd"]
+size = Vector2(4, 2.5)
+
+[node name="TorcherAmmo" type="Area2D"]
+y_sort_enabled = true
+collision_layer = 0
+collision_mask = 5
+input_pickable = false
+script = ExtResource("1_8547m")
+decelerationCurve = SubResource("Curve_xyk5o")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(30, 0)
+amount = 31
+texture = ExtResource("2_xyk5o")
+randomness = 0.15
+process_material = SubResource("ParticleProcessMaterial_4gk1t")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_4vgxi")
+rotation = -1.5707964
+scale = Vector2(76.59303, 125.33405)
+texture = SubResource("CanvasTexture_4gk1t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(39.999996, 0)
+scale = Vector2(6.963003, 6.963003)
+shape = SubResource("RectangleShape2D_if3hd")

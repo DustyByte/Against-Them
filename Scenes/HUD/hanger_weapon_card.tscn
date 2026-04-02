@@ -1,0 +1,134 @@
+[gd_scene load_steps=18 format=3 uid="uid://dm7u6u3jfw2dk"]
+
+[ext_resource type="Shader" uid="uid://dfh2ub8phs2eg" path="res://Shaders/gradient_fade.gdshader" id="1_mmdyw"]
+[ext_resource type="Script" uid="uid://cgg3ds3dma028" path="res://Scripts/hanger_weapon_card.gd" id="2_7g7cx"]
+[ext_resource type="Texture2D" uid="uid://qtjug5bi6xd0" path="res://Assets/Weapons/Rupture/RuptureHangerUse.png" id="2_tvreu"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="3_7g7cx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ws5qu"]
+resource_local_to_scene = true
+shader = ExtResource("1_mmdyw")
+shader_parameter/color = Color(1, 1, 1, 0.49803922)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jphr4"]
+bg_color = Color(0.51, 0.51, 0.51, 1)
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+
+[sub_resource type="Theme" id="Theme_m58cx"]
+Panel/styles/panel = SubResource("StyleBoxFlat_jphr4")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_diwi0"]
+bg_color = Color(0.5803922, 0.9254902, 0.5568628, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="Theme" id="Theme_ry834"]
+Panel/styles/panel = SubResource("StyleBoxFlat_diwi0")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6xt72"]
+bg_color = Color(0.31764707, 0.31764707, 0.31764707, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d64pg"]
+bg_color = Color(0.5254902, 0.87058824, 0.8745098, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="Theme" id="Theme_0m4ny"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_6xt72")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_d64pg")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8xm3"]
+bg_color = Color(0.8235294, 0.74509805, 0.9254902, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="Theme" id="Theme_8gplb"]
+Label/colors/font_color = Color(0.74, 1, 0.96099997, 1)
+Label/font_sizes/font_size = 14
+Label/fonts/font = ExtResource("3_7g7cx")
+Panel/styles/panel = SubResource("StyleBoxFlat_j8xm3")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j54dk"]
+bg_color = Color(0.8235294, 0.74509805, 0.9254902, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="Theme" id="Theme_a5wpc"]
+resource_local_to_scene = true
+Label/colors/font_color = Color(0.74, 1, 0.96099997, 1)
+Label/font_sizes/font_size = 10
+Label/fonts/font = ExtResource("3_7g7cx")
+Panel/styles/panel = SubResource("StyleBoxFlat_j54dk")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tvreu"]
+size = Vector2(100, 21)
+
+[node name="HangerWeaponCard" type="Panel"]
+material = SubResource("ShaderMaterial_ws5qu")
+custom_minimum_size = Vector2(100, 25)
+offset_right = 100.0
+offset_bottom = 25.0
+theme = SubResource("Theme_m58cx")
+script = ExtResource("2_7g7cx")
+
+[node name="Avatar" type="Sprite2D" parent="."]
+position = Vector2(87.00001, 12.5)
+scale = Vector2(0.23204608, 0.23204608)
+texture = ExtResource("2_tvreu")
+
+[node name="UltIndicator" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 15.0
+offset_right = 68.0
+offset_bottom = 23.0
+theme = SubResource("Theme_ry834")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 4.5
+offset_right = 69.0
+offset_bottom = 11.5
+theme = SubResource("Theme_0m4ny")
+show_percentage = false
+
+[node name="AmmoIcon" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 4.0
+offset_right = 49.0
+offset_bottom = 12.0
+theme = SubResource("Theme_8gplb")
+
+[node name="AmmoIndicator" type="Label" parent="."]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 5.0
+offset_right = 78.0
+offset_bottom = 14.0
+theme = SubResource("Theme_a5wpc")
+text = "32"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
+position = Vector2(51, 12)
+scale = Vector2(1, 1.2372218)
+shape = SubResource("RectangleShape2D_tvreu")
+visibility_mode = 1
+
+[connection signal="released" from="TouchScreenButton" to="." method="_on_touch_screen_button_released"]

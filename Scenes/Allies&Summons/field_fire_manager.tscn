@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgx1f0082iex6"]
+
+[ext_resource type="Script" uid="uid://d2llr8p6sk0vi" path="res://Scripts/field_fire_manager.gd" id="1_rx51j"]
+
+[node name="FieldFireManager" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_rx51j")

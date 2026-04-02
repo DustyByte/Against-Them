@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://6gcq5fq2xf17"]
+
+[ext_resource type="Script" uid="uid://c1qc2u6qkv031" path="res://Scripts/icicle.gd" id="1_odohb"]
+[ext_resource type="Texture2D" uid="uid://13c14i7ag7e6" path="res://Assets/Alles&Summons/IcicleThrower/Icicle.png" id="2_rpf5h"]
+[ext_resource type="Texture2D" uid="uid://caks2c8fu3dru" path="res://Assets/Alles&Summons/IcicleThrower/IceFlakeMidSharp.png" id="3_rpf5h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ubuqk"]
+size = Vector2(36, 8)
+
+[sub_resource type="Gradient" id="Gradient_ubuqk"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_c7qxk"]
+gradient = SubResource("Gradient_ubuqk")
+
+[sub_resource type="Curve" id="Curve_41c5o"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.3033984, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_i50l2"]
+curve = SubResource("Curve_41c5o")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4nns3"]
+resource_local_to_scene = true
+particle_flag_disable_z = true
+direction = Vector3(-1, 0, 0)
+initial_velocity_min = 267.77
+initial_velocity_max = 355.44998
+gravity = Vector3(0, 0, 0)
+scale_min = 0.75
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_i50l2")
+color_ramp = SubResource("GradientTexture1D_c7qxk")
+
+[node name="Icicle" type="Area2D"]
+collision_layer = 0
+collision_mask = 5
+input_pickable = false
+script = ExtResource("1_odohb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(-1, 0)
+shape = SubResource("RectangleShape2D_ubuqk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_rpf5h")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+visible = false
+emitting = false
+texture = ExtResource("3_rpf5h")
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.95
+process_material = SubResource("ParticleProcessMaterial_4nns3")
+
+[connection signal="body_entered" from="." to="." method="hit"]

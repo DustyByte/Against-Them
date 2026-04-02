@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://p8i512pix0ff"]
+
+[ext_resource type="Shader" uid="uid://ed18287mtpwg" path="res://Shaders/freeze.gdshader" id="1_xp08v"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_xp08v")
+shader_parameter/ice_color = Color(0.6, 0.85, 1, 1)
+shader_parameter/animation_speed = 4.0

@@ -4,6 +4,7 @@ var name: String = ""
 var description: String = ""
 var modifiers: Dictionary = {}
 var isAvailable: bool = false
+var isForceDeactivated: bool = false
 var children: Array[Option] = []
 
 
@@ -24,7 +25,7 @@ func augment_children(childrenToAugment: Array[Option]) -> void:
 
 func make_immediate_children_available() -> void:
 	for child in children:
-		child.isAvailable = true
+		child.isAvailable = not isForceDeactivated
 
 
 func duplicate_deep() -> Option:
@@ -40,6 +41,11 @@ func duplicate_deep() -> Option:
 	option.children = duplicatedChildren
 	
 	return option
+
+
+func deactivate(force: bool = false) -> void:
+	isAvailable = false
+	isForceDeactivated = force
 
 
 func _to_string() -> String:

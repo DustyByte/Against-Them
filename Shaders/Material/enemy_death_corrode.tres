@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://cepqugo2467hp"]
+
+[ext_resource type="Shader" uid="uid://dclukjmbey6mq" path="res://Shaders/corrode.gdshader" id="1_wdq06"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cq5ks"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_n0kms"]
+noise = SubResource("FastNoiseLite_cq5ks")
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_wdq06")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_n0kms")
+shader_parameter/threshold = 1.0
+shader_parameter/outline_width = 0.02
+shader_parameter/outline_color = Color(0.089999974, 0.9241665, 1, 1)

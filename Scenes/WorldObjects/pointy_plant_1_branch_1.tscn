@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://ir2a3a2g1kud"]
+
+[ext_resource type="Texture2D" uid="uid://cyfohkf5g0x6o" path="res://Assets/World Objects/PointyPlant11.png" id="1_kdi8t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6cyyh"]
+size = Vector2(72, 38)
+
+[node name="PointyPlant1Branch1" type="StaticBody2D" groups=["world_object"]]
+collision_mask = 0
+metadata/avgColor = Color(0.52, 0.90399987, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_6cyyh")
+
+[node name="PointyPlant11" type="Sprite2D" parent="."]
+texture = ExtResource("1_kdi8t")
+offset = Vector2(-28, -114)

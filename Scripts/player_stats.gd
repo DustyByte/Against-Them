@@ -1,18 +1,20 @@
 class_name PlayerStats
 
-const BASE_HP: float = 300
+const BASE_HP: float = 3000
 var maxHP: float = BASE_HP
 var currentHP: float = BASE_HP
-var currentExp: float = 0
+var currentExp: float = 0.0
 
 
 var activeModifiers: Dictionary = {
+	maxHPMultiplier = 1.0,
+	maxHPIncrease = 0.0,
 }
 
 
-## Adds given exp amount and returns the current exp.
-func add_exp(expAmount: float) -> float:
-	currentExp += expAmount
+## Adds the given EXP and returns the current EXP.
+func add_exp(amount: float) -> float:
+	currentExp += amount
 	return currentExp
 
 
@@ -24,6 +26,14 @@ func add_modifiers(modifiers: Dictionary) -> void:
 			activeModifiers[key] = activeModifiers[key]+value if _should_be_added(key) else activeModifiers[key]*value
 		else:
 			activeModifiers[key] = value
+
+
+## Adds the given amount to max HP and increaes current HP accordingly.
+func increase_max_hp(amount: float) -> void:
+	activeModifiers.maxHPIncrease += amount
+	update_max_hp()
+	currentHP += amount
+	print(maxHP)
 
 
 func _should_be_added(key: String) -> bool:
@@ -38,5 +48,5 @@ func _get_calculated_hp() -> float:
 
 
 func update_max_hp() -> float:
-	pass # perfom math to update maxHP here
+	maxHP = BASE_HP*activeModifiers.maxHPMultiplier + activeModifiers.maxHPIncrease
 	return maxHP

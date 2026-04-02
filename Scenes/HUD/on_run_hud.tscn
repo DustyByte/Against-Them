@@ -1,0 +1,91 @@
+[gd_scene load_steps=9 format=3 uid="uid://dlqeqn5pu8vf8"]
+
+[ext_resource type="Script" uid="uid://kaosiieesv7u" path="res://Scripts/on_run_hud.gd" id="1_div4g"]
+[ext_resource type="Texture2D" uid="uid://rlmfaevuagj7" path="res://Assets/Shader Textures/FireButton.png" id="2_usva3"]
+[ext_resource type="Texture2D" uid="uid://br8q6eumndyrr" path="res://Assets/Shader Textures/FireButtonPressed.png" id="3_nrs1e"]
+[ext_resource type="Script" uid="uid://bytcphue4ndvk" path="res://Scripts/weapon_hanger.gd" id="4_3j417"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y282y"]
+bg_color = Color(0.47843137, 0.47843137, 0.47843137, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3j417"]
+bg_color = Color(0.78039217, 0.7607843, 1, 1)
+
+[sub_resource type="Theme" id="Theme_k5in4"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_y282y")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_3j417")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vjotj"]
+radius = 126.55
+
+[node name="OnRunHUD" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_div4g")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(771, 37)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -385.0
+offset_top = 33.0
+theme = SubResource("Theme_k5in4")
+value = 47.5
+show_percentage = false
+
+[node name="FireButton" type="TextureButton" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_top = 0.66
+anchor_right = 0.8
+anchor_bottom = 0.66
+offset_left = -86.0
+offset_top = -86.0
+scale = Vector2(0.675, 0.675)
+texture_normal = ExtResource("2_usva3")
+texture_pressed = ExtResource("3_nrs1e")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -202.0
+offset_top = -254.0
+offset_right = 202.0
+offset_bottom = 254.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchor_left = 0.8
+anchor_top = 0.666
+anchor_right = 0.8
+anchor_bottom = 0.666
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="Control"]
+position = Vector2(-86, -86)
+scale = Vector2(0.675, 0.675)
+texture_normal = ExtResource("2_usva3")
+texture_pressed = ExtResource("3_nrs1e")
+shape = SubResource("CircleShape2D_vjotj")
+action = "X"
+
+[node name="WeaponHanger" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(2, 2)
+script = ExtResource("4_3j417")

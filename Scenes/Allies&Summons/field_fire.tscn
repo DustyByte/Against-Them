@@ -1,0 +1,103 @@
+[gd_scene load_steps=16 format=3 uid="uid://bmbo5rn61y1h"]
+
+[ext_resource type="Script" uid="uid://d05ojwkt3hxcy" path="res://Scripts/field_fire.gd" id="1_jcsgb"]
+[ext_resource type="Texture2D" uid="uid://h7gsxiadcl1g" path="res://Assets/Alles&Summons/FieldFire/OnRunUse.png" id="2_74ek8"]
+
+[sub_resource type="Curve" id="Curve_4dedy"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, -360), 0.0, 0.0, 0, 0, Vector2(1, 360), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_74ek8"]
+curve = SubResource("Curve_4dedy")
+
+[sub_resource type="Gradient" id="Gradient_6iwbo"]
+colors = PackedColorArray(1, 0.6333333, 0.45, 1, 0.8901961, 0, 0.105882354, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_txype"]
+gradient = SubResource("Gradient_6iwbo")
+
+[sub_resource type="Curve" id="Curve_gaha4"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.31786072), -1.7436937, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8srv2"]
+curve = SubResource("Curve_gaha4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hrld4"]
+resource_local_to_scene = true
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(1, 0.65, 1)
+emission_shape = 1
+emission_sphere_radius = 150.0
+angle_min = -167.2
+angle_max = 136.50002
+angle_curve = SubResource("CurveTexture_74ek8")
+direction = Vector3(0, -1, 0)
+initial_velocity_max = 33.18
+gravity = Vector3(0, -73.5, 0)
+attractor_interaction_enabled = false
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_8srv2")
+color_ramp = SubResource("GradientTexture1D_txype")
+
+[sub_resource type="Gradient" id="Gradient_ebdvi"]
+offsets = PackedFloat32Array(0.74923545, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2j51h"]
+gradient = SubResource("Gradient_ebdvi")
+
+[sub_resource type="Curve" id="Curve_ah5qx"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.9886685, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ispy0"]
+curve = SubResource("Curve_ah5qx")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o87gp"]
+resource_local_to_scene = true
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 255.70999
+initial_velocity_max = 255.70999
+gravity = Vector3(0, 0, 0)
+scale_min = 15.0
+scale_max = 20.0
+scale_curve = SubResource("CurveTexture_ispy0")
+color_ramp = SubResource("GradientTexture1D_2j51h")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i3yey"]
+
+[node name="FieldFire" type="Area2D"]
+collision_layer = 0
+collision_mask = 4
+input_pickable = false
+monitoring = false
+monitorable = false
+script = ExtResource("1_jcsgb")
+
+[node name="Fire" type="GPUParticles2D" parent="."]
+visible = false
+emitting = false
+amount = 128
+lifetime = 1.4
+process_material = SubResource("ParticleProcessMaterial_hrld4")
+
+[node name="Explosion" type="GPUParticles2D" parent="."]
+visible = false
+modulate = Color(1, 0.95183337, 0.83, 1)
+emitting = false
+amount = 26
+one_shot = true
+speed_scale = 1.85
+explosiveness = 0.9
+process_material = SubResource("ParticleProcessMaterial_o87gp")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_74ek8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_i3yey")

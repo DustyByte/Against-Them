@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://mhp4f3p4niu5"]
+
+[ext_resource type="Script" uid="uid://cgieod5u8w7at" path="res://Scripts/rupture.gd" id="1_qegv3"]
+[ext_resource type="Texture2D" uid="uid://jwqcwmiuenam" path="res://Assets/Weapons/Rupture/OnRunUse.png" id="2_s88vl"]
+
+[node name="Weapon" type="Node2D"]
+script = ExtResource("1_qegv3")
+metadata/avatar_path = "res://Assets/Weapons/Rupture/HomeUse.png"
+metadata/theme_color = Color(0.5576, 0.67130667, 0.82, 1)
+metadata/hanger_use_avatar_path = "res://Assets/Weapons/Rupture/RuptureHangerUse.png"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(22, 0)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_s88vl")
+flip_h = true
+
+[node name="Barrel" type="Node2D" parent="."]
+position = Vector2(45, -7)

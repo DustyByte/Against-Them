@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://byky2cufv4pw1"]
+
+[ext_resource type="Script" uid="uid://qmdcn81r76am" path="res://Scripts/damage_text.gd" id="1_k46x1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_k4f72"]
+
+[node name="DamageText" type="Label"]
+z_index = 1
+offset_right = 40.0
+offset_bottom = 23.0
+label_settings = SubResource("LabelSettings_k4f72")
+script = ExtResource("1_k46x1")

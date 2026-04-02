@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ck6gartftf1rk"]
+
+[ext_resource type="Script" uid="uid://bkofdpa4keqf6" path="res://Scripts/recall_knives_manager.gd" id="1_s0uo0"]
+
+[node name="RecallKnivesManager" type="Node2D"]
+script = ExtResource("1_s0uo0")

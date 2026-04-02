@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://lhnqe6rf4yjh"]
+
+[ext_resource type="Script" uid="uid://bgbyvdwd0ew16" path="res://Scripts/torcher.gd" id="1_scpqs"]
+[ext_resource type="Texture2D" uid="uid://ctrhc6aspicef" path="res://Assets/Weapons/Torcher/OnRunUse.png" id="2_ith2l"]
+
+[node name="Weapon" type="Node2D"]
+script = ExtResource("1_scpqs")
+metadata/avatar_path = "res://Assets/Weapons/Torcher/HomeUse.png"
+metadata/theme_color = Color(0.95, 0.41799998, 0.45346662, 1)
+metadata/hanger_use_avatar_path = "res://Assets/Weapons/Torcher/OnHangerUse.png"
+
+[node name="OnRunUse" type="Sprite2D" parent="."]
+position = Vector2(48, 0)
+texture = ExtResource("2_ith2l")
+flip_h = true
+
+[node name="Barrel" type="Node2D" parent="."]
+position = Vector2(102, 0)

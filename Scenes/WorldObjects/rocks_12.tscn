@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://o2f0lsi5blk3"]
+
+[ext_resource type="PackedScene" uid="uid://dp6sef4nl7bjo" path="res://Scenes/WorldObjects/rock_2.tscn" id="1_hq7i5"]
+[ext_resource type="PackedScene" uid="uid://cncg2pgbcjiwc" path="res://Scenes/WorldObjects/rock_1.tscn" id="2_rerho"]
+
+[node name="Rocks12" type="Node2D" groups=["world_object"]]
+y_sort_enabled = true
+
+[node name="Rock2" parent="." instance=ExtResource("1_hq7i5")]
+modulate = Color(0.8560673, 0.8560673, 0.85606724, 1)
+position = Vector2(-256, -94)
+
+[node name="Rock1" parent="." instance=ExtResource("2_rerho")]

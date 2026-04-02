@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://kam0ukqhjrwn"]
+
+[ext_resource type="Texture2D" uid="uid://0adri823aul7" path="res://Assets/Alles&Summons/IcicleThrower/Crystal.png" id="1_a2q2g"]
+[ext_resource type="Script" uid="uid://ddo7glvlt748k" path="res://Scripts/cryolite.gd" id="2_rjpl1"]
+
+[sub_resource type="Curve" id="Curve_dek5a"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+bake_resolution = 30
+_data = [Vector2(0, 0.013949394), 0.0, 6.31425, 0, 0, Vector2(0.25, 1), 0.0, 0.0, 0, 0, Vector2(0.5045871, 0.013949394), -4.9415903, -4.9415903, 0, 0, Vector2(0.7568807, -1), 0.0, 0.0, 0, 0, Vector2(1, 0.013949394), 6.0646734, 0.0, 0, 0]
+point_count = 5
+
+[node name="Cryolite" type="Sprite2D"]
+texture = ExtResource("1_a2q2g")
+script = ExtResource("2_rjpl1")
+breatheAnimationCurve = SubResource("Curve_dek5a")

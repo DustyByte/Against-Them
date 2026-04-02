@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dduxba1iypluh"]
+
+[ext_resource type="Shader" uid="uid://l06673hnpysi" path="res://Shaders/scale.gdshader" id="1_flyvl"]
+
+[resource]
+shader = ExtResource("1_flyvl")
+shader_parameter/scale = 1.0

@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://checgq5huiyl1"]
+
+[ext_resource type="Shader" uid="uid://coa5r6emjold8" path="res://Shaders/gravityBomb.gdshader" id="1_rmbes"]
+[ext_resource type="Texture2D" uid="uid://dmqtwxj5m64x" path="res://Assets/Shader Textures/T_VFX_Glo31.png" id="2_j10lg"]
+
+[sub_resource type="Gradient" id="Gradient_betho"]
+offsets = PackedFloat32Array(0.58648646, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.8226667, 0.72, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g6gkm"]
+gradient = SubResource("Gradient_betho")
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_rmbes")
+shader_parameter/gradient = SubResource("GradientTexture1D_g6gkm")
+shader_parameter/fade = ExtResource("2_j10lg")
+shader_parameter/radius = 0.0

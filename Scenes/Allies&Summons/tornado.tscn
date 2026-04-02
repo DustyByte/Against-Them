@@ -1,0 +1,120 @@
+[gd_scene load_steps=6 format=3 uid="uid://bjyoby3fcrtbc"]
+
+[ext_resource type="Script" uid="uid://bc0kbqli2fvix" path="res://Scripts/tornado.gd" id="1_o2g7m"]
+[ext_resource type="Material" uid="uid://cdvw84415ikyd" path="res://Shaders/Material/tornado_trail_shader_mat.tres" id="3_kgotu"]
+[ext_resource type="Texture2D" uid="uid://b47ndk4ysb6pw" path="res://Assets/ParticleWhite.png" id="3_mj4ve"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ppyta"]
+radius = 29.15476
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mf4mk"]
+resource_local_to_scene = true
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 14.01
+direction = Vector3(0, -1, 0)
+spread = 0.0
+initial_velocity_min = 197.48
+initial_velocity_max = 277.31
+orbit_velocity_min = 1.1850002
+orbit_velocity_max = 1.4880002
+gravity = Vector3(600, 0, 0)
+attractor_interaction_enabled = false
+scale_min = 0.099999994
+scale_max = 0.25
+turbulence_noise_strength = 10.92
+turbulence_influence_min = 0.128
+turbulence_influence_max = 0.252
+collision_use_scale = true
+
+[node name="Tornado" type="Area2D"]
+y_sort_enabled = true
+collision_layer = 0
+collision_mask = 4
+input_pickable = false
+monitorable = false
+script = ExtResource("1_o2g7m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_ppyta")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(2, 0)
+amount = 16
+texture = ExtResource("3_mj4ve")
+lifetime = 1.9
+preprocess = 1.9
+explosiveness = 0.26
+randomness = 0.15
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_mf4mk")
+
+[node name="Wrapper" type="Node2D" parent="."]
+material = ExtResource("3_kgotu")
+
+[node name="Line2D8" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(54, -152, 48, -159, 39, -163, 31, -166, 14, -168, -2, -169, -17, -169, -35, -166, -49, -160, -63, -155, -69, -145, -71, -138)
+texture_mode = 1
+
+[node name="Line2D9" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(55, -113, 50, -119, 40, -122, 30, -123, 11, -125, 3, -124, -12, -122, -25, -120, -35, -116, -44, -111, -47, -107, -44, -102)
+texture_mode = 1
+
+[node name="Line2D10" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(63, -100, 57, -104, 46, -106, 29, -108, 11, -107, -5, -103, -16, -97, -21, -92)
+texture_mode = 1
+
+[node name="Line2D11" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(58, -64, 53, -70, 46, -72, 38, -74, 28, -76, 16, -77, 5, -78, -6, -78, -17, -76, -24, -71)
+texture_mode = 1
+
+[node name="Line2D12" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(15, -41, 11, -47, 1, -50, -9, -52, -20, -53, -28, -51, -35, -48)
+texture_mode = 1
+
+[node name="Line2D13" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(-2, -21, -9, -27, -18, -29, -28, -27, -35, -22)
+texture_mode = 1
+
+[node name="Line2D" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(-80, -150, -64, -145, -49, -140, -31, -138, -15, -138, 0, -138, 15, -141, 25, -144, 39, -149, 50, -154, 59, -160, 64, -167, 61, -176, 52, -182, 39, -187, 22, -190, 1, -194, -14, -194, -28, -193, -42, -191, -55, -188, -69, -183, -84, -175, -88, -165, -88, -156, -80, -150)
+texture_mode = 1
+antialiased = true
+
+[node name="Line2D2" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(-37, -101, -23, -97, -11, -95, 2, -95, 16, -96, 29, -98, 42, -102, 50, -106, 57, -109)
+texture_mode = 1
+
+[node name="Line2D3" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(-64, -132, -53, -128, -42, -125, -33, -123, -21, -121, -7, -121, 5, -123, 17, -127, 28, -130, 39, -135, 48, -141, 53, -146)
+texture_mode = 1
+
+[node name="Line2D4" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(-23, -67, -14, -62, 0, -58, 15, -57, 30, -57, 45, -58, 57, -60)
+texture_mode = 1
+
+[node name="Line2D5" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(-33, -44, -25, -40, -14, -37, -3, -36, 5, -36, 9, -36)
+texture_mode = 1
+
+[node name="Line2D6" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(-18, -82, 0, -80, 14, -79, 30, -80, 44, -84, 59, -89, 63, -97)
+texture_mode = 1
+
+[node name="Line2D7" type="Line2D" parent="Wrapper"]
+use_parent_material = true
+points = PackedVector2Array(-32, -19, -24, -17, -15, -16, -8, -17, -2, -18)
+texture_mode = 1

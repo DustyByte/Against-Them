@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://5y4xjytnnm0v"]
+
+[ext_resource type="Script" uid="uid://d3kcjvandbfna" path="res://Scripts/laser_orb.gd" id="1_mt3g1"]
+[ext_resource type="Texture2D" uid="uid://cfolw71tb0he1" path="res://Assets/Alles&Summons/LaserOrb/OnRunUse.png" id="1_r83fp"]
+
+[sub_resource type="Curve" id="Curve_r83fp"]
+bake_resolution = 30
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2021739, 1), 1.5813082, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_pw1sv"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+bake_resolution = 30
+_data = [Vector2(0, 0.013949394), 0.0, 6.31425, 0, 0, Vector2(0.25, 1), 0.0, 0.0, 0, 0, Vector2(0.5045871, 0.013949394), -4.9415903, -4.9415903, 0, 0, Vector2(0.7568807, -1), 0.0, 0.0, 0, 0, Vector2(1, 0.013949394), 6.0646734, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mt3g1"]
+size = Vector2(1500, 5)
+
+[node name="LaserDrone" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_mt3g1")
+beamCurve = SubResource("Curve_r83fp")
+breatheAnimationCurve = SubResource("Curve_pw1sv")
+
+[node name="Beam" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+input_pickable = false
+monitoring = false
+monitorable = false
+
+[node name="Line2D" type="Line2D" parent="Beam"]
+visible = false
+points = PackedVector2Array(0, 0, 1500, 0)
+width = 3.0
+default_color = Color(1, 0.58000004, 0.58000004, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Beam"]
+visible = false
+position = Vector2(750, 0)
+shape = SubResource("RectangleShape2D_mt3g1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, 128)
+texture = ExtResource("1_r83fp")
+offset = Vector2(0, -128)

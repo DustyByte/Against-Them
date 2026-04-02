@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cdvw84415ikyd"]
+
+[ext_resource type="Shader" uid="uid://dgk582gk4osau" path="res://Shaders/tornado.gdshader" id="1_bw6f6"]
+[ext_resource type="Texture2D" uid="uid://0trtwatovevb" path="res://Assets/Shader Textures/TornadoWindTrailTexture.png" id="2_tetlm"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_bw6f6")
+shader_parameter/line_texture = ExtResource("2_tetlm")
+shader_parameter/baseColor = Color(0.994088, 0.7444061, 0.75654155, 1)
+shader_parameter/scroll_speed = 1.0
+shader_parameter/offset = 0.41200001957

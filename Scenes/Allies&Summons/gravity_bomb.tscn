@@ -1,0 +1,52 @@
+[gd_scene load_steps=10 format=3 uid="uid://cquu8sucgq5j1"]
+
+[ext_resource type="Script" uid="uid://cn2a1m2x2dboh" path="res://Scripts/gravity_bomb.gd" id="1_agxqx"]
+[ext_resource type="Material" uid="uid://checgq5huiyl1" path="res://Shaders/Material/gravity_bomb_explosion_shader_mat.tres" id="2_nan8r"]
+[ext_resource type="Material" uid="uid://erurbtl6fi7y" path="res://Shaders/Material/gravity_bomb_inward_pull_shader_mat.tres" id="3_o4yj3"]
+[ext_resource type="Texture2D" uid="uid://bq1j0cr18as2y" path="res://Assets/Alles&Summons/GravityBomb/OnRunUse.png" id="4_pp3rl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ekjsw"]
+radius = 100.0
+
+[sub_resource type="Gradient" id="Gradient_q1inr"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_tceg4"]
+gradient = SubResource("Gradient_q1inr")
+width = 300
+height = 300
+
+[sub_resource type="Gradient" id="Gradient_avmmg"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vqt4g"]
+gradient = SubResource("Gradient_avmmg")
+width = 200
+height = 200
+
+[node name="GravityBomb" type="Area2D"]
+z_index = -1
+collision_layer = 0
+collision_mask = 0
+input_pickable = false
+monitorable = false
+script = ExtResource("1_agxqx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+scale = Vector2(1, 0.65)
+shape = SubResource("CircleShape2D_ekjsw")
+
+[node name="outwardEffect" type="Sprite2D" parent="."]
+visible = false
+material = ExtResource("2_nan8r")
+scale = Vector2(1, 0.65)
+texture = SubResource("GradientTexture2D_tceg4")
+
+[node name="inwardEffect" type="Sprite2D" parent="."]
+visible = false
+material = ExtResource("3_o4yj3")
+scale = Vector2(1, 0.65)
+texture = SubResource("GradientTexture2D_vqt4g")
+
+[node name="BombAvatar" type="Sprite2D" parent="."]
+modulate = Color(2.0331757, 2.0331757, 2.0331757, 1)
+texture = ExtResource("4_pp3rl")

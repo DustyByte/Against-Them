@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://caxsgk23aieqy"]
+
+[ext_resource type="Script" uid="uid://dnvd1chr7g1xq" path="res://Scripts/anomaly.gd" id="1_iqg11"]
+[ext_resource type="Shader" uid="uid://bdemy5x6acyfb" path="res://Shaders/suction.gdshader" id="1_ycr0p"]
+[ext_resource type="Texture2D" uid="uid://b47ndk4ysb6pw" path="res://Assets/ParticleWhite.png" id="2_iqg11"]
+
+[sub_resource type="Curve" id="Curve_we06a"]
+resource_local_to_scene = true
+bake_resolution = 20
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.75373137, 0), -3.7186034, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1vjw1"]
+radius = 32.140316
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1vjw1"]
+resource_local_to_scene = true
+shader = ExtResource("1_ycr0p")
+shader_parameter/strength = 0.250000011875
+shader_parameter/radius = 0.5
+shader_parameter/center = Vector2(0.5, 0.5)
+
+[node name="Anomaly" type="Area2D"]
+light_mask = 0
+collision_layer = 0
+collision_mask = 4
+input_pickable = false
+monitorable = false
+script = ExtResource("1_iqg11")
+curve = SubResource("Curve_we06a")
+
+[node name="EventHorizon" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+z_index = 1
+texture = ExtResource("2_iqg11")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_1vjw1")
+
+[node name="EffectSprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_1vjw1")
+scale = Vector2(2, 2)
+texture = ExtResource("2_iqg11")
+
+[connection signal="body_entered" from="." to="." method="on_hit_connect"]

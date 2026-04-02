@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnmw1wrifit3s"]
+
+[ext_resource type="Script" uid="uid://6tp5otuvg3q6" path="res://Scripts/gravity_bomb_manager.gd" id="1_vrcgt"]
+
+[node name="GravityBombManager" type="Node2D"]
+script = ExtResource("1_vrcgt")

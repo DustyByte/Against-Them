@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://bi7qhq164iar7"]
+
+[ext_resource type="Script" uid="uid://5yhyjpeewltt" path="res://Scripts/progress_bar_custom.gd" id="1_v1uev"]
+[ext_resource type="Texture2D" uid="uid://moxy1ahnxjsm" path="res://Assets/HUD Elements/PBBG.png" id="2_t2pna"]
+[ext_resource type="Texture2D" uid="uid://cqmrnvutoh0eh" path="res://Assets/HUD Elements/PBFillLine.png" id="3_02ruv"]
+
+[node name="ProgressBarCustom" type="Node2D"]
+script = ExtResource("1_v1uev")
+
+[node name="Pbbg" type="Sprite2D" parent="."]
+texture = ExtResource("2_t2pna")
+
+[node name="PbFillLine" type="Sprite2D" parent="."]
+texture = ExtResource("3_02ruv")

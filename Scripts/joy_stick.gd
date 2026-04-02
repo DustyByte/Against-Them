@@ -9,6 +9,8 @@ var knobRadius: float = 0.0
 var borderRadius: float = 0.0
 @export var borderColor: Color = Color(1, 1, 1, 0.25)
 @export var borderFill: bool = false
+@export var fromLeft: float = 0.200
+@export var fromTop: float = 0.666
 var joyStickInputDeadZoneRadius: float = 0.0
 var knobBeingHeld: bool = false
 
@@ -18,8 +20,8 @@ var output: Dictionary = {
 
 
 func _ready() -> void:
-	screenSize = get_window().size
-	joyStickPosition = position
+	screenSize = get_viewport().get_visible_rect().size
+	joyStickPosition = Vector2(screenSize.x * fromLeft, screenSize.y * fromTop)
 	knobPosition = joyStickPosition
 	knobRadius = get_window().size.y * 0.15 * 0.5
 	borderRadius = knobRadius * 2
@@ -31,10 +33,37 @@ func _draw() -> void:
 	draw_circle(to_local(knobPosition), knobRadius, knobColor, true)
 
 
+func is_inside_deadzone(pos: Vector2) -> bool:
+	var touchToJSCenterDistanceSq: float = joyStickPosition.distance_squared_to(pos)
+	return touchToJSCenterDistanceSq <= joyStickInputDeadZoneRadius * joyStickInputDeadZoneRadius
+
+
+var JSFingerIndex: int = -1
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
+	if event is InputEventScreenTouch:
+		if JSFingerIndex == -1:
+			if event.pressed and is_inside_deadzone(event.position):
+				JSFingerIndex = event.index
+				hold_knob(event.position)
+		elif not event.pressed and JSFingerIndex == event.index:
+			JSFingerIndex = -1
+			release_knob()
+	
+	elif JSFingerIndex != -1 and event is InputEventScreenDrag:
+		var JSToDragPointDirection := joyStickPosition.direction_to(event.position)
+		var dragPointToJSCenterDistance := joyStickPosition.distance_to(event.position)
+		
+		output.direction = JSToDragPointDirection
+		
+		if dragPointToJSCenterDistance < borderRadius:
+			move_knob(event.position)
+		else:
+			move_knob(joyStickPosition + (borderRadius * JSToDragPointDirection))
+	
+	
+	elif event is InputEventMouseButton:
 		if event.pressed:
-			var touchToJSCenterDistance: float = joyStickPosition.distance_to(event.global_position)
+			var touchToJSCenterDistance: float = joyStickPosition.distance_to(event.position)
 			if touchToJSCenterDistance <= joyStickInputDeadZoneRadius:
 				hold_knob(event.position)
 		elif knobBeingHeld:

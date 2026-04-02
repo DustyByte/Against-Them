@@ -7,7 +7,7 @@ var existingOrbitals: Array[Node2D] = []
 var orbitalRadiusDifference: float = 100.0
 var currentOuterMostOrbitalRadius: float = 100.0
 var flagsPerOrbital: int = 5
-var orbitalsOrbitAngularSpeed: float = 2*PI / 16
+var orbitalsOrbitAngularSpeed: float = TAU / 16
 
 
 func update_outer_most_orbital_radand_ping(value: float) -> void:
@@ -39,7 +39,7 @@ func get_new_flag() -> Node2D:
 	
 	existingFlags[-1].append(flag)
 	flagAmount += 1
-	var thetaBetweenEach: float = (2*PI) / flagAmount
+	var thetaBetweenEach: float = TAU / flagAmount
 	for flagIndex in range(flagAmount):
 		existingFlags[-1][flagIndex].position = firstFlagsPosition.rotated(thetaBetweenEach * flagIndex)
 	
