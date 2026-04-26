@@ -1,8 +1,14 @@
 class_name PlayerStats
 
-const BASE_HP: float = 3000
+signal hp_changed
+
+const BASE_HP: float = 300
 var maxHP: float = BASE_HP
-var currentHP: float = BASE_HP
+var currentHP: float = BASE_HP:
+	set(val):
+		currentHP = clampf(val, 0.0, maxHP)
+		hp_changed.emit(currentHP, maxHP)
+
 var currentExp: float = 0.0
 
 
@@ -33,7 +39,6 @@ func increase_max_hp(amount: float) -> void:
 	activeModifiers.maxHPIncrease += amount
 	update_max_hp()
 	currentHP += amount
-	print(maxHP)
 
 
 func _should_be_added(key: String) -> bool:

@@ -27,6 +27,8 @@ var hasRhythmAccumulate: bool = false
 var isSummonAdrenalineActive: bool = false
 var isAdrenalineActive: bool = false
 var relentlessPulseCount: int = 0
+var hasReapersRebate: int = 0
+var reapersRebateCount: int = 0
 
 
 func handle_kill() -> void:
@@ -41,6 +43,11 @@ func handle_kill() -> void:
 				weaponStat.damage *= 1.01
 		else:
 			rhythmFailedCount += 1
+	
+	if hasReapersRebate:
+		if reapersRebateCount >= 99:
+			reapersRebateCount = 0
+			player.take_heal(20.0)
 
 
 func handle_shoot() -> void:
@@ -343,7 +350,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 			optionChosen.make_immediate_children_available()
 		
 		"Overflowing Might":
-			playerStatsActiveModifiers.auraStats.killMileStoneMult += 1
+			playerStatsActiveModifiers.auraStats.killMilestoneMult += 1
 			optionChosen.make_immediate_children_available()
 		
 		"Overload":
@@ -360,7 +367,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 			playerStatsActiveModifiers.overloadExplosionMult += 0.01
 		
 		"Life":
-			playerStats.inccrease_max_hp(optionChosen.modifiers.maxHPIncrease)
+			playerStats.increase_max_hp(optionChosen.modifiers.maxHPIncrease)
 			optionChosen.make_immediate_children_available()
 		
 		"Force":
@@ -593,17 +600,49 @@ func implement_option_choice(optionChosen: Option) -> void:
 			relentlessPulseCount += 1
 			if relentlessPulseCount == 3:
 				optionChosen.deactivate(true)
+		
+		"Reaper’s Rebate":
+			hasReapersRebate += 1
+			optionChosen.make_immediate_children_available()
+		
+		"Regen":
+			optionChosen.make_immediate_children_available()
+			player_periodic_regen()
+		
+		"Momentum Pickups":
+			expManager.hasMomentumPickups += 1
+			optionChosen.make_immediate_children_available()
+		
+		"Recycle":
+			expManager.hasRecycle += 1
+			optionChosen.make_immediate_children_available()
+		
+		"Hasten The Beast":
+			optionChosen.make_immediate_children_available()
+			var keys: Array = playerStatsActiveModifiers.keys()
+			for key in keys:
+				var val = playerStatsActiveModifiers[key]
+				if val is Dictionary and val.has('isSummon'):
+					val.cd *= 0.7
+		
+		"Enrage The Beast":
+			optionChosen.make_immediate_children_available()
+			var keys: Array = playerStatsActiveModifiers.keys()
+			for key in keys:
+				var val = playerStatsActiveModifiers[key]
+				if val is Dictionary and val.has('isSummon'):
+					val.damage *= 1.3
+
+
+func player_periodic_regen() -> void:
+	player.take_heal(5.0)
+	get_tree().create_timer(5.0).timeout.connect(player_periodic_regen)
 
 
 func handle_player_level_up() -> void:
-	var options: Array[Option] = global.PROGRESSION_CHOICE_SYSTEM.give_selectable_options(4)
+	var options: Array[Option] = global.PROGRESSION_CHOICE_SYSTEM.give_selectable_options(6)
 	global.ON_RUN_HUD.show_options(options)
 	get_tree().paused = true
-
-
-func _input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("ui_accept"):
-		implement_option_choice($"../../ProgressionChoiceSystem".o)
 
 
 func _ready() -> void:

@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://ccmbnuntae3lt"]
+[gd_scene load_steps=7 format=3 uid="uid://ccmbnuntae3lt"]
 
 [ext_resource type="Script" uid="uid://bjyk7i28ylq4x" path="res://Scripts/grass.gd" id="1_5gg28"]
-[ext_resource type="Texture2D" uid="uid://b8bgtxnh87apa" path="res://Assets/Map Base.PNG" id="2_b7gke"]
 [ext_resource type="Shader" uid="uid://jcbicxmqlo40" path="res://Shaders/test_wind.gdshader" id="3_3jykw"]
 [ext_resource type="Texture2D" uid="uid://b0jrjr6rjdncd" path="res://Assets/World Objects/GrassAtlas.png" id="4_67byq"]
 
@@ -15,17 +14,13 @@ shader_parameter/strength = 5.0
 size = Vector2(32, -32)
 
 [sub_resource type="MultiMesh" id="MultiMesh_k3mpa"]
+custom_aabb = AABB(-50000, -50000, 0, 100000, 100000, 0)
 visible_instance_count = 0
 mesh = SubResource("QuadMesh_1huhg")
 
 [node name="WorldMap" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_5gg28")
-
-[node name="MapBase" type="Sprite2D" parent="."]
-z_index = -2
-scale = Vector2(25.984682, 11.223913)
-texture = ExtResource("2_b7gke")
 
 [node name="Grass" type="MultiMeshInstance2D" parent="."]
 z_index = -1

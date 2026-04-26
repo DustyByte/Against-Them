@@ -2,7 +2,7 @@ extends Node2D
 
 @onready var grassMMI: MultiMeshInstance2D = $Grass
 @onready var grassMMRID: RID = grassMMI.multimesh.get_rid()
-var player: CharacterBody2D = null
+@onready var player: CharacterBody2D = $"../Player"
 
 var grassTextures: Array[Texture] = [
 	preload("res://Assets/World Objects/Grass01.png"),
@@ -36,10 +36,13 @@ var grassDepthEffectRad: float = 40.0
 var grassDepthEffectRadSq: float = 1600.0
 var grassHidden: Dictionary = {}
 var tBegin: int = 0
+var currentWinGrid: Vector2 = Vector2.ZERO
+var builtWindows: Dictionary = {}
+var windowDim: Vector2
+var twiceWindowDim: Vector2
 
 
 func point_is_inside_circle(point: Vector2, circleCenter: Vector2, rad: float) -> bool:
-	#if point.x > circleCenter.x-rad and point.x < circleCenter.x+rad:
 	if point.distance_squared_to(circleCenter) < rad*rad:
 		return true
 	return false
@@ -89,7 +92,7 @@ func get_random_point_in_circle(center: Vector2, radius: float) -> Vector2:
 	return Vector2(x, y)
 
 
-func generate_grass_data_at(at: Vector2) -> void:
+func generate_grass_data_at(at: Vector2) -> Array:
 	var grassTypeIdx: int = randi_range(0, 4)
 	
 	var grassScale = Vector2.ONE * randf_range(1.0, 1.5)
@@ -97,27 +100,69 @@ func generate_grass_data_at(at: Vector2) -> void:
 	
 	var xForm: Transform2D = Transform2D(0.0, grassScale, 0.0, at)
 	
-	grassData.append([xForm, grassTypeIdx, Time.get_ticks_msec()])
+	return [xForm, grassTypeIdx, Time.get_ticks_msec()]
 
 
 func generate_grass_data_at_patch(patchLocation: Vector2) -> void:
 	var points: PackedVector2Array = PoissonDiscSampling.generate_points_for_circle(patchLocation, 320, 20, 1)
+	var extraArray: Array = []
+	extraArray.resize(points.size())
+	
+	var i: int = 0
 	for point in points:
-		generate_grass_data_at(point)
+		extraArray[i] = generate_grass_data_at(point)
+		i += 1
+	
+	grassData.append_array(extraArray)
+
+
+func worker_thread_generate_grass_data_at_patch(patchLocation: Vector2, tempGrassDataHolder: Array) -> void:
+	var points: PackedVector2Array = PoissonDiscSampling.generate_points_for_circle(patchLocation, 320, 20, 1)
+	var extraArray: Array = []
+	extraArray.resize(points.size())
+	
+	var i: int = 0
+	for point in points:
+		extraArray[i] = generate_grass_data_at(point)
+		i += 1
+	
+	tempGrassDataHolder.append_array(extraArray)
 
 
 func mm_object_sort_logic(A: Array, B: Array) -> bool:
 	return A[0].origin.y < B[0].origin.y
 
 
+func worker_update_grass_mm(dataToAdd: Array) -> void:
+	var tempGrassData: Array = grassData.duplicate(true)
+	tempGrassData.append_array(dataToAdd)
+	tempGrassData.sort_custom(mm_object_sort_logic)
+	
+	var buffer: PackedFloat32Array = create_buffer(tempGrassData)
+	var tgdSize: int = tempGrassData.size()
+	
+	RenderingServer.multimesh_allocate_data(grassMMRID, tgdSize, RenderingServer.MULTIMESH_TRANSFORM_2D, false, true)
+	RenderingServer.multimesh_set_buffer(grassMMRID, buffer)
+	RenderingServer.multimesh_set_visible_instances(grassMMRID, tgdSize)
+	
+	var update_main_thread_data: Callable = func(data: Array):
+		grassData = data
+	update_main_thread_data.bind(tempGrassData).call_deferred()
+
+
 func update_grass_mm() -> void:
 	grassData.sort_custom(mm_object_sort_logic)
 	
 	var buffer: PackedFloat32Array = create_buffer(grassData)
+	var gdSize: int = grassData.size()
 	
-	RenderingServer.multimesh_allocate_data(grassMMRID, grassData.size(), RenderingServer.MULTIMESH_TRANSFORM_2D, false, true)
+	RenderingServer.multimesh_allocate_data(grassMMRID, gdSize, RenderingServer.MULTIMESH_TRANSFORM_2D, false, true)
 	RenderingServer.multimesh_set_buffer(grassMMRID, buffer)
-	RenderingServer.multimesh_set_visible_instances(grassMMRID, grassData.size())
+	RenderingServer.multimesh_set_visible_instances(grassMMRID, gdSize)
+
+
+func set_grass_data(newGrassData: Array) -> void:
+	grassData = newGrassData
 
 
 func spawn_pointy_plant(toSpawnAt: Vector2) -> void:
@@ -131,8 +176,10 @@ func spawn_pointy_plant(toSpawnAt: Vector2) -> void:
 
 
 func spawn_pointy_plants_in_circles(circleCenters: Array[Vector2]) -> void:
+	var innerCircleRad: float = majorCircleRadius-majorCirclePadding
 	for center in circleCenters:
-		spawn_pointy_plant(get_random_point_in_circle(center, majorCircleRadius-majorCirclePadding))
+		var randomPoint: Vector2 = get_random_point_in_circle(center, innerCircleRad)
+		spawn_pointy_plant.call_deferred(randomPoint)
 
 
 func spawn_rock(toSpawnAt: Vector2) -> void:
@@ -146,12 +193,14 @@ func spawn_rock(toSpawnAt: Vector2) -> void:
 
 
 func spawn_rocks_in_circles(circleCenters: Array[Vector2]) -> void:
+	var innerCircleRad: float = majorCircleRadius-majorCirclePadding
 	for center in circleCenters:
-		spawn_rock(get_random_point_in_circle(center, majorCircleRadius-majorCirclePadding))
+		var randomPoint: Vector2 = get_random_point_in_circle(center, innerCircleRad)
+		spawn_rock.call_deferred(randomPoint)
 
 
 func get_major_circle_grid_for_window_at(windowRectCenter: Vector2) -> Array[Vector2]:
-	var windowSize: Vector2 = get_window().get_size()
+	var windowSize: Vector2 = windowDim
 	var grid: Array[Vector2] = []
 	var edgeLength := majorCircleRadius * 2
 	
@@ -170,12 +219,12 @@ func get_major_circle_grid_for_window_at(windowRectCenter: Vector2) -> Array[Vec
 	return grid
 
 
-func generate_world_at(location: Vector2) -> void:
-	var majorGrid: Array[Vector2] = get_major_circle_grid_for_window_at(location)
+func generate_world_at(windowCoord: Vector2) -> void:
+	var majorGrid: Array[Vector2] = get_major_circle_grid_for_window_at(windowCoord * twiceWindowDim)
 	
 	majorGrid.shuffle()
 	
-	var sliceIndex := 1 + int(majorGrid.size() * (1.0/6.0))
+	var sliceIndex := 1 + int(majorGrid.size() * 1.0/6.0)
 	
 	var slicedParts: Array = slice_array(majorGrid, sliceIndex)
 	var circlesForPP: Array[Vector2] = slicedParts[0]
@@ -185,41 +234,135 @@ func generate_world_at(location: Vector2) -> void:
 	var circlesForRock: Array[Vector2] = slicedParts[0]
 	majorGrid = slicedParts[1]
 	
+	#spawn_pointy_plants_in_circles(circlesForPP)
+	#spawn_rocks_in_circles(circlesForRock)
 	
-	spawn_pointy_plants_in_circles(circlesForPP)
-	spawn_rocks_in_circles(circlesForRock)
 	
 	for circleCenter in majorGrid:
 		var patchAmount: int = randi_range(2, 4)
 		for patchNum in range(patchAmount):
 			var patchLocation: Vector2 = get_random_point_in_circle(circleCenter, majorCircleRadius)
 			generate_grass_data_at_patch(patchLocation)
+	
+	builtWindows[windowCoord] = true
+
+
+func worker_thread_generate_world_at(windowCoord: Vector2, tempGrassDataHolder: Array) -> void:
+	if builtWindows.has(windowCoord):
+		return
+	
+	var majorGrid: Array[Vector2] = get_major_circle_grid_for_window_at(windowCoord*twiceWindowDim)
+	
+	majorGrid.shuffle()
+	
+	var sliceIndex := 1 + int(majorGrid.size() * 0.1667)
+	
+	var slicedParts: Array = slice_array(majorGrid, sliceIndex)
+	var circlesForPP: Array[Vector2] = slicedParts[0]
+	majorGrid = slicedParts[1]
+	
+	slicedParts = slice_array(majorGrid, clamp(sliceIndex, 0, majorGrid.size()))
+	var circlesForRock: Array[Vector2] = slicedParts[0]
+	majorGrid = slicedParts[1]
+	
+	#spawn_pointy_plants_in_circles(circlesForPP)
+	#spawn_rocks_in_circles(circlesForRock)
+	
+	
+	for circleCenter in majorGrid:
+		var patchAmount: int = randi_range(2, 4)
+		for patchNum in range(patchAmount):
+			var patchLocation: Vector2 = get_random_point_in_circle(circleCenter, majorCircleRadius)
+			worker_thread_generate_grass_data_at_patch(patchLocation, tempGrassDataHolder)
+	
+	update_build_window_dic.call_deferred(windowCoord)
+
+
+func update_build_window_dic(winCoord: Vector2) -> void:
+	builtWindows[winCoord] = true
+
+
+func add_grass_data_to_main_thread_data_array(arrayToAdd: Array) -> void:
+	grassData.append_array(arrayToAdd)
+
+
+func get_current_win_grid_coord(playerPos: Vector2) -> Vector2:
+	var newWinGridCoord: Vector2 = Vector2.ZERO
+	
+	var xyPosQuad: Vector2 = playerPos - twiceWindowDim * 0.5
+	if xyPosQuad.x >= 0:
+		newWinGridCoord.x += 1 + floor(xyPosQuad.x / twiceWindowDim.x)
+	
+	if xyPosQuad.y >= 0:
+		newWinGridCoord.y += 1 + floor(xyPosQuad.y / twiceWindowDim.y)
+	
+	var xyNegQuad: Vector2 = playerPos + twiceWindowDim * 0.5
+	if xyNegQuad.x < 0:
+		newWinGridCoord.x -= 1 + floor(-xyNegQuad.x / twiceWindowDim.x)
+	
+	if xyNegQuad.y < 0:
+		newWinGridCoord.y -= 1 + floor(-xyNegQuad.y / twiceWindowDim.y)
+	
+	return newWinGridCoord
+
+
+func get_unbuilt_win_grid_coord_from(winGridCoord: Vector2) -> PackedVector2Array:
+	var unbuiltWinCoord: PackedVector2Array = PackedVector2Array([])
+	unbuiltWinCoord.resize(8)
+	
+	var xLoopFrom: int = winGridCoord.x-1
+	var xLoopTo: int = winGridCoord.x+2
+	var yLoopFrom: int = winGridCoord.y-1
+	var yLoopTo: int = winGridCoord.y+2
+	
+	var k: int = 0
+	for i in range(xLoopFrom, xLoopTo):
+		for j in range(yLoopFrom, yLoopTo):
+			if i == winGridCoord.x and j == winGridCoord.y:
+				continue
+			
+			var coord: Vector2 = Vector2(i, j)
+			if not builtWindows.has(coord):
+				unbuiltWinCoord[k] = coord
+				k += 1
+	
+	unbuiltWinCoord.resize(k)
+	
+	return unbuiltWinCoord
+
+
+func _build_world_at_coords(coords: PackedVector2Array) -> void: # NEVER call from main thread
+	var tempGrassDataHolder: Array = []
+	for coord in coords:
+		worker_thread_generate_world_at(coord, tempGrassDataHolder)
+	worker_update_grass_mm(tempGrassDataHolder)
 
 
 func _ready() -> void:
-	var windowDim: Vector2 = get_window().get_size() * 2
+	windowDim = get_window().get_size()
+	twiceWindowDim = get_window().get_size() * 2.0
 	
-	generate_world_at(windowDim * Vector2(-1, -1))
-	generate_world_at(windowDim * Vector2(0, -1))
-	generate_world_at(windowDim * Vector2(1, -1))
-	generate_world_at(windowDim * Vector2(-1, 0))
-	generate_world_at(Vector2.ZERO)
-	generate_world_at(windowDim * Vector2(1, 0))
-	generate_world_at(windowDim * Vector2(-1, 1))
-	generate_world_at(windowDim * Vector2(0, 1))
-	generate_world_at(windowDim * Vector2(1, 1))
+	grassData.append([Transform2D(0.0, Vector2.DOWN * 20000.0), 1, 100])
+	
+	for i in range(-1, 2):
+		for j in range(-1, 2):
+			generate_world_at(Vector2(i, j))
+	
 	update_grass_mm()
-	
 	tBegin = Time.get_ticks_msec()
 
 
 func _process(_delta: float) -> void:
-	if not player:
-		player = global.PLAYER
-		return
-	
 	if player.velocity:
 		var playerLegPos: Vector2 = player.global_position
+		var half_dim: Vector2 = twiceWindowDim * 0.5
+		var diff: Vector2 = (playerLegPos - currentWinGrid * twiceWindowDim).abs()
+		if diff.x > half_dim.x or diff.y > half_dim.y:
+			currentWinGrid = get_current_win_grid_coord(playerLegPos)
+			var unbuiltGridCoords: PackedVector2Array = get_unbuilt_win_grid_coord_from(currentWinGrid)
+			if not unbuiltGridCoords.is_empty():
+				WorkerThreadPool.add_task(_build_world_at_coords.bind(unbuiltGridCoords))
+		
 		var circleUpBorder: Array = [Transform2D(0.0, playerLegPos - Vector2(0, grassDepthEffectRad))]
 		var circleBottomBorder: float = playerLegPos.y + grassDepthEffectRad
 		
@@ -233,7 +376,7 @@ func _process(_delta: float) -> void:
 					cpuGrass.texture = grassTextures[grassData[i][1]]
 					cpuGrass.transform = xform
 					cpuGrass.offset.y = -9.0
-					cpuGrass.position.y += 9
+					cpuGrass.position.y += 9.0
 					
 					add_child(cpuGrass)
 					grassHidden[key] = cpuGrass
@@ -243,7 +386,6 @@ func _process(_delta: float) -> void:
 	
 	for grassKey in grassHidden:
 		var cpuGrass: Sprite2D = grassHidden[grassKey]
-		var t: float = (Time.get_ticks_msec() - tBegin)/1000.0
 		
 		if not point_is_inside_circle(cpuGrass.global_position, player.global_position, grassDepthEffectRad+7):
 			RenderingServer.multimesh_instance_set_transform_2d(grassMMRID, grassKey.x, grassData[grassKey.x][0])
@@ -251,11 +393,10 @@ func _process(_delta: float) -> void:
 			grassHidden.erase(grassKey)
 		
 		else:
-			var waves: float = sin(PI + t * 4.0 + (cpuGrass.global_position.x * 0.5))
-
-			var skewedAmount: float = waves * atan(5.0/32.0)
-			var scaleAdjust: float = 1 + waves * 1.0/32.0
-
+			var t: float = (Time.get_ticks_msec() - tBegin) * 0.004 # 0.001 * 4
+			var waves: float = sin(PI + t + (cpuGrass.global_position.x * 0.5))
+			var skewedAmount: float = waves * 0.155 # atan(5/32)
+			var scaleAdjust: float = 1 + waves * 0.03125 # 1/32
+		
 			cpuGrass.scale.y = scaleAdjust * grassData[grassKey.x][0].get_scale().y
 			cpuGrass.skew = skewedAmount
-	

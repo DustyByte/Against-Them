@@ -54,20 +54,6 @@ scale = Vector2(0.675, 0.675)
 texture_normal = ExtResource("2_usva3")
 texture_pressed = ExtResource("3_nrs1e")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -202.0
-offset_top = -254.0
-offset_right = 202.0
-offset_bottom = 254.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
 anchor_left = 0.8

@@ -61,7 +61,7 @@ func resonate(d: float, resonatedFrom: CharacterBody2D) -> void:
 			var t: int = Time.get_ticks_usec()
 			global.add_damage_text(enemy.global_position, d, damageType)
 			print(Time.get_ticks_usec() - t)
-		Thread
+		
 
 func on_enemy_entered(enemy: Node2D) -> void:
 	enemy.got_hit.connect(resonate.bind(enemy))

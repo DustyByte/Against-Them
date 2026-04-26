@@ -2,6 +2,7 @@ class_name Player
 extends CharacterBody2D
 
 signal got_hit
+signal hp_changed
 
 var RUN_SPEED = 300.0
 var WALK_SPEED = 50.0
@@ -14,7 +15,6 @@ var onRunFeatures: Script = preload("res://Scripts/on_run_features.gd")
 var bulletBluePrint: PackedScene = preload("res://Scenes/Weapons/rupture_ammo.tscn")
 var joyStick: TouchScreenJoyStick = null
 var directionFacing: Vector2 = Vector2.RIGHT
-var enemySpawner: EnemySpawner
 var stats: PlayerStats = PlayerStats.new()
 var speed: float = RUN_SPEED
 var knockBackVelocity: Vector2 = Vector2.ZERO
@@ -59,21 +59,21 @@ func get_all_enemies_in_rad(rad: float) -> Array[Node2D]:
 	return enemies
 
 
-# remove or adjust this func later
-func init_spawner() -> void:
-	enemySpawner.spawn()
-	get_tree().create_timer(0.5).timeout.connect(init_spawner)
-
-
 ## Registers damage and returns current HP.
 func get_hit(incomingDamage) -> float:
 	if not avatarWrapperNode.isHitAnimationPlaying:
 		avatarWrapperNode.handle_hit_animation()
 		global.activeCamera.shake(8.0)
 		stats.currentHP -= incomingDamage
+		global.add_damage_text(global_position, incomingDamage, 5)
 	
 	got_hit.emit()
 	return stats.currentHP
+
+
+func take_heal(regenHP: float) -> void:
+	stats.currentHP += regenHP
+	global.add_damage_text(global_position, regenHP, 6)
 
 
 func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0) -> void:
@@ -92,9 +92,17 @@ func handle_death() -> void:
 func _ready() -> void:
 	weapon = get_node('VisualWrapper/WeaponSystem/Weapon')
 	joyStick = get_node("/root/World/CanvasLayer/JoyStick")
-	enemySpawner = EnemySpawner.new($"..", self)
-	init_spawner()
+	stats.hp_changed.connect(func(cHP: float, mHP: float):
+		hp_changed.emit(cHP, mHP)
+	)
 	global.PLAYER = self
+	
+	var cameraZoom: Vector2 = $Camera2D.zoom
+	var windowDim: Vector2 = get_viewport_rect().size
+	windowDim *= Vector2(1.0/cameraZoom.x, 1.0/cameraZoom.y)
+	
+	var imgDim: Vector2 = Vector2(400.0, 576.0)
+	$MapBase.scale = windowDim / imgDim
 
 
 func _physics_process(_delta: float) -> void:

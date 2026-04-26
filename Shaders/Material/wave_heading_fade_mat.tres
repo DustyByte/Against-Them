@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://k0dqqicbdisn"]
+
+[ext_resource type="Shader" uid="uid://c3c63ccaxgrp4" path="res://Shaders/wave_heading_fade.gdshader" id="1_qei41"]
+
+[sub_resource type="Gradient" id="Gradient_04yhl"]
+offsets = PackedFloat32Array(0, 0.5025381, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.2627451, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_aqwrk"]
+gradient = SubResource("Gradient_04yhl")
+
+[resource]
+shader = ExtResource("1_qei41")
+shader_parameter/color = SubResource("GradientTexture1D_aqwrk")

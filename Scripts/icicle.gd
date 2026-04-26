@@ -9,6 +9,7 @@ var carryingDamageType: int = -1
 var carryingKnockBackIntensity: float = -1.0
 var goingTowards: Vector2 = Vector2.ZERO
 var lifeSteal: float = 0.0
+var travelledDisSq: float = 0.0
 var toExplode: bool = false
 @onready var iceFlakes: GPUParticles2D = $GPUParticles2D
 
@@ -62,4 +63,9 @@ func explode_into_icicles(from: Vector2, icicleAmount: int = 4) -> void:
 
 
 func _process(delta: float) -> void:
-	position += goingTowards * SPEED * delta
+	var deltaDist: Vector2 = goingTowards * SPEED * delta
+	position += deltaDist
+	
+	travelledDisSq += deltaDist.length_squared()
+	if travelledDisSq > 4000000.0:
+		queue_free()

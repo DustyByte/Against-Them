@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://q0mcklnmoqmf"]
+[gd_scene load_steps=20 format=3 uid="uid://q0mcklnmoqmf"]
 
 [ext_resource type="Script" uid="uid://dfkowy554grup" path="res://Scripts/player.gd" id="1_v0iea"]
 [ext_resource type="PackedScene" uid="uid://b70qtk3vfuglf" path="res://Scenes/Players/spriteand_player_animations.tscn" id="2_6t5aa"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://jyihhchc5gmt" path="res://Scripts/muzzle_flash.gd" id="6_xxqkx"]
 [ext_resource type="Script" uid="uid://rik4mkjyngdk" path="res://Scripts/featuresand_summon_management_system.gd" id="7_3smsa"]
 [ext_resource type="Script" uid="uid://42lqnifquph3" path="res://Scripts/summon_flags.gd" id="8_8erm5"]
+[ext_resource type="Texture2D" uid="uid://b8bgtxnh87apa" path="res://Assets/Map Base.PNG" id="12_j8xm3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8erm5"]
 
@@ -130,6 +131,7 @@ position = Vector2(0, 30)
 shape = SubResource("CapsuleShape2D_6t5aa")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+ignore_rotation = false
 zoom = Vector2(0.6, 0.6)
 script = ExtResource("6_x3wgy")
 
@@ -138,6 +140,10 @@ script = ExtResource("7_3smsa")
 
 [node name="SummonFlags" type="Node2D" parent="."]
 script = ExtResource("8_8erm5")
+
+[node name="MapBase" type="Sprite2D" parent="."]
+z_index = -2
+texture = ExtResource("12_j8xm3")
 
 [connection signal="area_entered" from="ExpManagementSystem" to="ExpManagementSystem" method="_on_area_entered"]
 [connection signal="body_entered" from="HitDetectionArea" to="." method="_on_hit_detection_area_body_entered"]

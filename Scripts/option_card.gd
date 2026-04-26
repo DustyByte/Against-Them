@@ -1,7 +1,6 @@
 class_name OptionCard
 extends PanelContainer
 
-
 signal selected
 
 @onready var cardName: Label = $MarginContainer/VBoxContainer/Name

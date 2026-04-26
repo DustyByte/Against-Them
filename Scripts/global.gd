@@ -11,9 +11,11 @@ enum DAMAGE_TYPES {
 	ELECTRO,
 	FROST,
 	INFERNO,
-	EXOTIC
+	EXOTIC,
+	PLAYER_HIT,
+	PLAYER_HEAL
 }
-const DAMAGE_TYPE_COLORS: Array[Color] = [Color.CRIMSON, Color.MEDIUM_AQUAMARINE, Color.POWDER_BLUE, Color.LIGHT_CORAL, Color.MEDIUM_ORCHID]
+const DAMAGE_TYPE_COLORS: Array[Color] = [Color.CRIMSON, Color.MEDIUM_AQUAMARINE, Color.POWDER_BLUE, Color.LIGHT_CORAL, Color.MEDIUM_ORCHID, Color.RED, Color.GREEN]
 const EXP_DROP_TYPES: Dictionary = {
 	TYPE_1 = {
 		expAmount = 1,
@@ -70,7 +72,7 @@ var WEAPON_STATS: Dictionary = {
 		damageType = DAMAGE_TYPES.PHYSICAL
 	},
 	TORCHER = {
-		damage = 5.0,
+		damage = 50.0,
 		knockBackIntensity = 100.0,
 		cd = 0.2,
 		reloadTime = 2.0,

@@ -6,13 +6,17 @@ var modifiers: Dictionary = {}
 var isAvailable: bool = false
 var isForceDeactivated: bool = false
 var children: Array[Option] = []
+var iconPath: String = "res://icon.svg"
+var hierarchyMark: String = ""
 
 
-func _init(givenName: String, givenModifiers: Dictionary, givenDescription: String, initAsAvailable = false) -> void:
+func _init(givenName: String, givenModifiers: Dictionary, givenDescription: String, givenHierarchyMark: String, givenIconPath: String, initAsAvailable = false) -> void:
 	name = givenName
 	modifiers = givenModifiers
 	description = givenDescription
 	isAvailable = initAsAvailable
+	iconPath = givenIconPath
+	hierarchyMark = givenHierarchyMark
 
 
 func augment_child(childToAugment: Option) -> void:
@@ -29,11 +33,13 @@ func make_immediate_children_available() -> void:
 
 
 func duplicate_deep() -> Option:
-	var option: Option = Option.new('', {}, '')
+	var option: Option = Option.new('', {}, '', '', "")
 	var duplicatedChildren : Array[Option] = []
 	
 	option.name = name
 	option.description = description
+	option.iconPath = iconPath
+	option.hierarchyMark = hierarchyMark
 	option.modifiers = modifiers.duplicate(true)
 	option.isAvailable = isAvailable
 	for child in children:

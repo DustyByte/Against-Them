@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://btjw5oc720cgt"]
+[gd_scene load_steps=13 format=3 uid="uid://btjw5oc720cgt"]
 
 [ext_resource type="PackedScene" uid="uid://ccmbnuntae3lt" path="res://Scenes/WorldObjects/world_map.tscn" id="1_5a7ea"]
 [ext_resource type="Script" uid="uid://c7mxlei8x31sn" path="res://Scripts/world.gd" id="1_5ukr8"]
@@ -6,7 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://q0mcklnmoqmf" path="res://Scenes/Players/player.tscn" id="2_go701"]
 [ext_resource type="PackedScene" uid="uid://d3fyxqk784dc" path="res://Scenes/Systems/progression_choice_system.tscn" id="5_fo5ed"]
 [ext_resource type="PackedScene" uid="uid://dlqeqn5pu8vf8" path="res://Scenes/HUD/on_run_hud.tscn" id="6_5ukr8"]
+[ext_resource type="PackedScene" uid="uid://bdbgnos3wjblv" path="res://Scenes/HUD/player_health_indicator.tscn" id="6_5v1tr"]
 [ext_resource type="Script" uid="uid://cdihq7gp8lwbm" path="res://Scripts/detection_for_all.gd" id="7_o06y3"]
+[ext_resource type="Script" uid="uid://pim0pd78etau" path="res://Scripts/wave_manager.gd" id="8_k7acu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_k7acu"]
 resource_local_to_scene = true
@@ -42,6 +44,10 @@ process_mode = 3
 position = Vector2(215, 719)
 knobColor = Color(0.8745098, 0.7490196, 0.91764706, 0.5019608)
 
+[node name="PlayerHealthIndicator" parent="CanvasLayer" instance=ExtResource("6_5v1tr")]
+screenPositionX = 0.1
+screenPositionY = 0.175
+
 [node name="Player" parent="." instance=ExtResource("2_go701")]
 
 [node name="ProgressionChoiceSystem" parent="." instance=ExtResource("5_fo5ed")]
@@ -49,3 +55,6 @@ knobColor = Color(0.8745098, 0.7490196, 0.91764706, 0.5019608)
 [node name="ExpDropMMI" type="MultiMeshInstance2D" parent="."]
 z_index = -1
 multimesh = SubResource("MultiMesh_o06y3")
+
+[node name="WaveManager" type="Node" parent="."]
+script = ExtResource("8_k7acu")

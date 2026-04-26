@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://cpo3k2aa7uhip"]
+
+[ext_resource type="Script" uid="uid://c0xagge8hykfb" path="res://Scripts/option_icon.gd" id="1_ogmth"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_qxvah"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mj4yg"]
+font = ExtResource("2_qxvah")
+font_size = 22
+
+[node name="OptionIcon" type="TextureRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_ogmth")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 76.0
+offset_right = 80.0
+offset_bottom = 99.0
+mouse_filter = 1
+text = "IV.III"
+label_settings = SubResource("LabelSettings_mj4yg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="gui_input" from="." to="." method="xyz"]
