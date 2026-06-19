@@ -28,8 +28,10 @@ var enemyDropTotalWeight: int = 100
 @onready var world: Node2D = get_parent()
 @onready var player: Player = $"../Player"
 @onready var features_handle_kill: Callable = global.FEATURE_AND_SUMMON_MANAGEMENT_SYSTEM.handle_kill
+@export var wave_transition_delay: float = 0.75
+@export var drop_speed_multiplier: float = 0.92
 var dropInterval: Vector2 = Vector2(1.0, 2.0)
-var minDropInterval: float = 0.25
+var minDropInterval: float = 0.15
 var dropAmount: Vector2i = Vector2i(10, 15)
 var distanceFromPlayer: Vector2 = Vector2(500.0, 1000.0)
 var currentWave: int = 1
@@ -40,6 +42,8 @@ var waveHeadingBP: PackedScene = preload("res://Scenes/HUD/wave_heading.tscn")
 @onready var HUDCanvas: CanvasLayer = $"../CanvasLayer"
 var currentWaveDrops: Array[Dictionary]
 var nextWaveDrops: Array[Dictionary]
+var nextWaveDropsReady: bool = false
+var nextWaveDropsProductionInProgress: bool = false
 
 
 func generate_jittered_points(center: Vector2, count: int, radius: float) -> Array[Vector2]:
@@ -134,6 +138,9 @@ func get_seperated_multiple_drop(amount: int) -> Dictionary:
 
 
 func _worker_produce_next_wave_drops() -> void:
+	nextWaveDropsReady = false
+	nextWaveDropsProductionInProgress = true
+	var generatedDrops: Array[Dictionary] = []
 	var spawnAmount: int = randi_range(dropAmount.x, dropAmount.y)
 	while spawnAmount > 0: # spawned amount could exceed spawnAmount. And that is intentional.
 		var drop: Dictionary = {}
@@ -154,29 +161,50 @@ func _worker_produce_next_wave_drops() -> void:
 				drop = get_seperated_multiple_drop(amount)
 				spawnAmount -= amount
 		
-		nextWaveDrops.append(drop)
-	nextWaveDrops[-1].nextSpawnInterval = -1.0
+		generatedDrops.append(drop)
+	
+	generatedDrops[-1].nextSpawnInterval = -1.0
+	nextWaveDrops = generatedDrops
+	
+	nextWaveDropsReady = true
+	nextWaveDropsProductionInProgress = false
 
 
 func update_wave_difficulty() -> void:
-	dropAmount += Vector2i.ONE*5
-	if not dropInterval.x * 0.98 < minDropInterval:
-		dropInterval *= 0.98
-	
-	@warning_ignore("integer_division")
+	dropAmount += Vector2i.ONE * (10 + currentWave)
+	if dropInterval.x > minDropInterval:
+		dropInterval.x = max(dropInterval.x * drop_speed_multiplier, minDropInterval)
+		dropInterval.y = max(dropInterval.y * drop_speed_multiplier, minDropInterval * 1.5)
+
 	var x: int = currentWave / 10
 	var xRed: int = x
-	x = clampi(x, 0, enemyDropWeights.size())
+	x = clampi(x, 0, enemyDropWeights.size() - 1)
 	for i in range(x):
 		var randWeightShift: int = randi_range(-4, 4)
 		enemyDropWeights[i] += randWeightShift
 		enemyDropTotalWeight += randWeightShift
+		if enemyDropWeights[i] <= 0:
+			enemyDropWeights[i] += 20
+			enemyDropTotalWeight += 20
 	
-	if currentWave % 10 == 0 and not xRed > enemyDropWeights.size():
+	if currentWave % 10 == 0 and xRed < enemyDropWeights.size():
 		enemyDropWeights[xRed] += 10
+		enemyDropTotalWeight += 10
 
 
 func begin_current_wave() -> void:
+	if not nextWaveDropsReady:
+		var waitAttempts: int = 0
+		while nextWaveDropsProductionInProgress and waitAttempts < 20:
+			await sceneTree.create_timer(0.05).timeout
+			waitAttempts += 1
+		if not nextWaveDropsReady:
+			_worker_produce_next_wave_drops()
+	
+	currentWaveDrops = nextWaveDrops
+	nextWaveDrops = []
+	nextWaveDropsReady = false
+	
 	waveBegun.emit(currentWave)
 	add_wave_heading()
 	
@@ -207,10 +235,11 @@ func begin_current_wave() -> void:
 
 func handle_enemy_kill() -> void:
 	killedEnemyAmount += 1
+	global.TOTAL_ENEMY_KILLS += 1
 	if killedEnemyAmount >= currentWaveTotalEnemies:
 		killedEnemyAmount = 0
 		waveFinished.emit(currentWave-1)
-		sceneTree.create_timer(2.0).timeout.connect(begin_current_wave)
+		sceneTree.create_timer(wave_transition_delay).timeout.connect(begin_current_wave)
 
 
 func add_wave_heading() -> void:
@@ -220,11 +249,11 @@ func add_wave_heading() -> void:
 
 
 func _ready() -> void:
+	global.WAVE_MANAGER = self
+	
 	distanceFromPlayer += Vector2.ONE * get_window().get_size().x
 	
 	_worker_produce_next_wave_drops()
-	currentWaveDrops = nextWaveDrops
-	nextWaveDrops = []
+	begin_current_wave()
 	
 	WorkerThreadPool.add_task(_worker_produce_next_wave_drops)
-	begin_current_wave()

@@ -33,6 +33,8 @@ func explode() -> void:
 	
 	global.activeCamera.shake(5.0)
 	
+	global.WORLD.audio_2d_play(preload("res://Assets/SFX/GravityBombImpact.wav"), global_position, "game_world", randf_range(0.9, 1.1), 12.0)
+	
 	collision_mask = 4
 	hit()
 
@@ -58,9 +60,7 @@ func resonate(d: float, resonatedFrom: CharacterBody2D) -> void:
 	for enemy in enemies:
 		if enemy != resonatedFrom:
 			enemy.get_hit(d, false)
-			var t: int = Time.get_ticks_usec()
 			global.add_damage_text(enemy.global_position, d, damageType)
-			print(Time.get_ticks_usec() - t)
 		
 
 func on_enemy_entered(enemy: Node2D) -> void:

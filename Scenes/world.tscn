@@ -19,7 +19,7 @@ size = Vector2(5, -5)
 
 [sub_resource type="MultiMesh" id="MultiMesh_o06y3"]
 use_colors = true
-custom_aabb = AABB(-5000, -5000, 0, 10000, 10000, 1)
+custom_aabb = AABB(-50000, -50000, 0, 100000, 100000, 1)
 instance_count = 50000
 visible_instance_count = 0
 mesh = SubResource("QuadMesh_5ukr8")

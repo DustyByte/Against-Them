@@ -37,7 +37,6 @@ func hit() -> void:
 		var t: int = Time.get_ticks_usec()
 		if not enemy.marks.has('burn'):
 			burnMethod.call(enemy, stats.burnDamage)
-		print(Time.get_ticks_usec() - t)
 
 
 func beam_width_tween_method(val: float) -> void:

@@ -2,7 +2,7 @@ class_name PlayerStats
 
 signal hp_changed
 
-const BASE_HP: float = 300
+const BASE_HP: float = 50.0
 var maxHP: float = BASE_HP
 var currentHP: float = BASE_HP:
 	set(val):

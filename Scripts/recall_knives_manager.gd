@@ -53,7 +53,6 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	print(stackAmount)
 	if hasNotThrown and readyAmount == expectedReadyAmount:
 		get_tree().create_timer(stats.cd).timeout.connect(throw)
 		hasNotThrown = false

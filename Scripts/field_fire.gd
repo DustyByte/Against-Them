@@ -34,6 +34,8 @@ func explode() -> void:
 	
 	global.activeCamera.shake(5.0)
 	
+	global.WORLD.audio_2d_play(preload("res://Assets/SFX/FireBombImpact.wav"), global_position, "game_world", randf_range(0.9, 1.1))
+	
 	explosionParticles.finished.connect(explosionParticles.queue_free)
 	get_tree().create_timer(stats.duration).timeout.connect(handle_exit)
 	

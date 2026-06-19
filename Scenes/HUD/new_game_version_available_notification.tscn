@@ -1,0 +1,100 @@
+[gd_scene load_steps=7 format=3 uid="uid://bchj4gvsru11w"]
+
+[ext_resource type="Script" uid="uid://w320fov2ya3y" path="res://Scripts/update_notification.gd" id="1_7tsn2"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="1_lku0q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b8sjg"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_alxwv"]
+bg_color = Color(0.70980394, 0.70980394, 0.70980394, 1)
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="Theme" id="Theme_ttcx3"]
+Button/colors/font_color = Color(0.74509805, 0.9254902, 0.9254902, 1)
+Button/font_sizes/font_size = 20
+Button/fonts/font = ExtResource("1_lku0q")
+Button/styles/normal = SubResource("StyleBoxFlat_b8sjg")
+Label/colors/font_color = Color(0.74509805, 0.9254902, 0.9254902, 1)
+Label/font_sizes/font_size = 20
+Label/fonts/font = ExtResource("1_lku0q")
+Panel/styles/panel = SubResource("StyleBoxFlat_alxwv")
+
+[sub_resource type="LabelSettings" id="LabelSettings_l21j5"]
+font_size = 22
+font_color = Color(0.21, 0.21, 0.21, 1)
+
+[node name="UpdateNotification" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7tsn2")
+
+[node name="DimBackground" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.09803922)
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(500, 250)
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 250.0
+theme = SubResource("Theme_ttcx3")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Message" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "A new version of the game is available on Play Store.
+
+Please update to continue."
+label_settings = SubResource("LabelSettings_l21j5")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="MaybeLaterButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(192, 60)
+layout_mode = 2
+text = "Maybe later"
+
+[node name="UpdateButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(192, 60)
+layout_mode = 2
+text = "Update"

@@ -10,12 +10,14 @@ var arcRepeatInterval: float = 0.05
 var isChain: bool = false
 var chainingFrom: Vector2 = Vector2.ZERO
 var chainNo: int = -1
+var AS: AudioStream = preload("res://Assets/SFX/LightningLarge.wav")
 
 
 func setup_as_chain(chainFromGlobal: Vector2, chainNumber: int) -> void:
 	isChain = true
 	chainingFrom = chainFromGlobal
 	chainNo = chainNumber
+	AS = preload("res://Assets/SFX/LightningSmall.wav")
 
 
 func arc(_trash) -> void:
@@ -61,3 +63,4 @@ func _ready() -> void:
 	animationPlayer.play("strike")
 	animationPlayer.animation_finished.connect(arc)
 	
+	global.WORLD.audio_2d_play(AS, global_position, "game_world", randf_range(0.8, 1.2))

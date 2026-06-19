@@ -3,8 +3,13 @@ extends Node2D
 @onready var expDropMMI: MultiMeshInstance2D = $ExpDropMMI
 var particleBP: PackedScene = preload("res://Scenes/Effects/particles_throw.tscn")
 var GPUParticlePool: Array[GPUParticles2D] = []
+var ASP2dPool: Array[AudioStreamPlayer2D] = []
+var ASPPool: Array[AudioStreamPlayer] = []
+var ASP2dPoolSize: int = 0
+var ASPPoolSize: int = 0
 var poolCount: int = 0
 var expLifeTrackArr: Array[Dictionary] = []
+var elapsedTime: float = 0.0
 
 
 func fill_gpu_particle_pool(amount: int) -> void:
@@ -79,7 +84,67 @@ func remove_exp_id_lifetrack(id: int) -> void:
 				expLifeTrackArr.remove_at(i)
 
 
+func fill_audio_stream_player_2d_pool(amount: int) -> void:
+	ASP2dPool.resize(amount)
+	ASP2dPoolSize = amount
+	for i in range(amount):
+		ASP2dPool[i] = AudioStreamPlayer2D.new()
+		ASP2dPool[i].process_mode = Node.PROCESS_MODE_ALWAYS
+		add_child(ASP2dPool[i])
+
+
+var nextASP2d: int = 0
+func audio_2d_play(AS: AudioStream, enemyGlobalPosition: Vector2, sfxType: String, pitch: float = 0.0, vdb: float = 0.0) -> void:
+	if not global.SFX_TYPES_PERM[sfxType]:
+		return
+	
+	ASP2dPool[nextASP2d].global_position = enemyGlobalPosition
+	ASP2dPool[nextASP2d].stream = AS
+	ASP2dPool[nextASP2d].play()
+	if pitch:
+		ASP2dPool[nextASP2d].pitch_scale = pitch
+		if vdb:
+			ASP2dPool[nextASP2d].volume_db = vdb
+	
+	
+	nextASP2d = (nextASP2d+1) % ASP2dPoolSize
+
+
+func fill_audio_stream_player_pool(amount: int) -> void:
+	ASPPool.resize(amount)
+	ASPPoolSize = amount
+	for i in range(amount):
+		ASPPool[i] = AudioStreamPlayer.new()
+		add_child(ASPPool[i])
+
+
+var nextASP: int = 0
+func audio_play(AS: AudioStream, sfxType: StringName, pitch: float = 0.0, vdb: float = 0.0) -> void:
+	if not global.SFX_TYPES_PERM[sfxType]:
+		return
+	
+	ASPPool[nextASP].stream = AS
+	ASPPool[nextASP].play()
+	if pitch:
+		ASPPool[nextASP].pitch_scale = pitch
+		if vdb:
+			ASPPool[nextASP].volume_db = vdb
+	
+	nextASP = (nextASP+1) % ASPPoolSize
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_down"):
+		pass
+
+
 func _ready() -> void:
 	global.WORLD = self
 	
 	fill_gpu_particle_pool(10)
+	fill_audio_stream_player_2d_pool(16)
+	fill_audio_stream_player_pool(6)
+
+
+func _process(delta: float) -> void:
+	elapsedTime += delta

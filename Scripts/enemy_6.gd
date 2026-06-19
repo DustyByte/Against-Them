@@ -67,6 +67,8 @@ func explodeand_die(body: CharacterBody2D = null) -> void: # body here is always
 	
 	rangeArea.collision_mask = 4 # bit 3
 	
+	global.WORLD.audio_2d_play(global.ENEMY_DEATH_STREAM_03, global_position, "game_world", randf_range(1.55, 1.8))
+	
 	await get_tree().create_timer(0.1).timeout
 	
 	if body:
@@ -85,7 +87,7 @@ func explodeand_die(body: CharacterBody2D = null) -> void: # body here is always
 func drop_exp() -> void:
 	var expDrop: Area2D = expDropBluePrint.instantiate()
 	
-	expDrop.set_exp_type(global.EXP_DROP_TYPES.TYPE_1)
+	expDrop.set_exp_type(global.EXP_DROP_TYPES.TYPE_2 if randf() < 0.01 else global.EXP_DROP_TYPES.TYPE_3)
 	expDrop.global_position = global_position
 	
 	global.WORLD.add_child.call_deferred(expDrop)

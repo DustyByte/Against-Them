@@ -47,6 +47,8 @@ func handle_death() -> void:
 	var tween: Tween = get_tree().create_tween()
 	tween.tween_property(mat, 'shader_parameter/threshold', 0.0, 0.3).from(1.0)
 	
+	global.WORLD.audio_2d_play(global.ENEMY_DEATH_STREAM_02, global_position, "game_world", randf_range(0.8, 1.2))
+	
 	tween.finished.connect(drop_exp)
 	tween.finished.connect(queue_free)
 
@@ -54,7 +56,7 @@ func handle_death() -> void:
 func drop_exp() -> void:
 	var expDrop: Area2D = expDropBluePrint.instantiate()
 	
-	expDrop.set_exp_type(global.EXP_DROP_TYPES.TYPE_1)
+	expDrop.set_exp_type(global.EXP_DROP_TYPES.TYPE_2 if randf() < 0.01 else global.EXP_DROP_TYPES.TYPE_3)
 	expDrop.global_position = global_position
 	
 	global.WORLD.add_child.call_deferred(expDrop)

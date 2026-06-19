@@ -138,13 +138,6 @@ func insert(node: MMInstanceNode) -> void:
 		midIncrementCount = 0
 
 
-func print_list() -> void:
-	var runner: MMInstanceNode = head
-	for i in range(size):
-		print(runner.position)
-		runner = runner.next
-
-
 func get_left_portion_size() -> int:
 	var i: int = 0
 	var runner: MMInstanceNode = mid

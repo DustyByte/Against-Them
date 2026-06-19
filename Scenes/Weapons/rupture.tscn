@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://mhp4f3p4niu5"]
+[gd_scene load_steps=4 format=3 uid="uid://mhp4f3p4niu5"]
 
 [ext_resource type="Script" uid="uid://cgieod5u8w7at" path="res://Scripts/rupture.gd" id="1_qegv3"]
 [ext_resource type="Texture2D" uid="uid://jwqcwmiuenam" path="res://Assets/Weapons/Rupture/OnRunUse.png" id="2_s88vl"]
+[ext_resource type="AudioStream" uid="uid://cjb5qgvnjajsc" path="res://Assets/SFX/Gun1.mp3" id="3_rtt23"]
 
 [node name="Weapon" type="Node2D"]
 script = ExtResource("1_qegv3")
@@ -17,3 +18,6 @@ flip_h = true
 
 [node name="Barrel" type="Node2D" parent="."]
 position = Vector2(45, -7)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_rtt23")

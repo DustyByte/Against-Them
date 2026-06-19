@@ -1,0 +1,164 @@
+[gd_scene load_steps=8 format=3 uid="uid://cq2pwwiv8mgfi"]
+
+[ext_resource type="Script" uid="uid://bh4bwjawh4f12" path="res://Scripts/descend_results.gd" id="1"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_hb1h1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_alxwv"]
+bg_color = Color(0.70980394, 0.70980394, 0.70980394, 1)
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="Theme" id="Theme_6fktc"]
+Button/fonts/font = ExtResource("2_hb1h1")
+Label/colors/font_color = Color(0.74509805, 0.9254902, 0.9254902, 1)
+Label/font_sizes/font_size = 20
+Label/fonts/font = ExtResource("2_hb1h1")
+Panel/styles/panel = SubResource("StyleBoxFlat_alxwv")
+
+[sub_resource type="LabelSettings" id="LabelSettings_m32vb"]
+font = ExtResource("2_hb1h1")
+font_size = 22
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qdc0j"]
+bg_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="Theme" id="Theme_s1y4a"]
+Panel/styles/panel = SubResource("StyleBoxFlat_qdc0j")
+
+[node name="ResultsScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CenterContainer"]
+custom_minimum_size = Vector2(500, 450)
+layout_mode = 2
+theme = SubResource("Theme_6fktc")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/Panel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "THIS DESCEND"
+label_settings = SubResource("LabelSettings_m32vb")
+horizontal_alignment = 1
+
+[node name="StatsPanel" type="Panel" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+theme = SubResource("Theme_s1y4a")
+
+[node name="StatsMargin" type="MarginContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatsVBox" type="VBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin"]
+layout_mode = 2
+theme_override_constants/separation = 26
+
+[node name="EnemiesKilled" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox"]
+layout_mode = 2
+
+[node name="EnemiesLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox/EnemiesKilled"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Enemies Killed"
+
+[node name="EnemiesValue" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox/EnemiesKilled"]
+layout_mode = 2
+text = "0"
+
+[node name="WaveReached" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox"]
+layout_mode = 2
+
+[node name="WaveLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox/WaveReached"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Wave Reached"
+
+[node name="WaveValue" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox/WaveReached"]
+layout_mode = 2
+text = "1"
+
+[node name="ElapsedTime" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox"]
+layout_mode = 2
+
+[node name="TimeLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox/ElapsedTime"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Elapsed Time"
+
+[node name="TimeValue" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox/ElapsedTime"]
+layout_mode = 2
+text = "00:00"
+
+[node name="Spacer" type="Control" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ReturnButton" type="Panel" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme = SubResource("Theme_s1y4a")
+
+[node name="ButtonLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/ReturnButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -12.0
+offset_right = 60.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "RETURN"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="gui_input" from="CenterContainer/Panel/MarginContainer/VBoxContainer/ReturnButton" to="." method="_on_return_button_gui_input"]

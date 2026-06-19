@@ -1,9 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dlqeqn5pu8vf8"]
+[gd_scene load_steps=12 format=3 uid="uid://dlqeqn5pu8vf8"]
 
 [ext_resource type="Script" uid="uid://kaosiieesv7u" path="res://Scripts/on_run_hud.gd" id="1_div4g"]
 [ext_resource type="Texture2D" uid="uid://rlmfaevuagj7" path="res://Assets/Shader Textures/FireButton.png" id="2_usva3"]
 [ext_resource type="Texture2D" uid="uid://br8q6eumndyrr" path="res://Assets/Shader Textures/FireButtonPressed.png" id="3_nrs1e"]
 [ext_resource type="Script" uid="uid://bytcphue4ndvk" path="res://Scripts/weapon_hanger.gd" id="4_3j417"]
+[ext_resource type="Shader" uid="uid://33vkdmxuwfpo" path="res://Shaders/linear_texture_mapper.gdshader" id="5_k5in4"]
+[ext_resource type="Texture2D" uid="uid://6daugom02swt" path="res://Assets/HUD Elements/PauseButton.png" id="6_6e0tg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y282y"]
 bg_color = Color(0.47843137, 0.47843137, 0.47843137, 1)
@@ -17,6 +19,10 @@ ProgressBar/styles/fill = SubResource("StyleBoxFlat_3j417")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vjotj"]
 radius = 126.55
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h5qi5"]
+shader = ExtResource("5_k5in4")
+shader_parameter/my_texture = ExtResource("6_6e0tg")
 
 [node name="OnRunHUD" type="Control"]
 process_mode = 3
@@ -71,7 +77,23 @@ action = "X"
 
 [node name="WeaponHanger" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(2, 2)
+theme_override_constants/separation = 28
 script = ExtResource("4_3j417")
+
+[node name="PauseButtonMarginContainer" type="MarginContainer" parent="."]
+process_mode = 1
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 28
+
+[node name="Panel" type="Panel" parent="PauseButtonMarginContainer"]
+z_index = 2
+material = SubResource("ShaderMaterial_h5qi5")
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2

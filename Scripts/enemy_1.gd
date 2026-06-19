@@ -73,6 +73,8 @@ func handle_death() -> void:
 	var tween: Tween = get_tree().create_tween()
 	tween.tween_property(mat, 'shader_parameter/threshold', 0.0, 0.3).from(1.0)
 	
+	global.WORLD.audio_2d_play(global.ENEMY_DEATH_STREAM_01, global_position, "game_world", randf_range(0.8, 1.2))
+	
 	tween.finished.connect(drop_exp)
 	tween.finished.connect(queue_free)
 

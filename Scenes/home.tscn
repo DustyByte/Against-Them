@@ -1,0 +1,114 @@
+[gd_scene load_steps=9 format=3 uid="uid://bq10h1ud80djv"]
+
+[ext_resource type="Script" uid="uid://bgxp1ve1bjgxc" path="res://Scripts/home.gd" id="1_1ey7h"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_ibywg"]
+[ext_resource type="Texture2D" uid="uid://dfclutldkmf4" path="res://Assets/HUD Elements/A_black_image.jpeg" id="3_llnbm"]
+[ext_resource type="Texture2D" uid="uid://bhhhu7vr160fi" path="res://Assets/HUD Elements/Planet.png" id="4_12ycv"]
+[ext_resource type="AudioStream" uid="uid://cajhad7qdxent" path="res://Assets/SFX/UI.mp3" id="5_llnbm"]
+[ext_resource type="Script" uid="uid://cpb11gsddesn6" path="res://Scripts/home_http.gd" id="6_xyz12"]
+
+[sub_resource type="Theme" id="Theme_12ycv"]
+Label/font_sizes/font_size = 20
+Label/fonts/font = ExtResource("2_ibywg")
+
+[sub_resource type="LabelSettings" id="LabelSettings_llnbm"]
+font_size = 46
+
+[node name="Home" type="Node2D"]
+script = ExtResource("1_1ey7h")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme = SubResource("Theme_12ycv")
+theme_override_constants/separation = 22
+
+[node name="Title" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+text = "Against  THEM"
+label_settings = SubResource("LabelSettings_llnbm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="CanvasLayer/VBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="Descend" type="Panel" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Descend"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Descend"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Settings" type="Panel" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Settings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Discord" type="Panel" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Discord"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Discord"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Quit" type="Panel" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Quit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Quit"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ABlackImage" type="Sprite2D" parent="."]
+texture = ExtResource("3_llnbm")
+
+[node name="HomeHTTP" type="Node" parent="."]
+script = ExtResource("6_xyz12")
+
+[node name="Planet" type="Sprite2D" parent="."]
+position = Vector2(882, 451)
+scale = Vector2(0.45, 0.45)
+texture = ExtResource("4_12ycv")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_llnbm")
+mix_target = 2
+max_polyphony = 3

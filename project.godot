@@ -11,13 +11,15 @@ config_version=5
 [application]
 
 config/name="Against Them"
-run/main_scene="uid://btjw5oc720cgt"
+run/main_scene="uid://c4ojirv23fq4"
 config/features=PackedStringArray("4.5", "Mobile")
 config/icon="uid://cgwiohbwya2a6"
 
 [autoload]
 
 global="*res://Scripts/global.gd"
+AdMobManager="*res://Scripts/admob_manager.gd"
+SettingsManager="*res://Scripts/settings_manager.gd"
 
 [display]
 
@@ -68,6 +70,7 @@ pointing/emulate_mouse_from_touch=false
 
 [rendering]
 
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 anti_aliasing/quality/msaa_2d=1

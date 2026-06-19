@@ -15,7 +15,7 @@ func update_indicator(currentHP, maxHP) -> void:
 	if tween:
 		tween.kill()
 	
-	tween = get_tree().create_tween()
+	tween = get_tree().create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	
 	tween.tween_method(func(val: float):
 		fluidMat.set_shader_parameter("fill_level", val)

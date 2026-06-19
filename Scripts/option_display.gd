@@ -35,6 +35,9 @@ func _set_card_display_internals() -> void:
 
 
 func present_options(options: Array[Option]) -> void:
+	for oIcon in iconHolder.get_children():
+		oIcon.queue_free()
+		
 	for option in options:
 		var oIcon: OptionIcon = optionIconBP.instantiate()
 		
@@ -43,6 +46,8 @@ func present_options(options: Array[Option]) -> void:
 		oIcon.gui_input.connect(func(event: InputEvent):
 			if event is InputEventScreenTouch and event.is_pressed():
 				into_display_inject_option(option)
+				
+				global.WORLD.audio_play(preload("res://Assets/SFX/UI.mp3"), "ui", randf_range(0.8, 1.2))
 		)
 	
 	into_display_inject_option(options[0])
@@ -75,6 +80,8 @@ func into_display_remove_child_preview() -> void:
 
 func _handle_select_button_tap(event: InputEvent) ->  void:
 	if event is InputEventScreenTouch and event.is_pressed():
+		global.WORLD.audio_play(preload("res://Assets/SFX/UIReturn.wav"), "ui")
+		
 		on_select.call(currentlySelectedOption)
 		queue_free()
 

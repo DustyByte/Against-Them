@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://oci8hiohur6k"]
+[gd_scene load_steps=14 format=3 uid="uid://oci8hiohur6k"]
 
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="1_8igp8"]
 [ext_resource type="Script" uid="uid://1y2re252yal" path="res://Scripts/option_display.gd" id="1_g6xxd"]
+[ext_resource type="Script" uid="uid://cutl4iyt0bc55" path="res://Scripts/rewarded_ad_button.gd" id="5_3k8cb"]
 [ext_resource type="Texture2D" uid="uid://cbfu0vfsbbf2w" path="res://Assets/HUD Elements/OptionIcons/Faster.png" id="7_it5vf"]
 [ext_resource type="Texture2D" uid="uid://kq7lnyk7ll0a" path="res://Assets/HUD Elements/OptionIcons/Greed.png" id="8_mbcqy"]
 
@@ -45,6 +46,7 @@ Panel/styles/panel = SubResource("StyleBoxFlat_m7wgi")
 
 [node name="OptionDisplay" type="Node2D"]
 process_mode = 3
+z_index = 2
 script = ExtResource("1_g6xxd")
 
 [node name="OptionIconHolder" type="HBoxContainer" parent="."]
@@ -159,6 +161,7 @@ theme_override_constants/margin_right = 100
 [node name="Panel" type="Panel" parent="Buttons/WatchAdButton"]
 layout_mode = 2
 theme = SubResource("Theme_yylnf")
+script = ExtResource("5_3k8cb")
 
 [node name="CenterContainer" type="CenterContainer" parent="Buttons/WatchAdButton/Panel"]
 layout_mode = 1

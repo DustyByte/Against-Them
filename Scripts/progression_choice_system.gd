@@ -32,8 +32,8 @@ var baabbaa := Option.new('Hexa Adapt', {}, 'Hexa snails lightnings gains all th
 var c := Option.new("Retribution", {
 	retriStats = {
 		isSummon = true,
-		damage = 100.0,
-		range = 500.0,
+		damage = 20.0,
+		range = 400.0,
 		severeJudgement = 0,
 		moreFatForYou = 0
 	}
@@ -211,7 +211,7 @@ var nc := Option.new("Lasting Anomaly", {}, "Gravity zone remains active for 1 s
 
 var nanbnca := Option.new("Resonance", {}, "Gravity zone resonates. Any damage dealt to an enemy within the zone is also applied to all other enemies inside the zone.", 'III.I', "res://Assets/HUD Elements/OptionIcons/GravityBomb.png")
 
-var fieryFieldIconPath: String = "res://icon.svg"
+var fieryFieldIconPath: String = "res://Assets/HUD Elements/OptionIcons/FireField.png"
 var o := Option.new("Fiery Field", {
 	fieryFieldStats = {
 		isSummon = true,

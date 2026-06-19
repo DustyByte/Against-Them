@@ -221,6 +221,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 			if not playerStatsActiveModifiers.has("retriStats"):
 				_set_new_modifiers_into_player_stats(optionChosen.modifiers)
 				optionChosen.make_immediate_children_available()
+				optionChosen.deactivate(true)
 				add_retri()
 		
 		"Severe Judgement":
@@ -527,7 +528,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 		
 		"Rapid Manifestation":
 			optionChosen.make_immediate_children_available()
-			var keys: Array[String] = playerStatsActiveModifiers.keys()
+			var keys: Array = playerStatsActiveModifiers.keys()
 			for key in keys:
 				var val = playerStatsActiveModifiers[key]
 				if val is Dictionary and val.has('isSummon'):

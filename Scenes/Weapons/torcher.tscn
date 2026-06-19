@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://lhnqe6rf4yjh"]
+[gd_scene load_steps=4 format=3 uid="uid://lhnqe6rf4yjh"]
 
 [ext_resource type="Script" uid="uid://bgbyvdwd0ew16" path="res://Scripts/torcher.gd" id="1_scpqs"]
 [ext_resource type="Texture2D" uid="uid://ctrhc6aspicef" path="res://Assets/Weapons/Torcher/OnRunUse.png" id="2_ith2l"]
+[ext_resource type="AudioStream" uid="uid://cbfmid0b5y64t" path="res://Assets/SFX/Gun2.wav" id="3_klnaf"]
 
 [node name="Weapon" type="Node2D"]
 script = ExtResource("1_scpqs")
@@ -16,3 +17,6 @@ flip_h = true
 
 [node name="Barrel" type="Node2D" parent="."]
 position = Vector2(102, 0)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_klnaf")

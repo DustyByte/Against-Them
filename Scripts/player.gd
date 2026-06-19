@@ -22,6 +22,7 @@ var knockBackDecay: float = 10.0
 var selectedWeaponAimingTowards: Vector2 = Vector2.RIGHT
 var joystickDirection: Vector2 = Vector2.RIGHT
 var isWalking: bool = false
+var hitAS: AudioStream = preload("res://Assets/SFX/QuckZap.wav")
 
 
 func get_nearest_attackable_or_null() -> Node2D:
@@ -60,14 +61,19 @@ func get_all_enemies_in_rad(rad: float) -> Array[Node2D]:
 
 
 ## Registers damage and returns current HP.
-func get_hit(incomingDamage) -> float:
+func get_hit(incomingDamage: float) -> float:
 	if not avatarWrapperNode.isHitAnimationPlaying:
 		avatarWrapperNode.handle_hit_animation()
 		global.activeCamera.shake(8.0)
+		
 		stats.currentHP -= incomingDamage
 		global.add_damage_text(global_position, incomingDamage, 5)
+		
+		global.WORLD.audio_2d_play(hitAS, global_position, "game_world", randf_range(0.75, 1.1))
+		global.vibrate_handheld(100, 0.1)
 	
 	got_hit.emit()
+	
 	return stats.currentHP
 
 
@@ -81,12 +87,11 @@ func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0
 
 
 func handle_death() -> void:
-	pass # take care of animation and all here
-	var newCamera: Camera2D = Camera2D.new()
-	newCamera.global_position = global.activeCamera.global_position
-	newCamera.set_script(load("res://Scripts/on_run_camera.gd"))
-	global.WORLD.add_child(newCamera)
-	queue_free()
+	get_tree().paused = true
+	
+	# Show death screen
+	var death_screen: CanvasLayer = load("res://Scenes/HUD/death_screen.tscn").instantiate()
+	global.WORLD.add_child(death_screen)
 
 
 func _ready() -> void:
