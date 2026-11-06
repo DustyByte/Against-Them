@@ -31,8 +31,8 @@ var enemyDropTotalWeight: int = 100
 @export var wave_transition_delay: float = 0.75
 @export var drop_speed_multiplier: float = 0.92
 var dropInterval: Vector2 = Vector2(1.0, 2.0)
-var minDropInterval: float = 0.15
-var dropAmount: Vector2i = Vector2i(10, 15)
+var minDropInterval: float = 0.15 
+var dropAmount: Vector2i = Vector2i(10, 15) # 10, 15
 var distanceFromPlayer: Vector2 = Vector2(500.0, 1000.0)
 var currentWave: int = 1
 var killedEnemyAmount: int = 0
@@ -44,6 +44,7 @@ var currentWaveDrops: Array[Dictionary]
 var nextWaveDrops: Array[Dictionary]
 var nextWaveDropsReady: bool = false
 var nextWaveDropsProductionInProgress: bool = false
+var dropBossNow: bool = false
 
 
 func generate_jittered_points(center: Vector2, count: int, radius: float) -> Array[Vector2]:
@@ -171,7 +172,10 @@ func _worker_produce_next_wave_drops() -> void:
 
 
 func update_wave_difficulty() -> void:
-	dropAmount += Vector2i.ONE * (10 + currentWave)
+	if currentWave % 1 == 0:
+		dropBossNow = true
+	
+	dropAmount += Vector2i.ONE * (10 + currentWave) 
 	if dropInterval.x > minDropInterval:
 		dropInterval.x = max(dropInterval.x * drop_speed_multiplier, minDropInterval)
 		dropInterval.y = max(dropInterval.y * drop_speed_multiplier, minDropInterval * 1.5)
@@ -216,7 +220,14 @@ func begin_current_wave() -> void:
 		for data in drop.dropData:
 			var enemy: CharacterBody2D = data[0].instantiate()
 			enemy.global_position = player.global_position + data[1]
-			enemy.tree_exited.connect(handle_enemy_kill)
+			
+			if enemy.ENEMY_TYPE != 6 and dropBossNow:
+				enemy.set_as_boss()
+				currentWaveTotalEnemies -= 1
+				dropBossNow = false
+			else:
+				enemy.tree_exited.connect(handle_enemy_kill)
+			
 			enemy.tree_exited.connect(features_handle_kill)
 			world.add_child.call_deferred(enemy)
 		

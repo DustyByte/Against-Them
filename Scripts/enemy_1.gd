@@ -2,6 +2,9 @@ extends CharacterBody2D
 
 signal got_hit
 
+const ENEMY_TYPE: int = 1
+
+var asBoss: bool = false
 var followSpeed: float = 150.0
 
 @onready var avatarWrapper: Node2D = $Wrapper
@@ -19,6 +22,7 @@ var shrinking: bool = false
 var marks: Dictionary = {}
 var twitchTween: Tween = null
 var freezeEffect: Freeze = null
+var reverseInertia: float = 3.0
 
 
 func twitch() -> void:
@@ -31,8 +35,14 @@ func twitch() -> void:
 	twitchTween.tween_method(method, 0.0, 0.32, 0.075)
 
 
+func set_as_boss() -> void:
+	asBoss = true
+	stats = EnemyStats.new(global.ENEMY_BOSS_BASE_STATS.Type_1)
+	reverseInertia *= 0.34
+
+
 func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0) -> void:
-	knockBackVelocity = knockBackDirection * knockBackIntensity * 3
+	knockBackVelocity = knockBackDirection * knockBackIntensity * reverseInertia
 
 
 func apply_external_velocity(givenExternalVelocityWithDelta: Vector2) -> void:
@@ -65,6 +75,11 @@ func drop_exp() -> void:
 
 func handle_death() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
+	
+	if asBoss:
+		var headSprite: Sprite2D = $Wrapper/Head
+		headSprite.use_parent_material = true
+		headSprite.material = null
 	
 	var mat: ShaderMaterial = global.DEATH_CORRODE_SHADER_MATERIAL
 	avatarWrapper.use_parent_material = true
@@ -113,4 +128,9 @@ func _physics_process(_delta: float) -> void:
 	externalNonDecayVelocity = Vector2.ZERO
 	
 	move_and_slide()
-	
+
+
+func _ready() -> void:
+	if asBoss:
+		$Wrapper/Head.use_parent_material = false
+		$Wrapper/Head.material = preload("res://Shaders/Material/boss_outline.tres")

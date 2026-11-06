@@ -23,6 +23,7 @@ func launch(formGlob: Vector2, toGlob: Vector2) -> void:
 	target = toGlob
 	dir = global_position.direction_to(target)
 	avatar.rotation += Vector2.DOWN.angle_to(dir)
+	requiredTravelDist = (toGlob - formGlob).length()
 
 
 func explode() -> void:
@@ -92,12 +93,16 @@ func _ready() -> void:
 		body_entered.connect(explode_frozen_enemies_at_entry)
 
 
+var travelledDist: float = 0.0
+var requiredTravelDist: float = -1.0
 func _process(delta: float) -> void:
 	if active:
-		if global_position.distance_squared_to(target) <= 1112.0:
+		if travelledDist >= requiredTravelDist:
 			global_position += dir * 16.65
 			explode()
 			avatar.queue_free()
 			active = false
 			return
-		position += dir * SPEED * delta
+		var step: Vector2 = dir * SPEED * delta
+		travelledDist += step.length()
+		position += step

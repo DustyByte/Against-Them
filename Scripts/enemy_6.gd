@@ -2,6 +2,9 @@ extends CharacterBody2D
 
 signal got_hit
 
+const ENEMY_TYPE: int = 6
+
+var asBoss: bool = false
 var followSpeed: float = 200.0
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
 @onready var avatarWrapper: Node2D = $Wrapper

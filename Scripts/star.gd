@@ -6,7 +6,7 @@ const ON_RUN_FEATURES: Script = global.ON_RUN_FEATURES
 var stats: Dictionary = {}
 var scaleRightBefCollapse: Vector2
 var lightTexture: Texture = preload("res://Assets/Shader Textures/ExplosionLight32.png")
-var light: PointLight2D = null
+#var light: PointLight2D = null
 @export var scaleCollapseCurve: Curve =  null
 @export var lightCollapseCurve: Curve =  null
 
@@ -24,7 +24,7 @@ func _on_enemy_entered(enemy: Node2D) -> void:
 
 func collapse_method(val: float) -> void:
 	scale = scaleRightBefCollapse * scaleCollapseCurve.sample_baked(val)
-	light.energy = 8.0 * lightCollapseCurve.sample_baked(val)
+	#light.energy = 8.0 * lightCollapseCurve.sample_baked(val)
 
 
 func handle_collapse_finish() -> void:
@@ -41,12 +41,12 @@ func handle_collapse_finish() -> void:
 
 
 func collapse() -> void:
-	light = PointLight2D.new()
-	light.texture = lightTexture
-	light.texture_scale = 6.0
-	light.energy = 0.0
+	#light = PointLight2D.new()
+	#light.texture = lightTexture
+	#light.texture_scale = 6.0
+	#light.energy = 0.0
 	scaleRightBefCollapse = scale
-	add_child(light)
+	#add_child(light)
 	
 	var tween: Tween = get_tree().create_tween()
 	tween.tween_method(collapse_method, 0.0, 1.0, 0.33)

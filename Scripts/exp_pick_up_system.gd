@@ -4,7 +4,7 @@ extends Area2D
 signal levelUp
 
 const ATTRACTING_SPEED: float = 600.0
-const BASE_LEVEL_EXP_REQUIREMENT: float = 2.0
+const BASE_LEVEL_EXP_REQUIREMENT: float = 3.0
 const LEVEL_EXP_REQUIREMENT_GROWTH: float = 1.5
 
 @onready var player: CharacterBody2D = $".."

@@ -20,7 +20,7 @@ func throw() -> void:
 		var playerPos: Vector2 = player.global_position
 		fieldFire.launch(playerPos + launchFromOffset, Vector2(randf_range(playerPos.x - rangeRectHalfX, playerPos.x + rangeRectHalfX), randf_range(playerPos.y - rangeRectHalfY, playerPos.y + rangeRectHalfY)))
 	
-	get_tree().create_timer(stats.cd).timeout.connect(throw)
+	get_tree().create_timer(stats.cd, false).timeout.connect(throw)
 
 
 func _ready() -> void:

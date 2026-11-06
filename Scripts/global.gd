@@ -33,6 +33,17 @@ const EXP_DROP_TYPES: Dictionary = {
 	}
 }
 
+const ENEMY_BOSS_BASE_STATS: Dictionary = {
+	Type_1 = {
+		hp = 2000.0,
+		damage = 30.0
+	},
+	Type_4 = {
+		hp = 3000.0,
+		damage = 45.0
+	}
+}
+
 const ENEMY_BASE_STATS: Dictionary = {
 	Type_1 = {
 		hp = 40.0,

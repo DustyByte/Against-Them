@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://dn2ato1kv8080"]
+[gd_scene load_steps=9 format=3 uid="uid://dn2ato1kv8080"]
 
 [ext_resource type="Script" uid="uid://b4mtxmcco7qrj" path="res://Scripts/star.gd" id="1_3vu41"]
 [ext_resource type="Texture2D" uid="uid://djosix3cr13af" path="res://Assets/Alles&Summons/Star/StarWithoutGlow.png" id="1_d0spr"]
-[ext_resource type="Texture2D" uid="uid://dnud04oaer6k" path="res://Assets/Shader Textures/ExplosionLight32.png" id="3_1w5wt"]
 
 [sub_resource type="Curve" id="Curve_word2"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.696301, 0.0, 0, 0]
@@ -99,10 +98,5 @@ autoplay = "breathe"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
 shape = SubResource("CircleShape2D_word2")
-
-[node name="PointLight2D" type="PointLight2D" parent="."]
-energy = 0.72
-texture = ExtResource("3_1w5wt")
-texture_scale = 6.0
 
 [connection signal="body_entered" from="." to="." method="_on_enemy_entered"]

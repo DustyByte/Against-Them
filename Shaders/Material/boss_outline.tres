@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dd3imhu5s70k0"]
+
+[ext_resource type="Shader" uid="uid://cnvdgu3k8xban" path="res://Shaders/boss_outline.gdshader" id="1_goco7"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_goco7")
+shader_parameter/outline_color = Color(1, 0.47000003, 0.47000003, 1)
+shader_parameter/size = 1.0

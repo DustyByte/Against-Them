@@ -15,6 +15,7 @@ func launch(fromGlob: Vector2, toGlob: Vector2) -> void:
 	dir = fromGlob.direction_to(toGlob)
 	target = toGlob
 	isActive = true
+	requiredTravelDist = (toGlob - fromGlob).length()
 
 
 func explode() -> void:
@@ -90,14 +91,16 @@ func _ready() -> void:
 	inTex.height = i
 	$CollisionShape2D.shape.radius = 100.0 * r
 
-
+var travelledDist: float = 0.0
+var requiredTravelDist: float = -1.0
 func _physics_process(delta: float) -> void:
 	if isActive:
-		var distSq: float = global_position.distance_squared_to(target)
-		if distSq < 626.0:
+		var step: Vector2 = dir * SPEED * delta
+		travelledDist += step.length()
+		if travelledDist >= requiredTravelDist:
 			explode()
 			isActive = false
-		global_position += dir * SPEED * delta
+		global_position += step
 		return
 	
 	var enemies: Array[Node2D] = get_overlapping_bodies()

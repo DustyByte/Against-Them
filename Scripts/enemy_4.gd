@@ -2,6 +2,9 @@ extends CharacterBody2D
 
 signal got_hit
 
+const ENEMY_TYPE: int = 4
+
+var asBoss: bool = false
 var followSpeed : float = 100.0
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
 @onready var avatarWrapper: Node2D = $Wrapper
@@ -18,10 +21,17 @@ var direction: Vector2
 var marks: Dictionary = {}
 var shrinking: bool = false
 var freezeEffect: Freeze = null
+var reverseInertia: float = 3.0
+
+
+func set_as_boss() -> void:
+	asBoss = true
+	stats = EnemyStats.new(global.ENEMY_BOSS_BASE_STATS.Type_4)
+	reverseInertia *= 0.34
 
 
 func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0) -> void:
-	knockBackVelocity = knockBackDirection * knockBackIntensity * 3
+	knockBackVelocity = knockBackDirection * knockBackIntensity * reverseInertia
 
 
 func get_hit(incomingDamage: float, emitSignal: bool = true) -> float:
@@ -79,3 +89,8 @@ func _physics_process(delta: float) -> void:
 	time += delta
 	if time >= 0.8:
 		time = 0.0
+
+
+func _ready() -> void:
+	if asBoss:
+		avatarWrapper.material = preload("res://Shaders/Material/boss_outline.tres")

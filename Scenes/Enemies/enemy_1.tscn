@@ -118,6 +118,7 @@ metadata/_edit_horizontal_guides_ = [-2.0]
 shape = SubResource("CircleShape2D_xglj4")
 
 [node name="Wrapper" type="Node2D" parent="."]
+use_parent_material = true
 position = Vector2(0, 136)
 
 [node name="Shadow" type="Sprite2D" parent="Wrapper"]

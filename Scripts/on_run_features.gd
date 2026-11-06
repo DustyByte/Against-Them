@@ -78,6 +78,9 @@ static func burn_inflict(on: CharacterBody2D, damage: float = 3.0) -> void:
 
 
 static func freeze_inflict(on: CharacterBody2D, duration: float = 2.0) -> void:
+	if on.asBoss:
+		return
+	
 	if on.freezeEffect:
 		on.freezeEffect.add_duration(duration)
 		return

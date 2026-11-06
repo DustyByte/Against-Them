@@ -230,7 +230,6 @@ speedCurve = SubResource("Curve_joufe")
 position = Vector2(0, 24)
 
 [node name="Shadow" type="Sprite2D" parent="Wrapper"]
-use_parent_material = true
 position = Vector2(-4, 9)
 rotation = 3.1415927
 scale = Vector2(1, -1)

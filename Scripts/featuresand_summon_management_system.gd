@@ -180,7 +180,10 @@ var notAnomalyOnceTaken: bool = true
 var moreFusionCount: int = 0
 var feedTheMonsterCount: int = 0
 var thickerBeamCount: int = 0
+var fasterOrbitCount: int = 0
+var pickUpRangeCount: int = 0
 func implement_option_choice(optionChosen: Option) -> void:
+	isHandlingLevelUp = false
 	match optionChosen.name:
 		"Lightning Strike":
 			if hasNotLightning:
@@ -251,15 +254,20 @@ func implement_option_choice(optionChosen: Option) -> void:
 			add_star()
 		
 		"More Fusion":
-			starOrbital.increase_all_star_size(1.25)
-			optionChosen.make_immediate_children_available()
+			starOrbital.increase_all_star_size(1.20)
 			moreFusionCount += 1
-			if moreFusionCount == 3:
-				optionChosen.isAvailable = false
+			if moreFusionCount >= 2:
+				optionChosen.make_immediate_children_available()
+				if moreFusionCount == 3:
+					optionChosen.deactivate(true)
 		
 		"Faster Orbit":
-			playerStatsActiveModifiers.starStats.cd *= 0.8
-			optionChosen.make_immediate_children_available()
+			playerStatsActiveModifiers.starStats.cd *= 0.82
+			fasterOrbitCount += 1
+			if fasterOrbitCount >= 2:
+				optionChosen.make_immediate_children_available()
+				if fasterOrbitCount == 6:
+					optionChosen.deactivate(true)
 		
 		"Anomaly":
 			if notAnomalyOnceTaken:
@@ -406,6 +414,9 @@ func implement_option_choice(optionChosen: Option) -> void:
 		"Greed":
 			$"../ExpManagementSystem/Range".shape.radius *= optionChosen.modifiers.pickUpRangeMultiplier
 			optionChosen.make_immediate_children_available()
+			pickUpRangeCount += 1
+			if pickUpRangeCount >= 5:
+				optionChosen.deactivate(true)
 			
 		"Faster":
 			for weapon in global.PLAYERS_WEAPON_SYSTEM.carryingWeapons:
@@ -532,7 +543,8 @@ func implement_option_choice(optionChosen: Option) -> void:
 			for key in keys:
 				var val = playerStatsActiveModifiers[key]
 				if val is Dictionary and val.has('isSummon'):
-					val.cd *= 0.8696 # cd = cd/1.15
+					if val.has("cd"):
+						val.cd *= 0.8696 # cd = cd/1.15
 		
 		"Summon Adrenaline":
 			optionChosen.make_immediate_children_available()
@@ -640,10 +652,18 @@ func player_periodic_regen() -> void:
 	get_tree().create_timer(5.0).timeout.connect(player_periodic_regen)
 
 
+var isHandlingLevelUp: bool = false
+
 func handle_player_level_up() -> void:
+	if isHandlingLevelUp:
+		return
+	
+	isHandlingLevelUp = true
 	var options: Array[Option] = global.PROGRESSION_CHOICE_SYSTEM.give_selectable_options(6)
 	global.ON_RUN_HUD.show_options(options)
-	get_tree().paused = true
+
+	if global.ON_RUN_HUD.activeOptionDisplay == null:
+		isHandlingLevelUp = false
 
 
 func _ready() -> void:

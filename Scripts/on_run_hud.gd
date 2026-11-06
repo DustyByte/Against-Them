@@ -7,9 +7,18 @@ signal optionChosen
 @onready var pauseButtonPanel: Panel =  $PauseButtonMarginContainer/Panel
 var optionCardBluePrint: PackedScene = preload("res://Scenes/HUD/option_card.tscn")
 var pauseMenu: Control = null
+var activeOptionDisplay: OptionDisplay = null
+var pendingOptionChoices: Array = []
 
 func show_options(options: Array[Option]) -> void:
+	if activeOptionDisplay != null:
+		pendingOptionChoices.append(options)
+		return
+	
+	get_tree().paused = true
+	
 	var optionDisplay: OptionDisplay = load("res://Scenes/HUD/option_display.tscn").instantiate()
+	activeOptionDisplay = optionDisplay
 	optionDisplay.on_select = send_selection_signal
 	add_sibling(optionDisplay)
 	optionDisplay.present_options(options)
@@ -17,7 +26,17 @@ func show_options(options: Array[Option]) -> void:
 
 func send_selection_signal(option: Option) -> void:
 	optionChosen.emit(option)
-	get_tree().paused = false
+	
+	if activeOptionDisplay != null and is_instance_valid(activeOptionDisplay):
+		activeOptionDisplay.queue_free()
+	activeOptionDisplay = null
+	
+	if pendingOptionChoices.is_empty():
+		get_tree().paused = false
+		return
+	
+	var nextOptions: Array[Option] = pendingOptionChoices.pop_front()
+	show_options(nextOptions)
 
 
 func _ready() -> void:
