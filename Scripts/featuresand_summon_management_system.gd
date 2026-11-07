@@ -182,6 +182,16 @@ var feedTheMonsterCount: int = 0
 var thickerBeamCount: int = 0
 var fasterOrbitCount: int = 0
 var pickUpRangeCount: int = 0
+var fasterCount: int = 0
+var lightningStrikeCount: int = 0
+var hexaSnailCount: int = 0
+var silverStormCount: int = 0
+var recallDaggerCount: int = 0
+var miniatureStarCount: int = 0
+var laserOrbCount: int = 0
+var gravityBombCount: int = 0
+var fieryFieldCount: int = 0
+var cryoliteCount: int = 0
 func implement_option_choice(optionChosen: Option) -> void:
 	isHandlingLevelUp = false
 	match optionChosen.name:
@@ -190,9 +200,12 @@ func implement_option_choice(optionChosen: Option) -> void:
 				_set_new_modifiers_into_player_stats(optionChosen.modifiers)
 				optionChosen.make_immediate_children_available()
 				hasNotLightning = false
-				return
+			else:
+				playerStatsActiveModifiers.lightningStats.amount += 1
 			
-			playerStatsActiveModifiers.lightningStats.amount += 1
+			lightningStrikeCount += 1
+			if lightningStrikeCount >= 5:
+				optionChosen.deactivate(true)
 		
 		"Chain Reaction":
 			playerStatsActiveModifiers.lightningStats.chain += 1
@@ -202,10 +215,13 @@ func implement_option_choice(optionChosen: Option) -> void:
 				_set_new_modifiers_into_player_stats(optionChosen.modifiers)
 				add_hexa_snail()
 				optionChosen.make_immediate_children_available()
-				return
+			else:
+				playerStatsActiveModifiers.snailAmmount += optionChosen.modifiers.snailAmmount
+				add_hexa_snail()
 			
-			playerStatsActiveModifiers.snailAmmount += optionChosen.modifiers.snailAmmount
-			add_hexa_snail()
+			hexaSnailCount += 1
+			if hexaSnailCount >= 3:
+				optionChosen.deactivate(true)
 		
 		"Aggresive Snail":
 			playerStatsActiveModifiers.hexaSnailStats.damage *= 1.5
@@ -248,10 +264,13 @@ func implement_option_choice(optionChosen: Option) -> void:
 				_set_new_modifiers_into_player_stats(optionChosen.modifiers)
 				add_star()
 				optionChosen.make_immediate_children_available()
-				return
+			else:
+				playerStatsActiveModifiers.orbAmount += 1
+				add_star()
 			
-			playerStatsActiveModifiers.orbAmount += 1
-			add_star()
+			miniatureStarCount += 1
+			if miniatureStarCount >= 2:
+				optionChosen.deactivate(true)
 		
 		"More Fusion":
 			starOrbital.increase_all_star_size(1.20)
@@ -291,6 +310,9 @@ func implement_option_choice(optionChosen: Option) -> void:
 				optionChosen.make_immediate_children_available()
 			
 			add_silver_storm()
+			silverStormCount += 1
+			if silverStormCount >= 5:
+				optionChosen.deactivate(true)
 		
 		"Cold Wind":
 			playerStatsActiveModifiers.silStormStats['freeze'] = true
@@ -311,9 +333,12 @@ func implement_option_choice(optionChosen: Option) -> void:
 				_set_new_modifiers_into_player_stats(optionChosen.modifiers)
 				optionChosen.make_immediate_children_available()
 				add_recall_knives_manager()
-				return
+			else:
+				playerStatsActiveModifiers.recallKnifeStats.amount += 1
 			
-			playerStatsActiveModifiers.recallKnifeStats.amount += 1
+			recallDaggerCount += 1
+			if recallDaggerCount >= 5:
+				optionChosen.deactivate(true)
 		
 		"Heavy Dagger":
 			if not playerStatsActiveModifiers.recallKnifeStats.has('knockBackIntensity'):
@@ -345,6 +370,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 				optionChosen.make_immediate_children_available()
 			
 			add_aura()
+			optionChosen.deactivate(true)
 		
 		"Rhythm Increase":
 			playerStatsActiveModifiers.auraStats.cd *= 0.37
@@ -422,24 +448,33 @@ func implement_option_choice(optionChosen: Option) -> void:
 			for weapon in global.PLAYERS_WEAPON_SYSTEM.carryingWeapons:
 				weapon.stats.cd *= optionChosen.modifiers.weaponAttackSpeedMultiplier
 			optionChosen.make_immediate_children_available()
+			fasterCount += 1
+			if fasterCount >= 6:
+				optionChosen.deactivate(true)
 		
 		"Fiery Field":
 			if not playerStatsActiveModifiers.has("fieryFieldStats"):
 				_set_new_modifiers_into_player_stats(optionChosen.modifiers)
 				add_fiery_field()
 				optionChosen.make_immediate_children_available()
-				return
+			else:
+				playerStatsActiveModifiers.fieryFieldStats.amount += 1
 			
-			playerStatsActiveModifiers.fieryFieldStats.amount += 1
+			fieryFieldCount += 1
+			if fieryFieldCount >= 5:
+				optionChosen.deactivate(true)
 		
 		"Gravity Bomb":
 			if not playerStatsActiveModifiers.has("gravityBombStats"):
 				_set_new_modifiers_into_player_stats(optionChosen.modifiers)
 				add_gravity_bomb()
 				optionChosen.make_immediate_children_available()
-				return 
+			else:
+				playerStatsActiveModifiers.gravityBombStats.amount += 1
 			
-			playerStatsActiveModifiers.gravityBombStats.amount += 1
+			gravityBombCount += 1
+			if gravityBombCount >= 5:
+				optionChosen.deactivate(true)
 		
 		"Cryolite":
 			if not playerStatsActiveModifiers.has('cryoliteStats'):
@@ -447,6 +482,9 @@ func implement_option_choice(optionChosen: Option) -> void:
 				optionChosen.make_immediate_children_available()
 			
 			add_cryolite()
+			cryoliteCount += 1
+			if cryoliteCount >= 3:
+				optionChosen.deactivate(true)
 		
 		"Cryolite II":
 			playerStatsActiveModifiers.cryoliteStats.damage += 5 * floor(playerStats.currentHP / 100.0)
@@ -477,6 +515,9 @@ func implement_option_choice(optionChosen: Option) -> void:
 				optionChosen.make_immediate_children_available()
 			
 			add_laser_orb()
+			laserOrbCount += 1
+			if laserOrbCount >= 3:
+				optionChosen.deactivate(true)
 		
 		"Thiccer Beam":
 			var playerOrbStats: Dictionary = playerStatsActiveModifiers.orbStats

@@ -179,7 +179,7 @@ var la : = Option.new("Momentum Pickups", {}, "Picking up an exp has 0.5% chance
 var laa := Option.new("Recycle", {}, "Picking up an exp has 5% chance to refill 1 ammo of the selected Weapon.", 'III.I', "res://Assets/HUD Elements/OptionIcons/Greed.png")
 
 var m := Option.new("Faster", {
-	weaponAttackSpeedMultiplier = 0.75
+	weaponAttackSpeedMultiplier = 1.0 / 1.15 # Cooldown factor for +15% attack speed.
 }, "Weapon Attack Speed +15%", 'I', "res://Assets/HUD Elements/OptionIcons/Faster.png", true)
 
 var ma := Option.new('Adrenaline', {}, "Taking damage increases movement speed & attack speed by 60% for 5 seconds.", 'II.I', "res://Assets/HUD Elements/OptionIcons/Faster.png")

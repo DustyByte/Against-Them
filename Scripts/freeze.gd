@@ -10,6 +10,7 @@ var actualSpeed: float = -1.0
 var actualAnimSpeedScale: float = -1.0
 var ap: AnimationPlayer = null
 var freezeMarkCount: int = 1
+var wrapperUsedParentMaterial: bool = false
 
 
 func setup(durationToStayFrozen: float) -> void:
@@ -18,6 +19,7 @@ func setup(durationToStayFrozen: float) -> void:
 
 func handle_exit() -> void:
 	wrapper.material = null
+	wrapper.use_parent_material = wrapperUsedParentMaterial
 	parent.followSpeed = actualSpeed
 	ap.speed_scale = actualAnimSpeedScale
 	queue_free()
@@ -34,6 +36,11 @@ func add_duration(amount: float) -> void:
 
 
 func _ready() -> void:
+	# The wrapper must use its own material, otherwise it inherits its parent's
+	# material and the freeze shader assigned below is ignored.
+	wrapperUsedParentMaterial = wrapper.use_parent_material
+	wrapper.use_parent_material = false
+	
 	for child in wrapperChildren:
 		child.use_parent_material = true
 	

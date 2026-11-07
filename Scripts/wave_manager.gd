@@ -4,6 +4,25 @@ extends Node
 signal waveFinished
 signal waveBegun
 
+# Wave enemy counts follow a decelerating curve instead of growing indefinitely.
+# Approximate targets: wave 1 = 12, wave 10 = 48, wave 50 = 149, wave 100 = 200.
+# The curve reaches the hard cap on WAVE_TO_REACH_ENEMY_CAP and stays there.
+const MAX_ENEMIES_PER_WAVE: int = 200
+const WAVE_TO_REACH_ENEMY_CAP: int = 100
+const STARTING_WAVE_ENEMY_COUNT: int = 12
+const ENEMY_COUNT_VARIATION: float = 0.05
+const ENEMY_GROWTH_CURVE_SHARPNESS: float = 2.0
+
+# Enemy HP and damage step up every 5 waves. Each step adds the base growth
+# plus a small random offset, so the curve trends linearly but stays jagged.
+# Around wave 100 this is roughly 4.4x HP and 1.56x damage, with run-to-run
+# variation from the jitter.
+const ENEMY_STAT_STEP_WAVES: int = 5
+const ENEMY_HP_GROWTH_PER_STEP: float = 0.18
+const ENEMY_HP_GROWTH_JITTER: float = 0.03
+const ENEMY_DAMAGE_GROWTH_PER_STEP: float = 0.03
+const ENEMY_DAMAGE_GROWTH_JITTER: float = 0.006
+
 enum DROP_TYPES {
 	BATCH,
 	LONE,
@@ -32,7 +51,6 @@ var enemyDropTotalWeight: int = 100
 @export var drop_speed_multiplier: float = 0.92
 var dropInterval: Vector2 = Vector2(1.0, 2.0)
 var minDropInterval: float = 0.15 
-var dropAmount: Vector2i = Vector2i(10, 15) # 10, 15
 var distanceFromPlayer: Vector2 = Vector2(500.0, 1000.0)
 var currentWave: int = 1
 var killedEnemyAmount: int = 0
@@ -43,8 +61,10 @@ var waveHeadingBP: PackedScene = preload("res://Scenes/HUD/wave_heading.tscn")
 var currentWaveDrops: Array[Dictionary]
 var nextWaveDrops: Array[Dictionary]
 var nextWaveDropsReady: bool = false
-var nextWaveDropsProductionInProgress: bool = false
 var dropBossNow: bool = false
+var currentEnemyStatStep: int = -1
+var waveEnemyHPMultiplier: float = 1.0
+var waveEnemyDamageMultiplier: float = 1.0
 
 
 func generate_jittered_points(center: Vector2, count: int, radius: float) -> Array[Vector2]:
@@ -138,44 +158,66 @@ func get_seperated_multiple_drop(amount: int) -> Dictionary:
 	return drop
 
 
-func _worker_produce_next_wave_drops() -> void:
+func get_wave_enemy_amount_range(wave: int) -> Vector2i:
+	var growth_wave_span: float = float(maxi(WAVE_TO_REACH_ENEMY_CAP - 1, 1))
+	var normalized_wave: float = clampf(float(maxi(wave - 1, 0)) / growth_wave_span, 0.0, 1.0)
+
+	# Exponential ease-out, normalized so the curve reaches exactly the cap on
+	# WAVE_TO_REACH_ENEMY_CAP instead of growing without bound.
+	var curve_scale: float = maxf(1.0 - exp(-ENEMY_GROWTH_CURVE_SHARPNESS), 0.0001)
+	var normalized_growth: float = (1.0 - exp(-ENEMY_GROWTH_CURVE_SHARPNESS * normalized_wave)) / curve_scale
+	var target_amount: int = clampi(roundi(lerpf(float(STARTING_WAVE_ENEMY_COUNT), float(MAX_ENEMIES_PER_WAVE), normalized_growth)), 1, MAX_ENEMIES_PER_WAVE)
+
+	var variation: int = maxi(roundi(float(target_amount) * ENEMY_COUNT_VARIATION), 1)
+	if target_amount >= MAX_ENEMIES_PER_WAVE:
+		variation = 0
+
+	var minimum_amount: int = clampi(target_amount - variation, 1, MAX_ENEMIES_PER_WAVE)
+	var maximum_amount: int = clampi(target_amount + variation, minimum_amount, MAX_ENEMIES_PER_WAVE)
+
+	return Vector2i(minimum_amount, maximum_amount)
+
+
+# Builds the next wave's spawn data. This is intentionally synchronous: the
+# previous version ran this on a WorkerThreadPool task while the main thread was
+# consuming the very same state, so a wave could begin with an empty drop list
+# depending on how the two threads happened to interleave.
+func _produce_next_wave_drops() -> void:
 	nextWaveDropsReady = false
-	nextWaveDropsProductionInProgress = true
 	var generatedDrops: Array[Dictionary] = []
-	var spawnAmount: int = randi_range(dropAmount.x, dropAmount.y)
-	while spawnAmount > 0: # spawned amount could exceed spawnAmount. And that is intentional.
+	var amount_range: Vector2i = get_wave_enemy_amount_range(currentWave)
+	var spawnAmount: int = clampi(randi_range(amount_range.x, amount_range.y), 1, MAX_ENEMIES_PER_WAVE)
+	var spawnedAmount: int = 0
+
+	while spawnedAmount < spawnAmount:
+		var remaining: int = spawnAmount - spawnedAmount
 		var drop: Dictionary = {}
 		var dropType: int = get_random_drop_type()
 		
 		match dropType:
 			DROP_TYPES.BATCH:
-				var amount: int = randi_range(4, 7)
-				drop = get_batch_drop(amount)
-				spawnAmount -= amount
+				drop = get_batch_drop(mini(randi_range(4, 7), remaining))
 			
 			DROP_TYPES.LONE:
 				drop = get_lone_drop()
-				spawnAmount -= 1
 			
 			DROP_TYPES.SEPERATED_MULTIPLE:
-				var amount: int = randi_range(2, 4)
-				drop = get_seperated_multiple_drop(amount)
-				spawnAmount -= amount
+				drop = get_seperated_multiple_drop(mini(randi_range(2, 4), remaining))
 		
 		generatedDrops.append(drop)
+		spawnedAmount += drop.dropData.size()
 	
 	generatedDrops[-1].nextSpawnInterval = -1.0
 	nextWaveDrops = generatedDrops
-	
 	nextWaveDropsReady = true
-	nextWaveDropsProductionInProgress = false
 
 
 func update_wave_difficulty() -> void:
-	if currentWave % 1 == 0:
+	if currentWave % 5 == 0:
 		dropBossNow = true
 	
-	dropAmount += Vector2i.ONE * (10 + currentWave) 
+	# Enemy count is derived from currentWave in get_wave_enemy_amount_range().
+	# It no longer compounds with every wave.
 	if dropInterval.x > minDropInterval:
 		dropInterval.x = max(dropInterval.x * drop_speed_multiplier, minDropInterval)
 		dropInterval.y = max(dropInterval.y * drop_speed_multiplier, minDropInterval * 1.5)
@@ -196,14 +238,27 @@ func update_wave_difficulty() -> void:
 		enemyDropTotalWeight += 10
 
 
+func update_wave_enemy_stat_multipliers(wave: int) -> void:
+	var target_step: int = maxi(wave - 1, 0) / ENEMY_STAT_STEP_WAVES
+	while currentEnemyStatStep < target_step:
+		currentEnemyStatStep += 1
+		if currentEnemyStatStep == 0:
+			waveEnemyHPMultiplier = 1.0
+			waveEnemyDamageMultiplier = 1.0
+			continue
+
+		waveEnemyHPMultiplier += ENEMY_HP_GROWTH_PER_STEP + randf_range(-ENEMY_HP_GROWTH_JITTER, ENEMY_HP_GROWTH_JITTER)
+		waveEnemyDamageMultiplier += ENEMY_DAMAGE_GROWTH_PER_STEP + randf_range(-ENEMY_DAMAGE_GROWTH_JITTER, ENEMY_DAMAGE_GROWTH_JITTER)
+
+
 func begin_current_wave() -> void:
-	if not nextWaveDropsReady:
-		var waitAttempts: int = 0
-		while nextWaveDropsProductionInProgress and waitAttempts < 20:
-			await sceneTree.create_timer(0.05).timeout
-			waitAttempts += 1
-		if not nextWaveDropsReady:
-			_worker_produce_next_wave_drops()
+	update_wave_enemy_stat_multipliers(currentWave)
+
+	# Guard against starting an empty wave. With synchronous production this
+	# should never happen, but it keeps a misconfigured wave amount from
+	# permanently stalling the run.
+	if not nextWaveDropsReady or nextWaveDrops.is_empty():
+		_produce_next_wave_drops()
 	
 	currentWaveDrops = nextWaveDrops
 	nextWaveDrops = []
@@ -228,6 +283,7 @@ func begin_current_wave() -> void:
 			else:
 				enemy.tree_exited.connect(handle_enemy_kill)
 			
+			enemy.stats.apply_multipliers(waveEnemyHPMultiplier, waveEnemyDamageMultiplier)
 			enemy.tree_exited.connect(features_handle_kill)
 			world.add_child.call_deferred(enemy)
 		
@@ -239,9 +295,11 @@ func begin_current_wave() -> void:
 	
 	currentWave += 1
 	update_wave_difficulty()
-	currentWaveDrops = nextWaveDrops
-	nextWaveDrops = []
-	WorkerThreadPool.add_task(_worker_produce_next_wave_drops)
+
+	# Produce the next wave now that the difficulty has been updated. The data
+	# stays untouched in nextWaveDrops until begin_current_wave consumes it, so
+	# there is exactly one place that clears it.
+	_produce_next_wave_drops()
 
 
 func handle_enemy_kill() -> void:
@@ -264,7 +322,4 @@ func _ready() -> void:
 	
 	distanceFromPlayer += Vector2.ONE * get_window().get_size().x
 	
-	_worker_produce_next_wave_drops()
 	begin_current_wave()
-	
-	WorkerThreadPool.add_task(_worker_produce_next_wave_drops)
