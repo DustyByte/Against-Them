@@ -54,6 +54,8 @@ var minDropInterval: float = 0.15
 var distanceFromPlayer: Vector2 = Vector2(500.0, 1000.0)
 var currentWave: int = 1
 var killedEnemyAmount: int = 0
+var wavesCompleted: int = 0
+var bossesKilled: int = 0
 var currentWaveTotalEnemies: int = 0
 var waveHeadingBP: PackedScene = preload("res://Scenes/HUD/wave_heading.tscn")
 @onready var sceneTree: SceneTree = get_tree()
@@ -278,6 +280,7 @@ func begin_current_wave() -> void:
 			
 			if enemy.ENEMY_TYPE != 6 and dropBossNow:
 				enemy.set_as_boss()
+				enemy.tree_exited.connect(handle_boss_kill)
 				currentWaveTotalEnemies -= 1
 				dropBossNow = false
 			else:
@@ -302,11 +305,16 @@ func begin_current_wave() -> void:
 	_produce_next_wave_drops()
 
 
+func handle_boss_kill() -> void:
+	bossesKilled += 1
+
+
 func handle_enemy_kill() -> void:
 	killedEnemyAmount += 1
 	global.TOTAL_ENEMY_KILLS += 1
 	if killedEnemyAmount >= currentWaveTotalEnemies:
 		killedEnemyAmount = 0
+		wavesCompleted += 1
 		waveFinished.emit(currentWave-1)
 		sceneTree.create_timer(wave_transition_delay).timeout.connect(begin_current_wave)
 

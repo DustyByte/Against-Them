@@ -79,13 +79,13 @@ var WEAPON_STATS: Dictionary = {
 	RUPTURE = {
 		damage = 20.0,
 		knockBackIntensity = 50.0,
-		cd = 0.25,
+		cd = 0.05,
 		reloadTime = 3.0,
 		maxAmmo = 7,
 		damageType = DAMAGE_TYPES.PHYSICAL
 	},
 	TORCHER = {
-		damage = 5.0,
+		damage = 6.0,
 		knockBackIntensity = 120.0,
 		cd = 0.4,
 		reloadTime = 2.0,

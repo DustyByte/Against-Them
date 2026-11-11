@@ -52,6 +52,47 @@ text = "Descend"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Vault" type="Panel" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Vault"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Vault/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vault"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EchoesValue" type="Label" parent="CanvasLayer/VBoxContainer/Vault/HBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Achievements" type="Panel" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Achievements"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Achievements"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Settings" type="Panel" parent="CanvasLayer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2

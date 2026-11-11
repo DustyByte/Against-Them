@@ -51,7 +51,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="Panel" parent="CenterContainer"]
-custom_minimum_size = Vector2(500, 450)
+custom_minimum_size = Vector2(500, 530)
 layout_mode = 2
 theme = SubResource("Theme_6fktc")
 
@@ -134,6 +134,35 @@ text = "Elapsed Time"
 [node name="TimeValue" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox/ElapsedTime"]
 layout_mode = 2
 text = "00:00"
+
+[node name="EchoesPanel" type="Panel" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme = SubResource("Theme_s1y4a")
+
+[node name="EchoesMargin" type="MarginContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/EchoesPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EchoesEarned" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/EchoesPanel/EchoesMargin"]
+layout_mode = 2
+
+[node name="EchoesLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/EchoesPanel/EchoesMargin/EchoesEarned"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Echoes Earned"
+
+[node name="EchoesValue" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/EchoesPanel/EchoesMargin/EchoesEarned"]
+layout_mode = 2
+text = "0"
 
 [node name="Spacer" type="Control" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
