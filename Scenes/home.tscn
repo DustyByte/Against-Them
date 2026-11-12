@@ -1,153 +1,521 @@
-[gd_scene load_steps=9 format=3 uid="uid://bq10h1ud80djv"]
+[gd_scene load_steps=28 format=3 uid="uid://bq10h1ud80djv"]
 
 [ext_resource type="Script" uid="uid://bgxp1ve1bjgxc" path="res://Scripts/home.gd" id="1_1ey7h"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_ibywg"]
-[ext_resource type="Texture2D" uid="uid://dfclutldkmf4" path="res://Assets/HUD Elements/A_black_image.jpeg" id="3_llnbm"]
 [ext_resource type="Texture2D" uid="uid://bhhhu7vr160fi" path="res://Assets/HUD Elements/Planet.png" id="4_12ycv"]
 [ext_resource type="AudioStream" uid="uid://cajhad7qdxent" path="res://Assets/SFX/UI.mp3" id="5_llnbm"]
 [ext_resource type="Script" uid="uid://cpb11gsddesn6" path="res://Scripts/home_http.gd" id="6_xyz12"]
+[ext_resource type="Shader" path="res://Shaders/space_backdrop.gdshader" id="7_bg"]
+[ext_resource type="Shader" path="res://Shaders/planet_shade.gdshader" id="8_planet"]
+[ext_resource type="Script" path="res://Scripts/home_orbit.gd" id="9_orbit"]
 
-[sub_resource type="Theme" id="Theme_12ycv"]
-Label/font_sizes/font_size = 20
-Label/fonts/font = ExtResource("2_ibywg")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bg"]
+shader = ExtResource("7_bg")
 
-[sub_resource type="LabelSettings" id="LabelSettings_llnbm"]
-font_size = 46
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_planet"]
+shader = ExtResource("8_planet")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_add"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_glow"]
+offsets = PackedFloat32Array(0, 0.56, 0.64, 0.78, 1)
+colors = PackedColorArray(0.35, 0.65, 0.9, 0, 0.35, 0.65, 0.9, 0, 0.45, 0.78, 0.95, 0.28, 0.3, 0.55, 0.85, 0.08, 0.25, 0.5, 0.8, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_glow"]
+gradient = SubResource("Gradient_glow")
+width = 512
+height = 512
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="FontVariation" id="FontVariation_wide"]
+base_font = ExtResource("2_ibywg")
+spacing_glyph = 10
+
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("2_ibywg")
+spacing_glyph = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font = SubResource("FontVariation_wide")
+font_size = 58
+font_color = Color(0.9, 0.95, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_subtitle"]
+font = SubResource("FontVariation_spaced")
+font_size = 15
+font_color = Color(0.55, 0.78, 0.86, 0.85)
+
+[sub_resource type="LabelSettings" id="LabelSettings_primary"]
+font = SubResource("FontVariation_wide")
+font_size = 34
+font_color = Color(0.9, 0.97, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_item"]
+font = SubResource("FontVariation_spaced")
+font_size = 24
+font_color = Color(0.78, 0.84, 0.9, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_index"]
+font = SubResource("FontVariation_spaced")
+font_size = 13
+font_color = Color(0.45, 0.62, 0.7, 0.8)
+
+[sub_resource type="LabelSettings" id="LabelSettings_value"]
+font = SubResource("FontVariation_spaced")
+font_size = 22
+font_color = Color(0.62, 0.88, 0.95, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_footer"]
+font = SubResource("FontVariation_spaced")
+font_size = 13
+font_color = Color(0.45, 0.58, 0.66, 0.75)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_primary"]
+bg_color = Color(0.62, 0.88, 0.95, 0.08)
+border_width_left = 3
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_row"]
+bg_color = Color(0, 0, 0, 0)
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.07)
+
+[sub_resource type="Theme" id="Theme_menu"]
+Label/fonts/font = SubResource("FontVariation_spaced")
+Panel/styles/panel = SubResource("StyleBoxFlat_row")
 
 [node name="Home" type="Node2D"]
 script = ExtResource("1_1ey7h")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Backdrop" type="CanvasLayer" parent="."]
+layer = -1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
-offset_right = 40.0
-offset_bottom = 40.0
-theme = SubResource("Theme_12ycv")
-theme_override_constants/separation = 22
+[node name="Space" type="ColorRect" parent="Backdrop"]
+material = SubResource("ShaderMaterial_bg")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="Title" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="PlanetGlow" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_add")
+texture = SubResource("GradientTexture2D_glow")
+
+[node name="OrbitBack" type="Node2D" parent="."]
+script = ExtResource("9_orbit")
+front = false
+
+[node name="Planet" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_planet")
+position = Vector2(1100, 480)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_12ycv")
+
+[node name="OrbitFront" type="Node2D" parent="."]
+script = ExtResource("9_orbit")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Menu" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = SubResource("Theme_menu")
+
+[node name="Column" type="VBoxContainer" parent="UI/Menu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.07
+anchor_right = 0.4
+anchor_bottom = 1.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Title" type="Label" parent="UI/Menu/Column"]
 layout_mode = 2
-text = "Against  THEM"
-label_settings = SubResource("LabelSettings_llnbm")
-horizontal_alignment = 1
-vertical_alignment = 1
+text = "AGAINST THEM"
+label_settings = SubResource("LabelSettings_title")
 
-[node name="Control" type="Control" parent="CanvasLayer/VBoxContainer"]
-clip_contents = true
-custom_minimum_size = Vector2(0, 16)
+[node name="RuleGap" type="Control" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
+mouse_filter = 2
 
-[node name="Descend" type="Panel" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
+[node name="Rule" type="ColorRect" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(72, 2)
 layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0.9)
 
-[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Descend"]
+[node name="SubtitleGap" type="Control" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Subtitle" type="Label" parent="UI/Menu/Column"]
+layout_mode = 2
+text = "ECHOE  ·  IN ORBIT  ·  AWAITING DESCENT"
+label_settings = SubResource("LabelSettings_subtitle")
+
+[node name="MenuGap" type="Control" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Descend" type="Panel" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_primary")
+
+[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Descend"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Descend"
-horizontal_alignment = 1
-vertical_alignment = 1
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
 
-[node name="Vault" type="Panel" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Vault"]
+[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Descend"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
 
-[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Vault/HBoxContainer"]
+[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Descend/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Index" type="Label" parent="UI/Menu/Column/Descend/Margin/HBox"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "01"
+label_settings = SubResource("LabelSettings_index")
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Menu/Column/Descend/Margin/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Vault"
-horizontal_alignment = 1
+text = "DESCEND"
+label_settings = SubResource("LabelSettings_primary")
 vertical_alignment = 1
 
-[node name="EchoesValue" type="Label" parent="CanvasLayer/VBoxContainer/Vault/HBoxContainer"]
-custom_minimum_size = Vector2(120, 0)
+[node name="ItemsGap" type="Control" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Vault" type="Panel" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Vault"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
+
+[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Vault"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 27
+theme_override_constants/margin_right = 24
+
+[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Vault/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Index" type="Label" parent="UI/Menu/Column/Vault/Margin/HBox"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "02"
+label_settings = SubResource("LabelSettings_index")
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Menu/Column/Vault/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "VAULT"
+label_settings = SubResource("LabelSettings_item")
+vertical_alignment = 1
+
+[node name="EchoesValue" type="Label" parent="UI/Menu/Column/Vault/Margin/HBox"]
 layout_mode = 2
 text = "0"
-horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_value")
+horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Achievements" type="Panel" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
+[node name="EchoesUnit" type="Label" parent="UI/Menu/Column/Vault/Margin/HBox"]
+layout_mode = 2
+text = "ECHOES"
+label_settings = SubResource("LabelSettings_index")
+vertical_alignment = 1
+
+[node name="Achievements" type="Panel" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Achievements"]
+[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Achievements"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Achievements"
-horizontal_alignment = 1
-vertical_alignment = 1
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
 
-[node name="Settings" type="Panel" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Settings"]
+[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Achievements"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Settings"
-horizontal_alignment = 1
+mouse_filter = 2
+theme_override_constants/margin_left = 27
+theme_override_constants/margin_right = 24
+
+[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Achievements/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Index" type="Label" parent="UI/Menu/Column/Achievements/Margin/HBox"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "03"
+label_settings = SubResource("LabelSettings_index")
 vertical_alignment = 1
 
-[node name="Discord" type="Panel" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
+[node name="Label" type="Label" parent="UI/Menu/Column/Achievements/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ACHIEVEMENTS"
+label_settings = SubResource("LabelSettings_item")
+vertical_alignment = 1
+
+[node name="Settings" type="Panel" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Discord"]
+[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Settings"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Discord"
-horizontal_alignment = 1
-vertical_alignment = 1
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
 
-[node name="Quit" type="Panel" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/Quit"]
+[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Settings"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Quit"
-horizontal_alignment = 1
+mouse_filter = 2
+theme_override_constants/margin_left = 27
+theme_override_constants/margin_right = 24
+
+[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Settings/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Index" type="Label" parent="UI/Menu/Column/Settings/Margin/HBox"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "04"
+label_settings = SubResource("LabelSettings_index")
 vertical_alignment = 1
 
-[node name="ABlackImage" type="Sprite2D" parent="."]
-texture = ExtResource("3_llnbm")
+[node name="Label" type="Label" parent="UI/Menu/Column/Settings/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SETTINGS"
+label_settings = SubResource("LabelSettings_item")
+vertical_alignment = 1
+
+[node name="Discord" type="Panel" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Discord"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
+
+[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Discord"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 27
+theme_override_constants/margin_right = 24
+
+[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Discord/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Index" type="Label" parent="UI/Menu/Column/Discord/Margin/HBox"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "05"
+label_settings = SubResource("LabelSettings_index")
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Menu/Column/Discord/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "DISCORD"
+label_settings = SubResource("LabelSettings_item")
+vertical_alignment = 1
+
+[node name="Quit" type="Panel" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Quit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
+
+[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Quit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 27
+theme_override_constants/margin_right = 24
+
+[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Quit/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Index" type="Label" parent="UI/Menu/Column/Quit/Margin/HBox"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "06"
+label_settings = SubResource("LabelSettings_index")
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Menu/Column/Quit/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "QUIT"
+label_settings = SubResource("LabelSettings_item")
+vertical_alignment = 1
+
+[node name="Footer" type="HBoxContainer" parent="UI/Menu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.07
+anchor_top = 1.0
+anchor_right = 0.07
+anchor_bottom = 1.0
+offset_top = -64.0
+offset_right = 600.0
+offset_bottom = -40.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="StatusLight" type="ColorRect" parent="UI/Menu/Footer"]
+custom_minimum_size = Vector2(6, 6)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 1)
+
+[node name="StatusText" type="Label" parent="UI/Menu/Footer"]
+layout_mode = 2
+text = "ROGUE PLANET  ·  ENERGY SIGNATURE DETECTED"
+label_settings = SubResource("LabelSettings_footer")
+vertical_alignment = 1
+
+[node name="Version" type="Label" parent="UI/Menu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -340.0
+offset_top = -64.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "v0.0.0"
+label_settings = SubResource("LabelSettings_footer")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Fade" type="ColorRect" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
 
 [node name="HomeHTTP" type="Node" parent="."]
 script = ExtResource("6_xyz12")
-
-[node name="Planet" type="Sprite2D" parent="."]
-position = Vector2(882, 451)
-scale = Vector2(0.45, 0.45)
-texture = ExtResource("4_12ycv")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_llnbm")
