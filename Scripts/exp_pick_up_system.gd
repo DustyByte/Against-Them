@@ -71,6 +71,7 @@ func _process(delta: float) -> void:
 			
 			if currentExp >= currentExpMilestone:
 				currentLevel += 1
+				AchievementManager.register_level_reached(currentLevel)
 				playerStats.add_exp(-currentExp)
 				levelUp.emit()
 				revaluate_exp_barand_milestone()

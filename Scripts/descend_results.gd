@@ -28,6 +28,7 @@ func set_stats(kills: int, wave: int, elapsed_seconds: float) -> void:
 		var earned: int = MetaProgression.award_run_echoes(completed_waves, bosses_killed)
 		echoes_value.text = str(earned)
 		_echoes_awarded = true
+		AchievementManager.register_run_completed()
 
 
 func _on_return_button_gui_input(event: InputEvent) -> void:

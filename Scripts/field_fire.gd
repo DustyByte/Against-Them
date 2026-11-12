@@ -47,7 +47,7 @@ func hit() -> void:
 	var enemies: Array[Node2D] = get_overlapping_bodies()
 	for enemy in enemies:
 		var damage: float = stats.damage
-		enemy.get_hit(damage)
+		AchievementManager.hit(enemy, damage, &"fiery_field")
 		global.add_damage_text(enemy.global_position, damage, damageType)
 	
 	get_tree().create_timer(stats.hitCD).timeout.connect(hit)
@@ -61,18 +61,21 @@ func explode_frozen_enemies_at_entry(enemy: Node2D) -> void:
 	if not enemy.marks.has('freeze'):
 		return
 	
-	enemy.get_hit(INF, false)
+	AchievementManager.hit(enemy, INF, &"fiery_field", false)
 	var icicleBP: PackedScene = load("res://Scenes/Allies&Summons/icicle.tscn")
 	var world: Node2D = global.WORLD
 	var d: float = 5.0
 	var kbi: float = 10.0
 	var from: Vector2 = enemy.global_position
 	const PARAM: float = TAU / 3
+	# Shared by all shards of this explosion so Contagion can count the enemies they hit.
+	var spread: Dictionary = { "hit": {} }
 	for i in range(3):
 		var icicle: Icicle = icicleBP.instantiate()
 		var direction: Vector2 = Vector2.from_angle((i+1) * PARAM)
 		icicle.global_position = from
 		icicle.setup(direction, d, 2, kbi, 0.0)
+		icicle.explosionSpread = spread
 		world.add_child.call_deferred(icicle)
 
 

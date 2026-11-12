@@ -15,7 +15,7 @@ func set_damage(damage: float) -> void:
 
 
 func hit() -> void:
-	parent.get_hit(burnDamage)
+	AchievementManager.hit(parent, burnDamage, &"burn")
 	global.add_damage_text(global_position, burnDamage, damageType)
 	burnedCount += 1
 	

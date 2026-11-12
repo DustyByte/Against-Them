@@ -50,14 +50,14 @@ func deactivate() -> void:
 
 func handle_hit_connect(body: Node2D) -> void:
 	var d: float = stats.damage
-	body.get_hit(d)
+	AchievementManager.hit(body, d, &"silver_storm")
 	global.add_damage_text(body.global_position, d, 2)
 	if hasFreeze or stats.has('freeze'):
 		hasFreeze = true
 		onRunFeatures.freeze_inflict(body)
 	if hasLightning or stats.has('lightning'):
 		hasLightning = true
-		onRunFeatures.lightning_strike(body, d)
+		onRunFeatures.lightning_strike(body, d, 0, &"silver_storm")
 
 
 func _ready() -> void:

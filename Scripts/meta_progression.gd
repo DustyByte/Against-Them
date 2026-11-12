@@ -49,6 +49,7 @@ func add_echoes(amount: int) -> void:
 	echoes += amount
 	save_progress()
 	echoes_changed.emit(echoes)
+	AchievementManager.register_echoes_earned(amount, echoes)
 
 
 func award_run_echoes(waves_completed: int, bosses_killed: int) -> int:

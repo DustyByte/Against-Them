@@ -152,3 +152,5 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	elapsedTime += delta
+	if is_instance_valid(global.PLAYER):
+		AchievementManager.register_run_time(elapsedTime, delta, global.PLAYER.stats.currentHP)

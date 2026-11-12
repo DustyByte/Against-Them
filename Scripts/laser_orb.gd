@@ -32,7 +32,7 @@ func hit() -> void:
 	var enemies: Array[Node2D] = beamArea.get_overlapping_bodies()
 	var d: float = stats.damage
 	for enemy in enemies:
-		enemy.get_hit(d)
+		AchievementManager.hit(enemy, d, &"laser_orb")
 		global.add_damage_text(enemy.global_position, d, damageType)
 		var t: int = Time.get_ticks_usec()
 		if not enemy.marks.has('burn'):

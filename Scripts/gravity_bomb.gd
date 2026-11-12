@@ -44,7 +44,7 @@ func hit() -> void:
 	var enemies: Array[Node2D] = get_overlapping_bodies()
 	for enemy in enemies:
 		var d: float = stats.damage
-		enemy.get_hit(d, false)
+		AchievementManager.hit(enemy, d, &"gravity_bomb", false)
 		global.add_damage_text(enemy.global_position, d, damageType)
 	
 	get_tree().create_timer(stats.hitCD).timeout.connect(hit)
@@ -60,7 +60,7 @@ func resonate(d: float, resonatedFrom: CharacterBody2D) -> void:
 	var enemies: Array[Node2D] = get_overlapping_bodies()
 	for enemy in enemies:
 		if enemy != resonatedFrom:
-			enemy.get_hit(d, false)
+			AchievementManager.hit(enemy, d, &"gravity_bomb", false)
 			global.add_damage_text(enemy.global_position, d, damageType)
 		
 

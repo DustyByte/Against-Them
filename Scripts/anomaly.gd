@@ -18,7 +18,9 @@ func on_hit_connect(body: Node2D) -> void:
 		0.0, 0.75, 0.15
 	)
 	shrinkTween.finished.connect(func():
+		AchievementManager.push_source(&"black_hole")
 		body.handle_death()
+		AchievementManager.pop_source()
 	)
 	
 	body.collision_layer = 0

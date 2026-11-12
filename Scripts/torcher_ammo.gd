@@ -25,7 +25,7 @@ func init(givenShotDirection: Vector2, barrelGlobalAt: Vector2, givenDamage: flo
 
 func handleBulletConnect(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
-		body.get_hit(carryingDamage)
+		AchievementManager.hit(body, carryingDamage, &"torcher")
 		body.get_knocked_back(shotDirection, carryingKnockBackIntensity)
 		global.add_damage_text(body.global_position, carryingDamage, global.DAMAGE_TYPES.INFERNO)
 		global.ON_RUN_FEATURES.burn_inflict(body)

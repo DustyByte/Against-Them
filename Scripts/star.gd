@@ -17,7 +17,7 @@ func setup(statsGiven: Dictionary) -> void:
 
 func _on_enemy_entered(enemy: Node2D) -> void:
 	var d: float = stats.damage
-	enemy.get_hit(d)
+	AchievementManager.hit(enemy, d, &"star")
 	global.add_damage_text(enemy.global_position, d , DAMAGE_TYPE)
 	ON_RUN_FEATURES.burn_inflict(enemy, stats.burnDamage)
 

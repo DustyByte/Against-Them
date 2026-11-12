@@ -50,7 +50,7 @@ func _on_body_entered(body: Node2D) -> void:
 	
 	if body.is_in_group('enemy'):
 		body.get_knocked_back(shotDirection, carryingKnockBackIntensity)
-		body.get_hit(carryingDamage)
+		AchievementManager.hit(body, carryingDamage, &"rupture")
 		
 		global.add_damage_text(global_position, carryingDamage, global.DAMAGE_TYPES.PHYSICAL, randf()<0.1)
 		

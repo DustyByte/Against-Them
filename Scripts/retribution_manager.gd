@@ -59,7 +59,7 @@ func trigger() -> void:
 	var killMilestoneHPIncrease: int = stats.moreFatForYou
 	for enemy in enemies:
 		if enemy:
-			if enemy.get_hit(d) <= 0.0:
+			if AchievementManager.hit(enemy, d, &"retribution") <= 0.0:
 				if killMilestoneDamageIncrease:
 					killCountD += 1
 					if killCountD == 500:

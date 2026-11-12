@@ -16,6 +16,7 @@ func _ready() -> void:
 	
 	AdMobManager.rewarded_ad_failed_to_show.connect(_handle_rewarded_ad_failed_to_show)
 	AdMobManager.rewarded_earned.connect(func(rewardType, amount):
+		AchievementManager.register_revive()
 		queue_free()
 		get_tree().paused = false
 		var player: Player = global.PLAYER

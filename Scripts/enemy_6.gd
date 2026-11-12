@@ -82,9 +82,11 @@ func explodeand_die(body: CharacterBody2D = null) -> void: # body here is always
 		body.get_hit(stats.damage)
 	
 	attackables = rangeArea.get_overlapping_bodies()
+	AchievementManager.begin_explosion()
 	for attackable in attackables:
 		attackable.get_knocked_back(global_position.direction_to(attackable.global_position), 100.0)
 		attackable.get_hit(stats.damage)
+	AchievementManager.end_explosion()
 	
 	drop_exp()
 	queue_free()

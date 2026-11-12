@@ -60,6 +60,7 @@ func shoot() -> void:
 	walkOnShootTimerTime += onShootIncreaseTimerAmount
 	
 	var remainingAmmo: int = weapon.shoot_bullet()
+	AchievementManager.register_weapon_fired(weapon.name)
 	if remainingAmmo <= 0:
 		weapon.reload()
 		magEmptied.emit()

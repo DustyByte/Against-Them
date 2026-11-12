@@ -5,7 +5,8 @@ static var bleedBP: PackedScene = global.FREQUENT_EFFECTS_BLUEPRINTS.BLEED
 static var explosionBP: PackedScene = preload("res://Scenes/Effects/explosion_particles.tscn")
 
 
-static func lightning_strike(target: CharacterBody2D, damage: float, toChainAmount: int = 0) -> void:
+## `source` credits kills for achievements: Lightning Strike / Hexa Snail by default.
+static func lightning_strike(target: CharacterBody2D, damage: float, toChainAmount: int = 0, source: StringName = &"lightning") -> void:
 	var worldAddChild: Callable = global.WORLD.add_child
 	var lightning: Lightning = lightningBP.instantiate()
 	var targetGlobalPosition: Vector2 = target.global_position
@@ -21,16 +22,17 @@ static func lightning_strike(target: CharacterBody2D, damage: float, toChainAmou
 	lightning.global_position = targetGlobalPosition
 	worldAddChild.call_deferred(lightning)
 	
-	target.get_hit(damage)
+	AchievementManager.hit(target, damage, source)
 	global.add_damage_text(targetGlobalPosition, damage, 1)
+	var enemiesHit: int = 1
 	
 	if playerHasOverload and target.marks.has('burn'):
 		var oDmg: float = overloadDamageMultiplier * damage
-		var enemyJustDied: bool = target.get_hit(oDmg) <= 0.0
+		var enemyJustDied: bool = AchievementManager.hit(target, oDmg, source) <= 0.0
 		
 		if playerHasOverloadExplosion:
 			if enemyJustDied and not target.is_in_group("explodable"):
-				overload_explode(target, oDmg * playerActiveModifiers.overloadExplosionMult, targetGlobalPosition, world, detector)
+				overload_explode(target, oDmg * playerActiveModifiers.overloadExplosionMult, targetGlobalPosition, world, detector, source)
 		
 		global.add_damage_text(targetGlobalPosition, oDmg, 3, true)
 	
@@ -52,16 +54,18 @@ static func lightning_strike(target: CharacterBody2D, damage: float, toChainAmou
 			lightning.global_position = nextEnemyGlobalPosition
 			worldAddChild.call_deferred(lightning)
 			
-			nextEnemy.get_hit(damage)
+			AchievementManager.hit(nextEnemy, damage, source)
 			global.add_damage_text(nextEnemyGlobalPosition, damage, 1)
+			enemiesHit += 1
+			AchievementManager.register_lightning_chain_hits(enemiesHit)
 			
 			if playerHasOverload and nextEnemy.marks.has('burn'):
 				var oDmg: float = overloadDamageMultiplier * damage
-				var remHP: float = nextEnemy.get_hit(oDmg)
+				var remHP: float = AchievementManager.hit(nextEnemy, oDmg, source)
 				
 				if playerHasOverloadExplosion:
 					if remHP <= 0.0 and not nextEnemy.is_in_group("explodable"):
-						overload_explode(nextEnemy, oDmg*playerActiveModifiers.overloadExplosionMult, nextEnemyGlobalPosition, world, detector)
+						overload_explode(nextEnemy, oDmg*playerActiveModifiers.overloadExplosionMult, nextEnemyGlobalPosition, world, detector, source)
 				
 				global.add_damage_text(targetGlobalPosition, oDmg, 3, true)
 			
@@ -75,6 +79,7 @@ static func burn_inflict(on: CharacterBody2D, damage: float = 3.0) -> void:
 	var burnEmission: Burn = global.FREQUENT_EFFECTS_BLUEPRINTS.BURN_EMISSION.instantiate()
 	burnEmission.set_damage(damage)
 	on.add_child(burnEmission)
+	AchievementManager.register_burn_applied()
 
 
 static func freeze_inflict(on: CharacterBody2D, duration: float = 2.0) -> void:
@@ -86,6 +91,7 @@ static func freeze_inflict(on: CharacterBody2D, duration: float = 2.0) -> void:
 		return
 	
 	var freeze: Freeze = freezeBP.instantiate()
+	AchievementManager.register_freeze_applied()
 	freeze.setup(duration)
 	on.freezeEffect = freeze
 	on.add_child(freeze)
@@ -97,7 +103,7 @@ static func bleed_inflict(on: CharacterBody2D, damage: float) -> void:
 	on.add_child(bleed)
 
 
-static func overload_explode(target: CharacterBody2D, oeDmg: float, targetGlobalPosition: Vector2, whereToAddChild: Node2D, detector: BodyDetect) -> void:
+static func overload_explode(target: CharacterBody2D, oeDmg: float, targetGlobalPosition: Vector2, whereToAddChild: Node2D, detector: BodyDetect, source: StringName = &"lightning") -> void:
 	await whereToAddChild.get_tree().process_frame
 	var explosionParticles: GPUParticles2D = explosionBP.instantiate()
 	explosionParticles.self_modulate = Color.LIGHT_CORAL
@@ -107,6 +113,10 @@ static func overload_explode(target: CharacterBody2D, oeDmg: float, targetGlobal
 	explosionParticles.emitting = true
 	
 	var enemies: Array[CharacterBody2D] = detector.get_all_enemies_from(targetGlobalPosition, [target.get_rid()], 150.0)
-	for enemy in enemies: 
+	AchievementManager.push_source(source)
+	AchievementManager.begin_explosion()
+	for enemy in enemies:
 		enemy.get_hit(oeDmg)
 		global.add_damage_text(enemy.global_position, oeDmg, 3)
+	AchievementManager.end_explosion()
+	AchievementManager.pop_source()

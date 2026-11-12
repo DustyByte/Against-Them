@@ -58,6 +58,12 @@ func _ready() -> void:
 	actualAnimSpeedScale = ap.speed_scale
 	ap.speed_scale = 0.0
 
+	AchievementManager.register_frozen_count_changed(1)
+
+
+func _exit_tree() -> void:
+	AchievementManager.register_frozen_count_changed(-1)
+
 
 var x: float = 0.0
 func _process(delta: float) -> void:

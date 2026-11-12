@@ -18,7 +18,7 @@ func hitand_restart_timer() -> void:
 	var killCount: int = 0
 	
 	for body in enemiesInRange:
-		var remHP: float = body.get_hit(d)
+		var remHP: float = AchievementManager.hit(body, d, &"aura")
 		if killMilestoneMult and remHP <= 0.0:
 			killCount += 1
 		global.add_damage_text(body.global_position, d, DAMAGE_TYPE)

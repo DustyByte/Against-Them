@@ -15,7 +15,7 @@ func set_damage(damage: float) -> void:
 
 
 func hit() -> void:
-	parent.get_hit(bleedDamage)
+	AchievementManager.hit(parent, bleedDamage, &"bleed")
 	global.add_damage_text(global_position, bleedDamage, damageType)
 	bleededCount += 1
 	

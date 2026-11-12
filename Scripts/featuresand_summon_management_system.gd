@@ -194,6 +194,7 @@ var fieryFieldCount: int = 0
 var cryoliteCount: int = 0
 func implement_option_choice(optionChosen: Option) -> void:
 	isHandlingLevelUp = false
+	AchievementManager.register_option_picked(optionChosen)
 	match optionChosen.name:
 		"Lightning Strike":
 			if hasNotLightning:

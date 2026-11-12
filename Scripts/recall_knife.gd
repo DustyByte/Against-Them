@@ -35,7 +35,7 @@ func handleHitConnect(body: Node2D) -> void:
 	onRunFeatures.bleed_inflict(body, stats.bleedDamage)
 	global.add_damage_text(body.global_position, d, damageType)
 	
-	if body.get_hit(d) <= 0.0 and playerStatsActiveModifiers.has('recallKnifeKillMilestone'):
+	if AchievementManager.hit(body, d, &"recall_dagger") <= 0.0 and playerStatsActiveModifiers.has('recallKnifeKillMilestone'):
 		playerStatsActiveModifiers.recallKnifeKillMilestone += 1
 		if playerStatsActiveModifiers.recallKnifeKillMilestone == 600:
 			playerStatsActiveModifiers.recallKnifeKillMilestone = 0

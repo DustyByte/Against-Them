@@ -281,6 +281,7 @@ func begin_current_wave() -> void:
 			
 			if enemy.ENEMY_TYPE != 6 and dropBossNow:
 				enemy.set_as_boss()
+				AchievementManager.register_boss_spawned(enemy)
 				enemy.tree_exited.connect(handle_boss_kill)
 				currentWaveTotalEnemies -= 1
 				dropBossNow = false

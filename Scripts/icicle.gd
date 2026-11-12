@@ -11,6 +11,9 @@ var goingTowards: Vector2 = Vector2.ZERO
 var lifeSteal: float = 0.0
 var travelledDisSq: float = 0.0
 var toExplode: bool = false
+# Set on shards of an icicle explosion: { "hit": { enemy instance id: true } },
+# shared by every shard of that explosion and the explosions it sets off.
+var explosionSpread: Dictionary = {}
 @onready var iceFlakes: GPUParticles2D = $GPUParticles2D
 
 
@@ -27,7 +30,10 @@ func setup(direction: Vector2, carryDamage: float, carryDamageType: int, carryKn
 
 func hit(body: Node2D) -> void:
 	if body.is_in_group('enemy'):
-		var remHP: float = body.get_hit(carryingDamage)
+		var remHP: float = AchievementManager.hit(body, carryingDamage, &"cryolite")
+		if not explosionSpread.is_empty():
+			explosionSpread.hit[body.get_instance_id()] = true
+			AchievementManager.register_icicle_explosion_spread(explosionSpread.hit.size())
 		if toExplode and remHP <= 0.0:
 			explode_into_icicles(body.global_position, 3)
 		body.get_knocked_back(goingTowards, carryingKnockBackIntensity)
@@ -52,11 +58,13 @@ func explode_into_icicles(from: Vector2, icicleAmount: int = 4) -> void:
 	var kbi: float = carryingKnockBackIntensity * 0.1
 	var fd: float = freezeDur * 0.2
 	var param: float = TAU / icicleAmount
+	var spread: Dictionary = explosionSpread if not explosionSpread.is_empty() else { "hit": {} }
 	for i in range(icicleAmount):
 		var icicle: Icicle = icicleBP.instantiate()
 		var dir: Vector2 = Vector2.from_angle((i+1) * param)
 		icicle.global_position = from
 		icicle.setup(dir, d, carryingDamageType, kbi, fd, lifeSteal, toExplode)
+		icicle.explosionSpread = spread
 		world.add_child.call_deferred(icicle)
 	
 	queue_free()
