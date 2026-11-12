@@ -67,6 +67,8 @@ func get_hit(incomingDamage: float) -> float:
 		global.activeCamera.shake(8.0)
 		
 		stats.currentHP -= incomingDamage
+		if incomingDamage > 0.0:
+			AchievementManager.register_player_damaged()
 		global.add_damage_text(global_position, incomingDamage, 5)
 		
 		global.WORLD.audio_2d_play(hitAS, global_position, "game_world", randf_range(0.75, 1.1))

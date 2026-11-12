@@ -21,6 +21,7 @@ global="*res://Scripts/global.gd"
 AdMobManager="*res://Scripts/admob_manager.gd"
 SettingsManager="*res://Scripts/settings_manager.gd"
 MetaProgression="*res://Scripts/meta_progression.gd"
+AchievementManager="*res://Scripts/achievement_manager.gd"
 
 [display]
 

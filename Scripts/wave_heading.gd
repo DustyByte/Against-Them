@@ -1,6 +1,9 @@
 class_name WaveHeading
 extends Node2D
 
+## Achievement banners wait while any node is in this group.
+const GROUP: StringName = &"wave_heading"
+
 @export_range(0.0, 1.0, 0.001) var screenPositionX: float
 @export_range(0.0, 1.0, 0.001) var screenPositionY: float
 
@@ -29,6 +32,7 @@ func animate_entrance() -> void:
 
 
 func _ready() -> void:
+	add_to_group(GROUP)
 	var windowDim: Vector2 = get_viewport_rect().size
 	position = windowDim * Vector2(screenPositionX, screenPositionY)
 	

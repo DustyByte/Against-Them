@@ -30,6 +30,7 @@ func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0
 
 func get_hit(incomingDamage: float, emitSignal: bool = true) -> float:
 	stats.hp -= incomingDamage
+	AchievementManager.register_enemy_hit(incomingDamage)
 	
 	if emitSignal:
 		got_hit.emit(incomingDamage)
@@ -58,6 +59,8 @@ func explodeand_die(body: CharacterBody2D = null) -> void: # body here is always
 	if shrinking:
 		return
 	
+	# Blowing up on contact with the player (body set) is not a kill by the player.
+	AchievementManager.register_enemy_death(self, body == null)
 	deactivate()
 	
 	var explosionParticles: GPUParticles2D = explosionParticlesBP.instantiate()

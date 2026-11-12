@@ -36,6 +36,7 @@ func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0
 
 func get_hit(incomingDamage: float, emitSignal: bool = true) -> float:
 	stats.hp -= incomingDamage
+	AchievementManager.register_enemy_hit(incomingDamage)
 	
 	if emitSignal:
 		got_hit.emit(incomingDamage)
@@ -48,6 +49,7 @@ func get_hit(incomingDamage: float, emitSignal: bool = true) -> float:
 
 
 func handle_death() -> void:
+	AchievementManager.register_enemy_death(self)
 	process_mode = Node.PROCESS_MODE_DISABLED
 	
 	var mat: ShaderMaterial = global.DEATH_CORRODE_SHADER_MATERIAL

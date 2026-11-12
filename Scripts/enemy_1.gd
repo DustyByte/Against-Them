@@ -51,6 +51,7 @@ func apply_external_velocity(givenExternalVelocityWithDelta: Vector2) -> void:
 
 func get_hit(incomingDamage: float, emitSignal: bool = true) -> float:
 	stats.hp -= incomingDamage
+	AchievementManager.register_enemy_hit(incomingDamage)
 	
 	if emitSignal:
 		got_hit.emit(incomingDamage)
@@ -74,6 +75,7 @@ func drop_exp() -> void:
 
 
 func handle_death() -> void:
+	AchievementManager.register_enemy_death(self)
 	process_mode = Node.PROCESS_MODE_DISABLED
 	
 	if asBoss:

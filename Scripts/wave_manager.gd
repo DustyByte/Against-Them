@@ -267,6 +267,7 @@ func begin_current_wave() -> void:
 	nextWaveDropsReady = false
 	
 	waveBegun.emit(currentWave)
+	AchievementManager.register_wave_begun(currentWave)
 	add_wave_heading()
 	
 	currentWaveTotalEnemies = 0
@@ -315,6 +316,7 @@ func handle_enemy_kill() -> void:
 	if killedEnemyAmount >= currentWaveTotalEnemies:
 		killedEnemyAmount = 0
 		wavesCompleted += 1
+		AchievementManager.register_wave_completed(currentWave-1)
 		waveFinished.emit(currentWave-1)
 		sceneTree.create_timer(wave_transition_delay).timeout.connect(begin_current_wave)
 

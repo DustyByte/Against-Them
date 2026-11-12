@@ -1,0 +1,123 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://Scripts/achievement_banner.gd" id="1_banner"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_body"]
+bg_color = Color(0.05, 0.06, 0.08, 0.88)
+skew = Vector2(0.25, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95, 0.8, 0.42, 1)
+shadow_color = Color(0.95, 0.75, 0.3, 0.35)
+shadow_size = 14
+
+[sub_resource type="LabelSettings" id="LabelSettings_caption"]
+font = ExtResource("2_font")
+font_size = 18
+font_color = Color(0.95, 0.8, 0.42, 1)
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font = ExtResource("2_font")
+font_size = 26
+font_color = Color(0.74509805, 0.9254902, 0.9254902, 1)
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_amount"]
+font = ExtResource("2_font")
+font_size = 32
+font_color = Color(0.95, 0.8, 0.42, 1)
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_currency"]
+font = ExtResource("2_font")
+font_size = 14
+font_color = Color(0.95, 0.8, 0.42, 0.85)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="AchievementBanner" type="Control"]
+custom_minimum_size = Vector2(600, 96)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 600.0
+offset_bottom = 96.0
+pivot_offset = Vector2(300, 48)
+mouse_filter = 2
+script = ExtResource("1_banner")
+
+[node name="Body" type="Panel" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_body")
+
+[node name="Shine" type="Polygon2D" parent="Body"]
+color = Color(1, 0.95, 0.75, 0.22)
+polygon = PackedVector2Array(40, 0, 90, 0, 50, 96, 0, 96)
+
+[node name="Margin" type="MarginContainer" parent="Body"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 44
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 44
+theme_override_constants/margin_bottom = 10
+
+[node name="HBox" type="HBoxContainer" parent="Body/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="Text" type="VBoxContainer" parent="Body/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Caption" type="Label" parent="Body/Margin/HBox/Text"]
+layout_mode = 2
+text = "ACHIEVEMENT UNLOCKED!"
+label_settings = SubResource("LabelSettings_caption")
+
+[node name="Title" type="Label" parent="Body/Margin/HBox/Text"]
+layout_mode = 2
+text = "Achievement"
+label_settings = SubResource("LabelSettings_title")
+text_overrun_behavior = 3
+
+[node name="Reward" type="VBoxContainer" parent="Body/Margin/HBox"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Amount" type="Label" parent="Body/Margin/HBox/Reward"]
+layout_mode = 2
+text = "+0"
+label_settings = SubResource("LabelSettings_amount")
+horizontal_alignment = 1
+
+[node name="Currency" type="Label" parent="Body/Margin/HBox/Reward"]
+layout_mode = 2
+text = "ECHOES"
+label_settings = SubResource("LabelSettings_currency")
+horizontal_alignment = 1

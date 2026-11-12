@@ -140,6 +140,10 @@ func _input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	global.WORLD = self
+	AchievementManager.start_run()
+	var achievementBanners: Node = preload("res://Scripts/achievement_banner_presenter.gd").new()
+	achievementBanners.name = "AchievementBannerPresenter"
+	$CanvasLayer.add_child(achievementBanners)
 	
 	fill_gpu_particle_pool(10)
 	fill_audio_stream_player_2d_pool(16)

@@ -10,6 +10,9 @@ extends RefCounted
 ##   title    - text shown on the card.
 ##   target   - number after the slash on the card. 1 means a yes/no achievement.
 ##   reward   - Echoes granted on claim.
+##   stat     - (optional) AchievementManager stat that drives progress. Without it
+##              the achievement is not tracked yet and stays at 0.
+##   threshold- (optional) for yes/no achievements: complete once stat >= threshold.
 ##
 ## Reward scale: regular play earns roughly 3 Echoes per minute (about 90 per
 ## 30 minutes), so a reward is sized to the play time and skill it usually takes:
@@ -37,24 +40,24 @@ const CATEGORIES: Array[String] = [
 
 const ACHIEVEMENTS: Array[Dictionary] = [
 	# Enemy kills
-	{ "id": "first_blood", "category": "Enemy Kills", "type": TYPE_LIFETIME, "title": "Kill 1 enemy", "target": 1, "reward": 5 },
-	{ "id": "century", "category": "Enemy Kills", "type": TYPE_LIFETIME, "title": "Kill 100 enemies", "target": 100, "reward": 10 },
-	{ "id": "thousand_cuts", "category": "Enemy Kills", "type": TYPE_LIFETIME, "title": "Kill 1,000 enemies", "target": 1000, "reward": 30 },
-	{ "id": "ten_thousand", "category": "Enemy Kills", "type": TYPE_LIFETIME, "title": "Kill 10,000 enemies", "target": 10000, "reward": 150 },
-	{ "id": "exterminator", "category": "Enemy Kills", "type": TYPE_RUN, "title": "Kill 100 enemies in one run", "target": 100, "reward": 10 },
-	{ "id": "unstoppable", "category": "Enemy Kills", "type": TYPE_RUN, "title": "Kill 500 enemies in one run", "target": 500, "reward": 25 },
-	{ "id": "crowd_control", "category": "Enemy Kills", "type": TYPE_RUN, "title": "Kill 10 enemies within 1 second", "target": 10, "reward": 20 },
-	{ "id": "overkill", "category": "Enemy Kills", "type": TYPE_LIFETIME, "title": "Deal 1,000 damage with a single hit", "target": 1, "reward": 30 },
+	{ "id": "first_blood", "category": "Enemy Kills", "type": TYPE_LIFETIME, "title": "Kill 1 enemy", "target": 1, "reward": 5, "stat": "lifetime_kills" },
+	{ "id": "century", "category": "Enemy Kills", "type": TYPE_LIFETIME, "title": "Kill 100 enemies", "target": 100, "reward": 10, "stat": "lifetime_kills" },
+	{ "id": "thousand_cuts", "category": "Enemy Kills", "type": TYPE_LIFETIME, "title": "Kill 1,000 enemies", "target": 1000, "reward": 30, "stat": "lifetime_kills" },
+	{ "id": "ten_thousand", "category": "Enemy Kills", "type": TYPE_LIFETIME, "title": "Kill 10,000 enemies", "target": 10000, "reward": 150, "stat": "lifetime_kills" },
+	{ "id": "exterminator", "category": "Enemy Kills", "type": TYPE_RUN, "title": "Kill 100 enemies in one run", "target": 100, "reward": 10, "stat": "best_run_kills" },
+	{ "id": "unstoppable", "category": "Enemy Kills", "type": TYPE_RUN, "title": "Kill 500 enemies in one run", "target": 500, "reward": 25, "stat": "best_run_kills" },
+	{ "id": "crowd_control", "category": "Enemy Kills", "type": TYPE_RUN, "title": "Kill 10 enemies within 1 second", "target": 10, "reward": 20, "stat": "best_kills_in_one_second" },
+	{ "id": "overkill", "category": "Enemy Kills", "type": TYPE_LIFETIME, "title": "Deal 1,000 damage with a single hit", "target": 1, "reward": 30, "stat": "biggest_hit", "threshold": 1000 },
 
 	# Wave milestones
-	{ "id": "first_descent", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Complete wave 1", "target": 1, "reward": 5 },
-	{ "id": "descender", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Reach wave 5", "target": 5, "reward": 10 },
-	{ "id": "quarter_century", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Reach wave 25", "target": 25, "reward": 40 },
-	{ "id": "halfway_to_the_abyss", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Reach wave 50", "target": 50, "reward": 100 },
-	{ "id": "the_century", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Reach wave 100", "target": 100, "reward": 250 },
-	{ "id": "marathon", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Complete 50 waves in one run", "target": 50, "reward": 100 },
-	{ "id": "perfect_wave", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Complete a wave without taking damage", "target": 1, "reward": 10 },
-	{ "id": "untouchable", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Complete waves 1-10 without taking damage", "target": 10, "reward": 50 },
+	{ "id": "first_descent", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Complete wave 1", "target": 1, "reward": 5, "stat": "best_run_waves_completed" },
+	{ "id": "descender", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Reach wave 5", "target": 5, "reward": 10, "stat": "best_wave_reached" },
+	{ "id": "quarter_century", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Reach wave 25", "target": 25, "reward": 40, "stat": "best_wave_reached" },
+	{ "id": "halfway_to_the_abyss", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Reach wave 50", "target": 50, "reward": 100, "stat": "best_wave_reached" },
+	{ "id": "the_century", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Reach wave 100", "target": 100, "reward": 250, "stat": "best_wave_reached" },
+	{ "id": "marathon", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Complete 50 waves in one run", "target": 50, "reward": 100, "stat": "best_run_waves_completed" },
+	{ "id": "perfect_wave", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Complete a wave without taking damage", "target": 1, "reward": 10, "stat": "best_run_flawless_waves" },
+	{ "id": "untouchable", "category": "Wave Milestones", "type": TYPE_RUN, "title": "Complete waves 1-10 without taking damage", "target": 10, "reward": 50, "stat": "best_flawless_start_streak" },
 
 	# Survival
 	{ "id": "survivor", "category": "Survival", "type": TYPE_RUN, "title": "Survive 10 minutes", "target": 1, "reward": 15 },

@@ -9,10 +9,6 @@ const HEADER_FONT: FontFile = preload("res://Resources/Copperplate.otf")
 @onready var _card_list: VBoxContainer = $MarginContainer/VBoxContainer/ListMargin/ScrollContainer/CardList
 @onready var _return_button: Panel = $MarginContainer/VBoxContainer/ReturnMargin/ReturnButton
 
-# Claimed state. Lives only while the game is running until achievements are made real.
-static var _claimed_ids: Dictionary = {}
-
-
 func _ready() -> void:
 	_return_button.gui_input.connect(_on_return_gui_input)
 	_build_cards()
@@ -32,10 +28,10 @@ func _build_cards() -> void:
 				achievement["id"],
 				achievement["title"],
 				achievement["type"] == AchievementData.TYPE_LIFETIME,
-				_get_progress(achievement["id"]),
+				AchievementManager.get_progress(achievement["id"]),
 				achievement["target"],
 				achievement["reward"],
-				_claimed_ids.has(achievement["id"])
+				AchievementManager.is_claimed(achievement["id"])
 			)
 			card.claim_requested.connect(_on_claim_requested.bind(card))
 
@@ -56,22 +52,12 @@ func _make_category_header(category: String) -> Control:
 	return margin
 
 
-func _get_progress(_achievement_id: String) -> int:
-	# TODO: read real progress once achievement tracking exists.
-	return 0
-
-
 func _on_claim_requested(achievement_id: String, card: Node) -> void:
-	if _claimed_ids.has(achievement_id):
-		return
-
-	for achievement: Dictionary in AchievementData.ACHIEVEMENTS:
-		if achievement["id"] == achievement_id:
-			_play_ui_sfx()
-			_claimed_ids[achievement_id] = true
-			MetaProgression.add_echoes(achievement["reward"])
-			card.set_claimed(true)
-			return
+	# AchievementManager checks it is completed and unclaimed, saves the claim,
+	# and adds the reward to the player's Echoes.
+	if AchievementManager.claim(achievement_id) > 0:
+		_play_ui_sfx()
+		card.set_claimed(true)
 
 
 func _on_return_gui_input(event: InputEvent) -> void:
