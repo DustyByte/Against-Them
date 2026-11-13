@@ -22,6 +22,7 @@ func _on_request_completed(result: int, response_code: int, _headers: PackedStri
 	if verdict.update_available:
 		var update_notification: Control = preload("res://Scenes/HUD/new_game_version_available_notification.tscn").instantiate()
 		update_notification.setAsMustUpdate = verdict.must_be_updated
+		update_notification.latestVersion = latest_system_version.strip_edges()
 		$"../UI".add_child.call_deferred(update_notification)
 
 func _check_versions_and_verdict(latest_system_version: String, current_system_version: String) -> Dictionary:

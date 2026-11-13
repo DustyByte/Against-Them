@@ -23,6 +23,7 @@ SettingsManager="*res://Scripts/settings_manager.gd"
 MetaProgression="*res://Scripts/meta_progression.gd"
 AchievementManager="*res://Scripts/achievement_manager.gd"
 UpgradeManager="*res://Scripts/upgrade_manager.gd"
+InventoryManager="*res://Scripts/inventory_manager.gd"
 
 [display]
 

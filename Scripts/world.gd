@@ -141,6 +141,7 @@ func _input(event: InputEvent) -> void:
 func _ready() -> void:
 	global.WORLD = self
 	global.TOTAL_ENEMY_KILLS = 0 # per-run count (shown on results, used by Harvest)
+	global.RUN_REVIVES = 0
 	AchievementManager.start_run()
 	var achievementBanners: Node = preload("res://Scripts/achievement_banner_presenter.gd").new()
 	achievementBanners.name = "AchievementBannerPresenter"

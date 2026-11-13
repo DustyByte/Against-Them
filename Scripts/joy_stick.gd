@@ -5,6 +5,10 @@ var screenSize: Vector2 = Vector2.ZERO
 var joyStickPosition: Vector2 = Vector2.ZERO
 var knobPosition: Vector2 = Vector2.ZERO
 var knobRadius: float = 0.0
+# Resting size; the knob grows by KNOB_HELD_GROWTH while held. Set, never
+# added to, so uneven press/release pairs can't make it drift.
+var knobBaseRadius: float = 0.0
+const KNOB_HELD_GROWTH := 10.0
 @export var knobColor: Color = Color(1, 1, 1, 0.5)
 var borderRadius: float = 0.0
 @export var borderColor: Color = Color(1, 1, 1, 0.25)
@@ -23,8 +27,9 @@ func _ready() -> void:
 	screenSize = get_viewport().get_visible_rect().size
 	joyStickPosition = Vector2(screenSize.x * fromLeft, screenSize.y * fromTop)
 	knobPosition = joyStickPosition
-	knobRadius = get_window().size.y * 0.15 * 0.5
-	borderRadius = knobRadius * 2
+	knobBaseRadius = get_window().size.y * 0.15 * 0.5
+	knobRadius = knobBaseRadius
+	borderRadius = knobBaseRadius * 2
 	joyStickInputDeadZoneRadius = borderRadius * 3
 
 
@@ -61,6 +66,11 @@ func _input(event: InputEvent) -> void:
 			move_knob(joyStickPosition + (borderRadius * JSToDragPointDirection))
 	
 	
+	# On phones every touch is also sent as a fake mouse event; touches are
+	# already handled above, so only real mice (desktop testing) go below.
+	elif event.device == InputEvent.DEVICE_ID_EMULATION:
+		return
+	
 	elif event is InputEventMouseButton:
 		if event.pressed:
 			var touchToJSCenterDistance: float = joyStickPosition.distance_to(event.position)
@@ -83,7 +93,7 @@ func _input(event: InputEvent) -> void:
 
 func hold_knob(holdingFrom: Vector2 = Vector2.ZERO) -> void:
 	knobBeingHeld = true
-	knobRadius += 10
+	knobRadius = knobBaseRadius + KNOB_HELD_GROWTH
 	
 	if holdingFrom:
 		var touchToJSCenterDistance: float = joyStickPosition.distance_to(holdingFrom)
@@ -101,7 +111,7 @@ func hold_knob(holdingFrom: Vector2 = Vector2.ZERO) -> void:
 
 func release_knob() -> void:
 	knobBeingHeld = false
-	knobRadius -= 10
+	knobRadius = knobBaseRadius
 	knobPosition = joyStickPosition
 	output.direction = Vector2.ZERO
 	queue_redraw()

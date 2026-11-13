@@ -1,104 +1,312 @@
-[gd_scene load_steps=9 format=3 uid="uid://b5f6gjucls8oc"]
+[gd_scene load_steps=12 format=3 uid="uid://b5f6gjucls8oc"]
 
 [ext_resource type="Script" uid="uid://dtcjursscp0jc" path="res://Scripts/death_screen.gd" id="1"]
-[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_yhi1a"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_font"]
+[ext_resource type="Texture2D" path="res://Assets/HUD Elements/anchor_shard_icon.svg" id="3_shard"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0erqa"]
-bg_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("2_font")
+spacing_glyph = 4
 
-[sub_resource type="LabelSettings" id="LabelSettings_iejoy"]
-font = ExtResource("2_yhi1a")
+[sub_resource type="FontVariation" id="FontVariation_wide"]
+base_font = ExtResource("2_font")
+spacing_glyph = 7
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhi1a"]
-bg_color = Color(0.8083333, 0.77, 1, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="Theme" id="Theme_death"]
+Label/colors/font_color = Color(0.8, 0.86, 0.92, 1)
+Label/font_sizes/font_size = 18
+Label/fonts/font = ExtResource("2_font")
 
-[sub_resource type="LabelSettings" id="LabelSettings_5w2k2"]
-font = ExtResource("2_yhi1a")
-font_size = 14
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
+bg_color = Color(0.03, 0.04, 0.065, 0.96)
+border_width_left = 1
+border_width_top = 3
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.45, 0.5, 0.75)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 48.0
+content_margin_top = 40.0
+content_margin_right = 48.0
+content_margin_bottom = 40.0
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 24
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iejoy"]
-bg_color = Color(0.8083333, 0.77, 1, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stats"]
+bg_color = Color(0.62, 0.88, 0.95, 0.04)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.18)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_top = 16.0
+content_margin_bottom = 16.0
 
-[sub_resource type="LabelSettings" id="LabelSettings_brngq"]
-font = ExtResource("2_yhi1a")
-font_size = 12
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bail"]
+bg_color = Color(1, 1, 1, 0.03)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.86, 0.92, 0.3)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_revive"]
+bg_color = Color(0.62, 0.88, 0.95, 0.16)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rule"]
+bg_color = Color(0.95, 0.45, 0.5, 0.8)
 
 [node name="CanvasLayer" type="CanvasLayer"]
 process_mode = 3
 layer = 2
 
-[node name="BackgroundPanel" type="Panel" parent="."]
-offset_right = 320.0
-offset_bottom = 212.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_0erqa")
+[node name="DeathScreen" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_death")
 script = ExtResource("1")
 
-[node name="Title" type="Label" parent="BackgroundPanel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -43.5
-offset_right = 40.00006
-offset_bottom = -20.5
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(40, 11)
-text = "Body Destroyed!"
-label_settings = SubResource("LabelSettings_iejoy")
-horizontal_alignment = 1
-
-[node name="OkayButton" type="Panel" parent="BackgroundPanel"]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 141.0
-offset_right = 130.0
-offset_bottom = 176.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_yhi1a")
-
-[node name="Label" type="Label" parent="BackgroundPanel/OkayButton"]
+[node name="Dim" type="ColorRect" parent="DeathScreen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Bail Out"
-label_settings = SubResource("LabelSettings_5w2k2")
-horizontal_alignment = 1
-vertical_alignment = 1
+color = Color(0.02, 0.0, 0.015, 0.62)
 
-[node name="ReviveButton" type="Panel" parent="BackgroundPanel"]
-layout_mode = 0
-offset_left = 190.0
-offset_top = 141.0
-offset_right = 280.0
-offset_bottom = 176.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_iejoy")
-
-[node name="Label" type="Label" parent="BackgroundPanel/ReviveButton"]
+[node name="Center" type="CenterContainer" parent="DeathScreen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Revive (Ad)"
-label_settings = SubResource("LabelSettings_brngq")
+mouse_filter = 2
+
+[node name="Dialog" type="PanelContainer" parent="DeathScreen/Center"]
+custom_minimum_size = Vector2(720, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+
+[node name="VBox" type="VBoxContainer" parent="DeathScreen/Center/Dialog"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="Caption" type="Label" parent="DeathScreen/Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.45, 0.5, 0.9)
+theme_override_fonts/font = SubResource("FontVariation_wide")
+theme_override_font_sizes/font_size = 16
+text = "SIGNAL LOST"
 horizontal_alignment = 1
-vertical_alignment = 1
+
+[node name="Title" type="Label" parent="DeathScreen/Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.97, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 44
+text = "BODY DESTROYED"
+horizontal_alignment = 1
+
+[node name="Rule" type="Panel" parent="DeathScreen/Center/Dialog/VBox"]
+custom_minimum_size = Vector2(72, 2)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rule")
+
+[node name="Stats" type="PanelContainer" parent="DeathScreen/Center/Dialog/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_stats")
+
+[node name="Row" type="HBoxContainer" parent="DeathScreen/Center/Dialog/VBox/Stats"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Wave" type="VBoxContainer" parent="DeathScreen/Center/Dialog/VBox/Stats/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="DeathScreen/Center/Dialog/VBox/Stats/Row/Wave"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.6)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 11
+text = "WAVES CLEARED"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="DeathScreen/Center/Dialog/VBox/Stats/Row/Wave"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+
+[node name="Kills" type="VBoxContainer" parent="DeathScreen/Center/Dialog/VBox/Stats/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="DeathScreen/Center/Dialog/VBox/Stats/Row/Kills"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.6)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 14
+text = "KILLS"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="DeathScreen/Center/Dialog/VBox/Stats/Row/Kills"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+
+[node name="Time" type="VBoxContainer" parent="DeathScreen/Center/Dialog/VBox/Stats/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="DeathScreen/Center/Dialog/VBox/Stats/Row/Time"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.6)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 14
+text = "TIME"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="DeathScreen/Center/Dialog/VBox/Stats/Row/Time"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "00:00"
+horizontal_alignment = 1
+
+[node name="RevivesLeft" type="Label" parent="DeathScreen/Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.86, 0.92, 0.7)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 15
+text = "REVIVES LEFT  2 / 2"
+horizontal_alignment = 1
+
+[node name="Note" type="Label" parent="DeathScreen/Center/Dialog/VBox"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.55, 0.56, 1)
+theme_override_font_sizes/font_size = 16
+text = "No ad available. Check your connection and try again."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="DeathScreen/Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BailButton" type="Panel" parent="DeathScreen/Center/Dialog/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_bail")
+
+[node name="VBox" type="VBoxContainer" parent="DeathScreen/Center/Dialog/VBox/Buttons/BailButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="DeathScreen/Center/Dialog/VBox/Buttons/BailButton/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.9, 0.95, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 22
+text = "BAIL OUT"
+horizontal_alignment = 1
+
+[node name="Sub" type="Label" parent="DeathScreen/Center/Dialog/VBox/Buttons/BailButton/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.86, 0.92, 0.5)
+theme_override_font_sizes/font_size = 14
+text = "End the run"
+horizontal_alignment = 1
+
+[node name="ReviveButton" type="Panel" parent="DeathScreen/Center/Dialog/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_revive")
+
+[node name="HBox" type="HBoxContainer" parent="DeathScreen/Center/Dialog/VBox/Buttons/ReviveButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+theme_override_constants/separation = 14
+
+[node name="Icon" type="TextureRect" parent="DeathScreen/Center/Dialog/VBox/Buttons/ReviveButton/HBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("3_shard")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="DeathScreen/Center/Dialog/VBox/Buttons/ReviveButton/HBox"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="DeathScreen/Center/Dialog/VBox/Buttons/ReviveButton/HBox/Text"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.98, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 22
+text = "REVIVE"
+
+[node name="Sub" type="Label" parent="DeathScreen/Center/Dialog/VBox/Buttons/ReviveButton/HBox/Text"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.75)
+theme_override_font_sizes/font_size = 14
+text = "Watch an ad"

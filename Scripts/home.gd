@@ -22,10 +22,12 @@ const INTRO_SLIDE: float = 24.0
 @onready var _menu: Control = $UI/Menu
 @onready var _column: VBoxContainer = $UI/Menu/Column
 @onready var _descend_btn: Panel = $UI/Menu/Column/Descend
+@onready var _shop_btn: Panel = $UI/Menu/Column/Shop
+@onready var _inventory_btn: Panel = $UI/Menu/Column/Inventory
 @onready var _upgrades_btn: Panel = $UI/Menu/Column/Upgrades
 @onready var _achievements_btn: Panel = $UI/Menu/Column/Achievements
 @onready var _settings_btn: Panel = $UI/Menu/Column/Settings
-@onready var _discord_btn: Panel = $UI/Menu/Column/Discord
+@onready var _discord_btn: Panel = $UI/Menu/DiscordButton
 @onready var _quit_btn: Panel = $UI/Menu/Column/Quit
 # The Echoes counter lives outside the menu so it stays visible on sub screens.
 @onready var _echoes_counter: Control = $UI/EchoesCounter
@@ -57,6 +59,8 @@ func _ready() -> void:
 	_version.text = "v" + global.GAME_VERSION
 
 	_connect_button(_descend_btn, _on_descend_pressed)
+	_connect_button(_shop_btn, _on_shop_pressed)
+	_connect_button(_inventory_btn, _on_inventory_pressed)
 	_connect_button(_upgrades_btn, _on_upgrades_pressed)
 	_connect_button(_achievements_btn, _on_achievements_pressed)
 	_connect_button(_settings_btn, _on_settings_pressed)
@@ -147,6 +151,14 @@ func _on_settings_pressed() -> void:
 	_open_sub_screen(preload("res://Scenes/HUD/settings.tscn").instantiate(), false)
 
 
+func _on_shop_pressed() -> void:
+	_open_sub_screen(preload("res://Scenes/HUD/shop.tscn").instantiate())
+
+
+func _on_inventory_pressed() -> void:
+	_open_sub_screen(preload("res://Scenes/HUD/inventory.tscn").instantiate())
+
+
 func _on_upgrades_pressed() -> void:
 	_open_sub_screen(preload("res://Scenes/HUD/upgrades.tscn").instantiate())
 
@@ -203,13 +215,14 @@ func _play_intro() -> void:
 		tween.tween_property(item, "position:x", target_x, 0.55).set_delay(delay).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		delay += INTRO_STAGGER
 
-	# The resource counter drops in from the top edge.
-	var counter_y: float = _echoes_counter.position.y
-	_echoes_counter.modulate.a = 0.0
-	_echoes_counter.position.y = counter_y - INTRO_SLIDE
-	var counter_tween := create_tween().set_parallel()
-	counter_tween.tween_property(_echoes_counter, "modulate:a", 1.0, 0.45).set_delay(0.15)
-	counter_tween.tween_property(_echoes_counter, "position:y", counter_y, 0.55).set_delay(0.15).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	# The resource counter and the Discord button drop in from the top edge.
+	for notch: Control in [_echoes_counter, _discord_btn]:
+		var notch_y: float = notch.position.y
+		notch.modulate.a = 0.0
+		notch.position.y = notch_y - INTRO_SLIDE
+		var notch_tween := create_tween().set_parallel()
+		notch_tween.tween_property(notch, "modulate:a", 1.0, 0.45).set_delay(0.15)
+		notch_tween.tween_property(notch, "position:y", notch_y, 0.55).set_delay(0.15).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 
 	for orbit in [_orbit_back, _orbit_front]:
 		orbit.modulate.a = 0.0

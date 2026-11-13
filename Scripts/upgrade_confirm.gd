@@ -1,6 +1,6 @@
 extends Control
 
-## Purchase confirmation for one upgrade rank: a short message, the cost and
+## Purchase confirmation (an upgrade rank or a shop item): a short message, the cost and
 ## Cancel / Confirm. Confirm is disabled when the player can't afford it.
 
 signal confirmed
@@ -28,8 +28,13 @@ func _ready() -> void:
 
 
 func setup(title: String, next_rank: int, max_rank: int, cost: int, echoes_owned: int) -> void:
+	setup_with_message(title, "Upgrade to rank %d / %d?" % [next_rank, max_rank], cost, echoes_owned)
+
+
+## Same dialog with any message (used by the Shop for skin purchases).
+func setup_with_message(title: String, message: String, cost: int, echoes_owned: int) -> void:
 	_title.text = title.to_upper()
-	_message.text = "Upgrade to rank %d / %d?" % [next_rank, max_rank]
+	_message.text = message
 	_cost_value.text = str(cost)
 
 	_can_confirm = echoes_owned >= cost

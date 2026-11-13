@@ -1,31 +1,79 @@
-[gd_scene load_steps=8 format=3 uid="uid://c6tdsejwockw2"]
+[gd_scene load_steps=11 format=3 uid="uid://c6tdsejwockw2"]
 
 [ext_resource type="Script" uid="uid://dnys8ufy2agn1" path="res://Scripts/pause_menu.gd" id="1"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_dj1e7"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmjpy"]
-bg_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("2_dj1e7")
+spacing_glyph = 4
 
-[sub_resource type="Theme" id="Theme_f0sgo"]
+[sub_resource type="FontVariation" id="FontVariation_wide"]
+base_font = ExtResource("2_dj1e7")
+spacing_glyph = 7
+
+[sub_resource type="Theme" id="Theme_pause"]
+Label/colors/font_color = Color(0.8, 0.86, 0.92, 1)
+Label/font_sizes/font_size = 18
 Label/fonts/font = ExtResource("2_dj1e7")
-Panel/styles/panel = SubResource("StyleBoxFlat_dmjpy")
 
-[sub_resource type="LabelSettings" id="LabelSettings_janyw"]
-font_size = 32
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
+bg_color = Color(0.03, 0.04, 0.065, 0.96)
+border_width_left = 1
+border_width_top = 3
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.7)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 48.0
+content_margin_top = 40.0
+content_margin_right = 48.0
+content_margin_bottom = 40.0
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 24
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ppj0d"]
-bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stats"]
+bg_color = Color(0.62, 0.88, 0.95, 0.04)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.18)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_top = 16.0
+content_margin_bottom = 16.0
 
-[sub_resource type="Theme" id="Theme_r24hv"]
-Panel/styles/panel = SubResource("StyleBoxFlat_ppj0d")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_end"]
+bg_color = Color(1, 1, 1, 0.03)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.86, 0.92, 0.3)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_resume"]
+bg_color = Color(0.62, 0.88, 0.95, 0.16)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rule"]
+bg_color = Color(0.62, 0.88, 0.95, 0.8)
 
 [node name="PauseMenu" type="Control"]
 process_mode = 3
@@ -36,6 +84,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_pause")
 script = ExtResource("1")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -46,71 +95,172 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.21568628)
+color = Color(0, 0.01, 0.02, 0.62)
 
-[node name="Panel" type="Panel" parent="."]
-custom_minimum_size = Vector2(480, 280)
-layout_mode = 0
-offset_right = 480.0
-offset_bottom = 280.0
-theme = SubResource("Theme_f0sgo")
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="Center" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 48
-theme_override_constants/margin_top = 48
-theme_override_constants/margin_right = 48
-theme_override_constants/margin_bottom = 48
+mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+[node name="Dialog" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
-theme_override_constants/separation = 22
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+
+[node name="VBox" type="VBoxContainer" parent="Center/Dialog"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="Caption" type="Label" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.85)
+theme_override_fonts/font = SubResource("FontVariation_wide")
+theme_override_font_sizes/font_size = 16
+text = "DESCENT ON HOLD"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.97, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 44
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="Rule" type="Panel" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(72, 2)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rule")
+
+[node name="Stats" type="PanelContainer" parent="Center/Dialog/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_stats")
+
+[node name="Row" type="HBoxContainer" parent="Center/Dialog/VBox/Stats"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Wave" type="VBoxContainer" parent="Center/Dialog/VBox/Stats/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="Center/Dialog/VBox/Stats/Row/Wave"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.6)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 11
+text = "WAVES CLEARED"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Center/Dialog/VBox/Stats/Row/Wave"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+
+[node name="Kills" type="VBoxContainer" parent="Center/Dialog/VBox/Stats/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="Center/Dialog/VBox/Stats/Row/Kills"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.6)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 14
+text = "KILLS"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Center/Dialog/VBox/Stats/Row/Kills"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+
+[node name="Time" type="VBoxContainer" parent="Center/Dialog/VBox/Stats/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="Center/Dialog/VBox/Stats/Row/Time"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.6)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 14
+text = "TIME"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Center/Dialog/VBox/Stats/Row/Time"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "00:00"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Panel" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_resume")
+
+[node name="Label" type="Label" parent="Center/Dialog/VBox/ResumeButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9, 0.98, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 24
+text = "RESUME"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QuitButton" type="Panel" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_end")
+
+[node name="VBox" type="VBoxContainer" parent="Center/Dialog/VBox/QuitButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 alignment = 1
+theme_override_constants/separation = 4
 
-[node name="Title" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="Center/Dialog/VBox/QuitButton/VBox"]
 layout_mode = 2
-text = "Field Has been paused"
-label_settings = SubResource("LabelSettings_janyw")
+theme_override_colors/font_color = Color(0.86, 0.9, 0.95, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 22
+text = "END RUN"
 horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="ResumeButton" type="Panel" parent="Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
+[node name="Sub" type="Label" parent="Center/Dialog/VBox/QuitButton/VBox"]
 layout_mode = 2
-theme = SubResource("Theme_r24hv")
-
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/ResumeButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Resume"
+theme_override_colors/font_color = Color(0.8, 0.86, 0.92, 0.5)
+theme_override_font_sizes/font_size = 14
+text = "Collect your Echoes and return to orbit"
 horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="QuitButton" type="Panel" parent="Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-theme = SubResource("Theme_r24hv")
-
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/QuitButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Quit"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [connection signal="gui_input" from="ColorRect" to="." method="_on_color_rect_gui_input"]
-[connection signal="gui_input" from="Panel/MarginContainer/VBoxContainer/ResumeButton" to="." method="_on_resume_button_gui_input"]
-[connection signal="gui_input" from="Panel/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_gui_input"]
+[connection signal="gui_input" from="Center/Dialog/VBox/ResumeButton" to="." method="_on_resume_button_gui_input"]
+[connection signal="gui_input" from="Center/Dialog/VBox/QuitButton" to="." method="_on_quit_button_gui_input"]

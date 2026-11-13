@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bq10h1ud80djv"]
+[gd_scene load_steps=33 format=3 uid="uid://bq10h1ud80djv"]
 
 [ext_resource type="Script" uid="uid://bgxp1ve1bjgxc" path="res://Scripts/home.gd" id="1_1ey7h"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_ibywg"]
@@ -9,6 +9,7 @@
 [ext_resource type="Shader" path="res://Shaders/planet_shade.gdshader" id="8_planet"]
 [ext_resource type="Script" path="res://Scripts/home_orbit.gd" id="9_orbit"]
 [ext_resource type="Texture2D" path="res://Assets/HUD Elements/echoe_icon.svg" id="10_echoe"]
+[ext_resource type="Texture2D" path="res://Assets/HUD Elements/discord_icon.svg" id="11_discord"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bg"]
 shader = ExtResource("7_bg")
@@ -252,6 +253,94 @@ custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
 mouse_filter = 2
 
+[node name="Shop" type="Panel" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Shop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
+
+[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Shop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 27
+theme_override_constants/margin_right = 24
+
+[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Shop/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Index" type="Label" parent="UI/Menu/Column/Shop/Margin/HBox"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "--"
+label_settings = SubResource("LabelSettings_index")
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Menu/Column/Shop/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SHOP"
+label_settings = SubResource("LabelSettings_item")
+vertical_alignment = 1
+
+[node name="Inventory" type="Panel" parent="UI/Menu/Column"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Inventory"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
+
+[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Inventory"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 27
+theme_override_constants/margin_right = 24
+
+[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Inventory/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Index" type="Label" parent="UI/Menu/Column/Inventory/Margin/HBox"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "--"
+label_settings = SubResource("LabelSettings_index")
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Menu/Column/Inventory/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "INVENTORY"
+label_settings = SubResource("LabelSettings_item")
+vertical_alignment = 1
+
 [node name="Upgrades" type="Panel" parent="UI/Menu/Column"]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
@@ -384,50 +473,6 @@ text = "SETTINGS"
 label_settings = SubResource("LabelSettings_item")
 vertical_alignment = 1
 
-[node name="Discord" type="Panel" parent="UI/Menu/Column"]
-custom_minimum_size = Vector2(0, 64)
-layout_mode = 2
-
-[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Discord"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.62, 0.88, 0.95, 0)
-
-[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Discord"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 27
-theme_override_constants/margin_right = 24
-
-[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Discord/Margin"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 18
-
-[node name="Index" type="Label" parent="UI/Menu/Column/Discord/Margin/HBox"]
-custom_minimum_size = Vector2(30, 0)
-layout_mode = 2
-text = "--"
-label_settings = SubResource("LabelSettings_index")
-vertical_alignment = 1
-
-[node name="Label" type="Label" parent="UI/Menu/Column/Discord/Margin/HBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "DISCORD"
-label_settings = SubResource("LabelSettings_item")
-vertical_alignment = 1
-
 [node name="Quit" type="Panel" parent="UI/Menu/Column"]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
@@ -471,6 +516,42 @@ size_flags_horizontal = 3
 text = "QUIT"
 label_settings = SubResource("LabelSettings_item")
 vertical_alignment = 1
+
+[node name="DiscordButton" type="Panel" parent="UI/Menu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.93
+anchor_right = 0.93
+offset_left = -84.0
+offset_bottom = 58.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_counter")
+
+[node name="Highlight" type="ColorRect" parent="UI/Menu/DiscordButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
+
+[node name="Icon" type="TextureRect" parent="UI/Menu/DiscordButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = 14.0
+offset_right = -22.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("11_discord")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Footer" type="HBoxContainer" parent="UI/Menu"]
 layout_mode = 1

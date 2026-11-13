@@ -1,30 +1,80 @@
-extends Panel
+extends Control
+## Shown when Echo dies: a short run summary, revives left, and Bail Out /
+## Revive. Revive spends an Anchor Shard if the player has one, otherwise it
+## plays a rewarded ad. The world stays paused until the revive countdown ends.
 
-const MIN_SCALE := 0.5
-const MAX_SCALE := 2.0
-const SCALE_MARGIN := 0.95
 const COUNTDOWN_FROM := 3
 const COUNTDOWN_STEP := 0.8
+const FONT: FontFile = preload("res://Resources/Copperplate.otf")
 
-@onready var title_label: Label = $Title
-@onready var understood_button: Panel = $OkayButton
-@onready var revive_button: Panel = $ReviveButton
+@onready var _dim: ColorRect = $Dim
+@onready var _dialog: PanelContainer = $Center/Dialog
+@onready var _wave_value: Label = $Center/Dialog/VBox/Stats/Row/Wave/Value
+@onready var _kills_value: Label = $Center/Dialog/VBox/Stats/Row/Kills/Value
+@onready var _time_value: Label = $Center/Dialog/VBox/Stats/Row/Time/Value
+@onready var _revives_left: Label = $Center/Dialog/VBox/RevivesLeft
+@onready var _note: Label = $Center/Dialog/VBox/Note
+@onready var bail_button: Panel = $Center/Dialog/VBox/Buttons/BailButton
+@onready var revive_button: Panel = $Center/Dialog/VBox/Buttons/ReviveButton
+@onready var _revive_icon: TextureRect = $Center/Dialog/VBox/Buttons/ReviveButton/HBox/Icon
+@onready var revive_label: Label = $Center/Dialog/VBox/Buttons/ReviveButton/HBox/Text/Label
+@onready var _revive_sub: Label = $Center/Dialog/VBox/Buttons/ReviveButton/HBox/Text/Sub
 
 # Revive only happens once the reward was granted AND the ad has been closed,
 # whichever of the two arrives last. Until then the world stays paused.
 var _ad_open: bool = false
 var _reward_earned: bool = false
 var _reviving: bool = false
+var _note_tween: Tween
 
 func _ready() -> void:
-	understood_button.gui_input.connect(_check_if_touch_then_execute.bind(_on_okay_button_gui_input))
+	bail_button.gui_input.connect(_check_if_touch_then_execute.bind(_on_okay_button_gui_input))
 	revive_button.gui_input.connect(_check_if_touch_then_execute.bind(_on_revive_button_gui_input))
-	get_viewport().connect("size_changed", _on_viewport_size_changed)
-	_update_scale()
-	
+
 	AdMobManager.rewarded_ad_failed_to_show.connect(_handle_rewarded_ad_failed_to_show)
 	AdMobManager.rewarded_earned.connect(_on_rewarded_earned)
 	AdMobManager.rewarded_ad_dismissed.connect(_on_rewarded_ad_dismissed)
+	_fill_stats()
+	_update_revive_button()
+	_play_entrance()
+
+func _fill_stats() -> void:
+	# Same wave figure the results screen shows after Bail Out.
+	_wave_value.text = str(global.WAVE_MANAGER.currentWave - 1) if is_instance_valid(global.WAVE_MANAGER) else "-"
+	_kills_value.text = str(global.TOTAL_ENEMY_KILLS)
+	var seconds: int = int(global.WORLD.elapsedTime) if is_instance_valid(global.WORLD) else 0
+	_time_value.text = "%02d:%02d" % [seconds / 60, seconds % 60]
+
+## Revive spends a shard if the player has one, otherwise it plays an ad.
+## After MAX_REVIVES_PER_RUN revives the button greys out.
+func _update_revive_button() -> void:
+	var left: int = maxi(global.MAX_REVIVES_PER_RUN - global.RUN_REVIVES, 0)
+	_revives_left.text = "REVIVES LEFT  %d / %d" % [left, global.MAX_REVIVES_PER_RUN]
+	if left == 0:
+		_revive_icon.visible = false
+		revive_label.text = "NO REVIVES"
+		_revive_sub.text = "Limit reached this run"
+		revive_button.modulate.a = 0.4
+	elif InventoryManager.anchor_shards > 0:
+		_revive_icon.visible = true
+		revive_label.text = "REVIVE"
+		_revive_sub.text = "Use a shard (%d owned)" % InventoryManager.anchor_shards
+	else:
+		_revive_icon.visible = false
+		revive_label.text = "REVIVE"
+		_revive_sub.text = "Watch an ad"
+
+## The world behind dims in and the panel rises into place.
+func _play_entrance() -> void:
+	_dim.modulate.a = 0.0
+	_dialog.modulate.a = 0.0
+	await get_tree().process_frame   # let the panel lay out first
+	_dialog.pivot_offset = _dialog.size * 0.5
+	_dialog.scale = Vector2(0.94, 0.94)
+	var tween := create_tween().set_parallel()
+	tween.tween_property(_dim, "modulate:a", 1.0, 0.35)
+	tween.tween_property(_dialog, "modulate:a", 1.0, 0.3).set_delay(0.08)
+	tween.tween_property(_dialog, "scale", Vector2.ONE, 0.4).set_delay(0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func _on_rewarded_earned(_reward_type: String, _amount: int) -> void:
 	if _reward_earned:
@@ -45,10 +95,11 @@ func _try_revive() -> void:
 
 ## World stays paused while a 3-2-1 plays, so the player can get ready.
 func _start_countdown() -> void:
+	global.RUN_REVIVES += 1
 	visible = false
 	
 	var settings := LabelSettings.new()
-	settings.font = title_label.label_settings.font
+	settings.font = FONT
 	settings.font_size = 120
 	settings.font_color = Color(0.85, 0.97, 1.0)
 	settings.outline_size = 14
@@ -84,45 +135,24 @@ func _finish_revive() -> void:
 	var player: Player = global.PLAYER
 	player.take_heal(player.stats.maxHP * 0.5)
 	player.revive_shockwave()
-	# Free the whole death screen layer (this script sits on its panel).
+	# Free the whole death screen layer (this script sits on its root control).
 	get_parent().queue_free()
 
-func _handle_rewarded_ad_failed_to_show(err: String) -> void:
+func _handle_rewarded_ad_failed_to_show(_err: String) -> void:
 	_ad_open = false
-	var message_label: Label = Label.new()
-	message_label.text = "Please check your internet and try again a few seconds later"
-	message_label.modulate = Color(1.0, 0.55, 0.557, 0.0)
-	
-	add_child(message_label)
-	message_label.position = Vector2(size.x * 0.5, size.y * 0.25) - (message_label.size * 0.5)
-	message_label.pivot_offset = message_label.size * 0.5
-	message_label.scale = Vector2(1.0/scale.x, 1.0/scale.y)
-	
-	var tween: Tween = message_label.create_tween()
-	tween.tween_property(message_label, "modulate:a", 1.0, 0.25)
-	tween.tween_property(message_label, "position:y", message_label.position.y - 40, 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_interval(0.75)
-	tween.tween_property(message_label, "modulate:a", 0.0, 0.4)
-	tween.finished.connect(message_label.queue_free)
+	if _note_tween:
+		_note_tween.kill()
+	_note.visible = true
+	_note.modulate.a = 1.0
+	_note_tween = create_tween()
+	_note_tween.tween_interval(3.0)
+	_note_tween.tween_property(_note, "modulate:a", 0.0, 0.4)
+	_note_tween.tween_callback(func(): _note.visible = false)
 
 func _check_if_touch_then_execute(event: InputEvent, functionToExecute: Callable):
 	if event is InputEventScreenTouch and event.is_pressed():
 		global.WORLD.audio_play(preload("res://Assets/SFX/UI.mp3"), "ui")
 		functionToExecute.call()
-
-func _on_viewport_size_changed() -> void:
-	_update_scale()
-
-func _update_scale() -> void:
-	var window_dim: Vector2 = get_viewport_rect().size
-	
-	var scale_x: float = window_dim.x / size.x * SCALE_MARGIN
-	var scale_y: float = window_dim.y / size.y * SCALE_MARGIN
-	scale = Vector2(
-		clamp(scale_x, MIN_SCALE, MAX_SCALE),
-		clamp(scale_y, MIN_SCALE, MAX_SCALE)
-	)
-	position = (window_dim - size * scale) * 0.5
 
 func _on_okay_button_gui_input() -> void:
 	var descendResults: Control = load("res://Scenes/HUD/descend_results.tscn").instantiate()
@@ -136,7 +166,13 @@ func _on_okay_button_gui_input() -> void:
 	queue_free()
 
 func _on_revive_button_gui_input() -> void:
-	if _ad_open or _reviving:
+	if _ad_open or _reviving or global.RUN_REVIVES >= global.MAX_REVIVES_PER_RUN:
+		return
+	# Spend an Anchor Shard if the player has one: no ad, straight to the countdown.
+	if InventoryManager.use_anchor_shard():
+		AchievementManager.register_revive()
+		_reviving = true
+		_start_countdown()
 		return
 	_ad_open = true
 	AdMobManager.show_rewarded_ad()

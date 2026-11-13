@@ -1,0 +1,169 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://Scripts/skin_card.gd" id="1_card"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_font"]
+[ext_resource type="Texture2D" path="res://Assets/HUD Elements/echoe_icon.svg" id="3_echoe"]
+
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("2_font")
+spacing_glyph = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.035, 0.05, 0.075, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.2)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 22.0
+content_margin_top = 22.0
+content_margin_right = 22.0
+content_margin_bottom = 22.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stage"]
+bg_color = Color(0.62, 0.88, 0.95, 0.04)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.3)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+
+[sub_resource type="Theme" id="Theme_card"]
+Label/colors/font_color = Color(0.78, 0.84, 0.9, 1)
+Label/font_sizes/font_size = 20
+Label/fonts/font = ExtResource("2_font")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cost"]
+bg_color = Color(0.62, 0.88, 0.95, 0.06)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.3)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0.62, 0.88, 0.95, 0.14)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.7)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_divider"]
+bg_color = Color(1, 1, 1, 0.07)
+
+[node name="SkinCard" type="PanelContainer"]
+size_flags_horizontal = 3
+mouse_filter = 1
+theme = SubResource("Theme_card")
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+script = ExtResource("1_card")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="Stage" type="PanelContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_stage")
+
+[node name="ViewHint" type="Label" parent="VBox/Stage"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.45)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 13
+text = "TAP TO VIEW"
+
+[node name="NameLabel" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.96, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 24
+text = "SKIN NAME"
+horizontal_alignment = 1
+
+[node name="Divider" type="Panel" parent="VBox"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_divider")
+
+[node name="PricePanel" type="PanelContainer" parent="VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cost")
+
+[node name="HBox" type="HBoxContainer" parent="VBox/PricePanel"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+theme_override_constants/separation = 10
+
+[node name="Icon" type="TextureRect" parent="VBox/PricePanel/HBox"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("3_echoe")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="VBox/PricePanel/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 0.7, 1)
+theme_override_font_sizes/font_size = 24
+text = "0"
+vertical_alignment = 1
+
+[node name="Unit" type="Label" parent="VBox/PricePanel/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 0.7, 0.6)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 14
+text = "ECHOES"
+vertical_alignment = 1
+
+[node name="PurchaseButton" type="Panel" parent="VBox"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_button")
+
+[node name="Label" type="Label" parent="VBox/PurchaseButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.85, 0.96, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 20
+text = "PURCHASE"
+horizontal_alignment = 1
+vertical_alignment = 1

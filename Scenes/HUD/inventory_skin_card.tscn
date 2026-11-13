@@ -1,0 +1,111 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://Scripts/inventory_skin_card.gd" id="1_card"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_font"]
+
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("2_font")
+spacing_glyph = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.045, 0.04, 0.075, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78, 0.64, 0.98, 0.22)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 22.0
+content_margin_top = 22.0
+content_margin_right = 22.0
+content_margin_bottom = 22.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frame"]
+bg_color = Color(0.78, 0.64, 0.98, 0.05)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78, 0.64, 0.98, 0.3)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+
+[sub_resource type="Theme" id="Theme_card"]
+Label/colors/font_color = Color(0.8, 0.8, 0.9, 1)
+Label/font_sizes/font_size = 18
+Label/fonts/font = ExtResource("2_font")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0.78, 0.64, 0.98, 0.14)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78, 0.64, 0.98, 0.7)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="InventorySkinCard" type="PanelContainer"]
+size_flags_horizontal = 3
+mouse_filter = 1
+theme = SubResource("Theme_card")
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+script = ExtResource("1_card")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="Stage" type="PanelContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_frame")
+
+[node name="ViewHint" type="Label" parent="VBox/Stage"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.78, 0.64, 0.98, 0.5)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 13
+text = "TAP TO VIEW"
+
+[node name="NameLabel" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.94, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 24
+text = "SKIN"
+horizontal_alignment = 1
+
+[node name="EquipButton" type="Panel" parent="VBox"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_button")
+
+[node name="Label" type="Label" parent="VBox/EquipButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 20
+text = "EQUIP"
+horizontal_alignment = 1
+vertical_alignment = 1

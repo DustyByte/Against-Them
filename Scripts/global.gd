@@ -1,6 +1,6 @@
 extends Node
 
-const GAME_VERSION: String = "2.0.2"
+const GAME_VERSION: String = "2.0.3"
 
 var EXP_DROP_POLYGON_ARRAY: PackedVector2Array = PackedVector2Array([
 		Vector2(-3.53553390593, 0.0),
@@ -119,6 +119,9 @@ var DETECTOR: BodyDetect = null
 var activeCamera: Camera2D = null
 var WAVE_MANAGER: Node = null
 var TOTAL_ENEMY_KILLS: int = 0
+## Revives used this run (shard or ad); capped by MAX_REVIVES_PER_RUN.
+var RUN_REVIVES: int = 0
+const MAX_REVIVES_PER_RUN: int = 2
 
 const DAMAGE_TEXT_OFFSET: Vector2 = Vector2(40.0, -40.0)
 func add_damage_text(globalPosEnemy: Vector2, damage: float, damageType: int, isCrit: bool = false) -> void:
