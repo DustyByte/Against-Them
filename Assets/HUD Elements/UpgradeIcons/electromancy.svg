@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Electromancy</title>
+  <circle cx="50" cy="50" r="38" fill="none" stroke="#74E0B8" stroke-width="2.2"/>
+  <circle cx="50" cy="50" r="30" fill="none" stroke="#74E0B8" stroke-opacity="0.4" stroke-width="1.6" stroke-dasharray="3 4"/>
+  <polygon points="50,7 54,12 50,17 46,12" fill="#74E0B8"/>
+  <polygon points="87.2,71.5 85.5,77.8 79.2,76.5 81,70.3" fill="#74E0B8"/>
+  <polygon points="12.8,71.5 19,70.3 20.8,76.5 14.5,77.8" fill="#74E0B8"/>
+  <polygon points="56,22 38,52 49,52 43,78 63,44 52,44 60,22" fill="#74E0B8" fill-opacity="0.85" stroke="#74E0B8" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M56 24 L41 50 L49 50" fill="none" stroke="#E2FBF2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M30 36 L34 40 M68 62 L72 66" stroke="#E2FBF2" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

@@ -1,6 +1,6 @@
 extends Node
 
-const GAME_VERSION: String = "1.0.0"
+const GAME_VERSION: String = "2.0.2"
 
 var EXP_DROP_POLYGON_ARRAY: PackedVector2Array = PackedVector2Array([
 		Vector2(-3.53553390593, 0.0),
@@ -79,7 +79,7 @@ var WEAPON_STATS: Dictionary = {
 	RUPTURE = {
 		damage = 20.0,
 		knockBackIntensity = 50.0,
-		cd = 0.05,
+		cd = 0.25,
 		reloadTime = 3.0,
 		maxAmmo = 7,
 		damageType = DAMAGE_TYPES.PHYSICAL

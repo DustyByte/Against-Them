@@ -38,6 +38,11 @@ func revaluate_exp_barand_milestone() -> void:
 
 
 func _ready() -> void:
+	# Magnetism. The shape is shared with the saved scene, so change a copy.
+	var rangeShape: CollisionShape2D = $Range
+	rangeShape.shape = rangeShape.shape.duplicate()
+	rangeShape.shape.radius *= UpgradeManager.pickup_radius_multiplier()
+	
 	revaluate_exp_barand_milestone()
 	var s: int = carryingWeapons.size()
 	carryingWeaponsStats.resize(s)
@@ -53,8 +58,9 @@ func _process(delta: float) -> void:
 		var expDrop: Area2D = expDropsBeingPickedUp[i]
 		
 		if expDrop.global_position.distance_squared_to(global_position) <= 400:
-			var currentExp: float = playerStats.add_exp(expDrop.expAmount)
-			expBar.value += expDrop.expAmount
+			var gainedExp: float = expDrop.expAmount * UpgradeManager.exp_multiplier() # Fortune
+			var currentExp: float = playerStats.add_exp(gainedExp)
+			expBar.value += gainedExp
 			
 			if hasMomentumPickups and randf() <= 0.005:
 				for stat in carryingWeaponsStats:

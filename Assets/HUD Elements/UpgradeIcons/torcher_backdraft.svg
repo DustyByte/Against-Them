@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Backdraft</title>
+  <polygon points="8,42 26,32 26,68 8,58" fill="#FF6E4E" fill-opacity="0.2" stroke="#FF6E4E" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M32 36 C48 28 64 28 76 34 C86 39 84 50 74 48 C68 47 68 41 73 40" fill="none" stroke="#FF6E4E" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M32 50 C52 48 72 52 92 50" fill="none" stroke="#FFE2DA" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M32 64 C48 72 64 72 76 66 C86 61 84 50 74 52 C68 53 68 59 73 60" fill="none" stroke="#FF6E4E" stroke-width="2.8" stroke-linecap="round"/>
+</svg>

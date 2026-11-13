@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Extended Mag</title>
+  <rect x="34" y="10" width="32" height="58" rx="4" fill="#C3C97F" fill-opacity="0.1" stroke="#C3C97F" stroke-width="2.4"/>
+  <path d="M42 20 L58 20 M42 29 L58 29 M42 38 L58 38 M42 47 L58 47 M42 56 L58 56" stroke="#C3C97F" stroke-opacity="0.65" stroke-width="3" stroke-linecap="round"/>
+  <path d="M34 72 L66 72" stroke="#C3C97F" stroke-opacity="0.6" stroke-width="2" stroke-dasharray="3 3"/>
+  <rect x="34" y="76" width="32" height="14" rx="3" fill="#F1F3DA" stroke="#F1F3DA" stroke-width="2"/>
+  <path d="M76 76 L76 90 M71 83 L81 83" stroke="#F1F3DA" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

@@ -701,7 +701,7 @@ func handle_player_level_up() -> void:
 		return
 	
 	isHandlingLevelUp = true
-	var options: Array[Option] = global.PROGRESSION_CHOICE_SYSTEM.give_selectable_options(6)
+	var options: Array[Option] = global.PROGRESSION_CHOICE_SYSTEM.give_selectable_options(UpgradeManager.level_up_option_count()) # 6, +1 with Extra Choice
 	global.ON_RUN_HUD.show_options(options)
 
 	if global.ON_RUN_HUD.activeOptionDisplay == null:

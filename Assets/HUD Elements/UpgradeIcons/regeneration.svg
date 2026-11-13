@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Regeneration</title>
+  <path d="M50 14 A36 36 0 0 1 81.2 32" fill="none" stroke="#8EE6A8" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M81.2 68 A36 36 0 0 1 50 86" fill="none" stroke="#8EE6A8" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M18.8 68 A36 36 0 0 1 18.8 32" fill="none" stroke="#8EE6A8" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M75.5 33.5 L81.2 32 L82.3 26" fill="none" stroke="#8EE6A8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M55.5 89.5 L50 86 L54 81" fill="none" stroke="#8EE6A8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14 36.5 L18.8 32 L24.3 34.5" fill="none" stroke="#8EE6A8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="36" cy="56" r="3" fill="#8EE6A8" fill-opacity="0.5"/>
+  <circle cx="49" cy="50" r="5" fill="#8EE6A8" fill-opacity="0.75"/>
+  <circle cx="64" cy="42" r="7.5" fill="#E2FBE8"/>
+</svg>

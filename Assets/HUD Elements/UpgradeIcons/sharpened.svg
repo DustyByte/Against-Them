@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Sharpened</title>
+  <polygon points="84,16 30,62 16,84 38,70" fill="#FF8F8F" fill-opacity="0.3"/>
+  <polygon points="84,16 38,70 16,84 30,62" fill="none" stroke="#FF8F8F" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M84 16 L30 62 L16 84" fill="none" stroke="#FFE3E3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M66 12 L70 18 M88 34 L82 30 M74 6 L76 10" stroke="#FFE3E3" stroke-width="2" stroke-linecap="round"/>
+</svg>

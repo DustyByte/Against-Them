@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bq10h1ud80djv"]
+[gd_scene load_steps=32 format=3 uid="uid://bq10h1ud80djv"]
 
 [ext_resource type="Script" uid="uid://bgxp1ve1bjgxc" path="res://Scripts/home.gd" id="1_1ey7h"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_ibywg"]
@@ -8,6 +8,7 @@
 [ext_resource type="Shader" path="res://Shaders/space_backdrop.gdshader" id="7_bg"]
 [ext_resource type="Shader" path="res://Shaders/planet_shade.gdshader" id="8_planet"]
 [ext_resource type="Script" path="res://Scripts/home_orbit.gd" id="9_orbit"]
+[ext_resource type="Texture2D" path="res://Assets/HUD Elements/echoe_icon.svg" id="10_echoe"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bg"]
 shader = ExtResource("7_bg")
@@ -85,6 +86,30 @@ border_color = Color(0.62, 0.88, 0.95, 0.4)
 bg_color = Color(0, 0, 0, 0)
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.07)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_counter"]
+bg_color = Color(0.03, 0.045, 0.07, 0.72)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.22)
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 22.0
+content_margin_bottom = 8.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_counter_value"]
+font = SubResource("FontVariation_spaced")
+font_size = 26
+font_color = Color(0.94, 0.97, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_counter_unit"]
+font = SubResource("FontVariation_spaced")
+font_size = 13
+font_color = Color(0.55, 0.7, 0.78, 0.9)
 
 [sub_resource type="Theme" id="Theme_menu"]
 Label/fonts/font = SubResource("FontVariation_spaced")
@@ -211,7 +236,7 @@ theme_override_constants/separation = 18
 [node name="Index" type="Label" parent="UI/Menu/Column/Descend/Margin/HBox"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-text = "01"
+text = "--"
 label_settings = SubResource("LabelSettings_index")
 vertical_alignment = 1
 
@@ -227,11 +252,11 @@ custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Vault" type="Panel" parent="UI/Menu/Column"]
+[node name="Upgrades" type="Panel" parent="UI/Menu/Column"]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 
-[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Vault"]
+[node name="Highlight" type="ColorRect" parent="UI/Menu/Column/Upgrades"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -241,7 +266,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.62, 0.88, 0.95, 0)
 
-[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Vault"]
+[node name="Margin" type="MarginContainer" parent="UI/Menu/Column/Upgrades"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -252,36 +277,23 @@ mouse_filter = 2
 theme_override_constants/margin_left = 27
 theme_override_constants/margin_right = 24
 
-[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Vault/Margin"]
+[node name="HBox" type="HBoxContainer" parent="UI/Menu/Column/Upgrades/Margin"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 18
 
-[node name="Index" type="Label" parent="UI/Menu/Column/Vault/Margin/HBox"]
+[node name="Index" type="Label" parent="UI/Menu/Column/Upgrades/Margin/HBox"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-text = "02"
+text = "--"
 label_settings = SubResource("LabelSettings_index")
 vertical_alignment = 1
 
-[node name="Label" type="Label" parent="UI/Menu/Column/Vault/Margin/HBox"]
+[node name="Label" type="Label" parent="UI/Menu/Column/Upgrades/Margin/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "VAULT"
+text = "UPGRADES"
 label_settings = SubResource("LabelSettings_item")
-vertical_alignment = 1
-
-[node name="EchoesValue" type="Label" parent="UI/Menu/Column/Vault/Margin/HBox"]
-layout_mode = 2
-text = "0"
-label_settings = SubResource("LabelSettings_value")
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="EchoesUnit" type="Label" parent="UI/Menu/Column/Vault/Margin/HBox"]
-layout_mode = 2
-text = "ECHOES"
-label_settings = SubResource("LabelSettings_index")
 vertical_alignment = 1
 
 [node name="Achievements" type="Panel" parent="UI/Menu/Column"]
@@ -317,7 +329,7 @@ theme_override_constants/separation = 18
 [node name="Index" type="Label" parent="UI/Menu/Column/Achievements/Margin/HBox"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-text = "03"
+text = "--"
 label_settings = SubResource("LabelSettings_index")
 vertical_alignment = 1
 
@@ -361,7 +373,7 @@ theme_override_constants/separation = 18
 [node name="Index" type="Label" parent="UI/Menu/Column/Settings/Margin/HBox"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-text = "04"
+text = "--"
 label_settings = SubResource("LabelSettings_index")
 vertical_alignment = 1
 
@@ -405,7 +417,7 @@ theme_override_constants/separation = 18
 [node name="Index" type="Label" parent="UI/Menu/Column/Discord/Margin/HBox"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-text = "05"
+text = "--"
 label_settings = SubResource("LabelSettings_index")
 vertical_alignment = 1
 
@@ -449,7 +461,7 @@ theme_override_constants/separation = 18
 [node name="Index" type="Label" parent="UI/Menu/Column/Quit/Margin/HBox"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-text = "06"
+text = "--"
 label_settings = SubResource("LabelSettings_index")
 vertical_alignment = 1
 
@@ -503,6 +515,43 @@ grow_vertical = 0
 text = "v0.0.0"
 label_settings = SubResource("LabelSettings_footer")
 horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="EchoesCounter" type="PanelContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.07
+anchor_right = 0.07
+offset_right = 220.0
+offset_bottom = 58.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_counter")
+
+[node name="HBox" type="HBoxContainer" parent="UI/EchoesCounter"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Icon" type="TextureRect" parent="UI/EchoesCounter/HBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("10_echoe")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="UI/EchoesCounter/HBox"]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_counter_value")
+vertical_alignment = 1
+
+[node name="Unit" type="Label" parent="UI/EchoesCounter/HBox"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "ECHOES"
+label_settings = SubResource("LabelSettings_counter_unit")
 vertical_alignment = 1
 
 [node name="Fade" type="ColorRect" parent="UI"]

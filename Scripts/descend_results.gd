@@ -25,7 +25,7 @@ func set_stats(kills: int, wave: int, elapsed_seconds: float) -> void:
 			completed_waves = global.WAVE_MANAGER.wavesCompleted
 			bosses_killed = global.WAVE_MANAGER.bossesKilled
 
-		var earned: int = MetaProgression.award_run_echoes(completed_waves, bosses_killed)
+		var earned: int = MetaProgression.award_run_echoes(completed_waves, bosses_killed, kills)
 		echoes_value.text = str(earned)
 		_echoes_awarded = true
 		AchievementManager.register_run_completed()

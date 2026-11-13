@@ -20,4 +20,4 @@ func shoot_bullet(gunHoldersKnockBackIntensityBuff: float = 0,  gunHoldersDamage
 
 
 func _ready() -> void:
-	setup(global.WEAPON_STATS.RUPTURE.duplicate_deep(), bulletBluePrintPath)
+	setup(UpgradeManager.apply_weapon_upgrades("rupture", global.WEAPON_STATS.RUPTURE.duplicate_deep()), bulletBluePrintPath)

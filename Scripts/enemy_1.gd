@@ -50,6 +50,8 @@ func apply_external_velocity(givenExternalVelocityWithDelta: Vector2) -> void:
 
 
 func get_hit(incomingDamage: float, emitSignal: bool = true) -> float:
+	if asBoss:
+		incomingDamage *= UpgradeManager.boss_damage_multiplier() # Boss Bane
 	stats.hp -= incomingDamage
 	AchievementManager.register_enemy_hit(incomingDamage)
 	

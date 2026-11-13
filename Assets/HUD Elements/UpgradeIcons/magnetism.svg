@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Magnetism</title>
+  <circle cx="50" cy="50" r="38" fill="none" stroke="#E79AF2" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="4 6"/>
+  <circle cx="50" cy="50" r="20" fill="#E79AF2" fill-opacity="0.12" stroke="#E79AF2" stroke-width="2.4"/>
+  <polygon points="50,40 58,50 50,60 42,50" fill="#FBE5FF"/>
+  <path d="M78 22 L68 32 M22 78 L32 68 M80 74 L70 66 M20 26 L30 34" stroke="#E79AF2" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round"/>
+  <polygon points="82,15 86,19 82,23 78,19" fill="#E79AF2"/>
+  <polygon points="18,77 22,81 18,85 14,81" fill="#E79AF2"/>
+  <polygon points="85,73 89,77 85,81 81,77" fill="#E79AF2"/>
+  <polygon points="15,19 19,23 15,27 11,23" fill="#E79AF2"/>
+</svg>

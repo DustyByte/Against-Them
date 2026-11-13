@@ -9,7 +9,8 @@ var muzzleFlashColor: Color = Color(1.0, 0.41, 0.42, 1.0)
 func shoot_bullet(gunHoldersKnockBackIntensityBuff: float = 0,  gunHoldersDamageBuff: float = 0, towards: Vector2 = currentlyPointingTowards) -> int:
 	global.activeCamera.shake(10.0)
 	muzzleFlash.flash(muzzleFlashColor, barrel.global_position)
-	gunHolder.get_knocked_back(-currentlyPointingTowards, stats.knockBackIntensity * 0.4)
+	# Recoil ignores the Impact / Backdraft upgrades, which only push enemies harder.
+	gunHolder.get_knocked_back(-currentlyPointingTowards, stats.knockBackIntensity / stats.upgradeKnockBackMultiplier * 0.4)
 	
 	if global.SFX_TYPES_PERM["game_world"]:
 		WeaponShootAS.pitch_scale = randf_range(0.7, 1.3)
@@ -19,4 +20,4 @@ func shoot_bullet(gunHoldersKnockBackIntensityBuff: float = 0,  gunHoldersDamage
 
 
 func _ready() -> void:
-	setup(global.WEAPON_STATS.TORCHER.duplicate_deep(), torcherAmmoBluePrintPath)
+	setup(UpgradeManager.apply_weapon_upgrades("torcher", global.WEAPON_STATS.TORCHER.duplicate_deep()), torcherAmmoBluePrintPath)

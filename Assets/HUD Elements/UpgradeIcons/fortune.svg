@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Fortune</title>
+  <rect x="16" y="62" width="16" height="24" rx="2" fill="#CDEB7F" fill-opacity="0.12" stroke="#CDEB7F" stroke-opacity="0.5" stroke-width="2.2"/>
+  <rect x="42" y="48" width="16" height="38" rx="2" fill="#CDEB7F" fill-opacity="0.18" stroke="#CDEB7F" stroke-opacity="0.75" stroke-width="2.2"/>
+  <rect x="68" y="34" width="16" height="52" rx="2" fill="#CDEB7F" fill-opacity="0.26" stroke="#CDEB7F" stroke-width="2.2"/>
+  <polygon points="76,8 84,18 76,28 68,18" fill="#F2FBDB"/>
+  <path d="M60 12 L64 14 M90 26 L94 24 M88 8 L91 5" stroke="#CDEB7F" stroke-width="2" stroke-linecap="round"/>
+</svg>

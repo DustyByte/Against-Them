@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Pyromancy</title>
+  <circle cx="50" cy="50" r="38" fill="none" stroke="#FF8A6E" stroke-width="2.2"/>
+  <circle cx="50" cy="50" r="30" fill="none" stroke="#FF8A6E" stroke-opacity="0.4" stroke-width="1.6" stroke-dasharray="3 4"/>
+  <polygon points="50,7 54,12 50,17 46,12" fill="#FF8A6E"/>
+  <polygon points="87.2,71.5 85.5,77.8 79.2,76.5 81,70.3" fill="#FF8A6E"/>
+  <polygon points="12.8,71.5 19,70.3 20.8,76.5 14.5,77.8" fill="#FF8A6E"/>
+  <path d="M50 26 C40 38 36 50 40 60 C43 68 57 68 60 60 C64 50 60 38 50 26 Z" fill="#FF8A6E" fill-opacity="0.75"/>
+  <path d="M50 44 C46 50 45 56 47 60 C48 63 52 63 53 60 C55 56 54 50 50 44 Z" fill="#FFE6DE"/>
+</svg>

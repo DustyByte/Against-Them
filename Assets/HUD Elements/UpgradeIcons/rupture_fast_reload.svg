@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Fast Reload</title>
+  <path d="M8 36 L22 36 M4 50 L20 50 M8 64 L22 64" stroke="#EE937D" stroke-opacity="0.5" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M34 12 L82 12 M34 88 L82 88" stroke="#EE937D" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="38,14 78,14 58,50 78,86 38,86 58,50" fill="none" stroke="#EE937D" stroke-width="2.4" stroke-linejoin="round"/>
+  <polygon points="52,28 64,28 58,39" fill="#EE937D" fill-opacity="0.5"/>
+  <polygon points="58,58 72,82 44,82" fill="#FCE3DC"/>
+  <path d="M58 50 L58 60" stroke="#FCE3DC" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 3"/>
+</svg>

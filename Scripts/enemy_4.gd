@@ -35,6 +35,8 @@ func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0
 
 
 func get_hit(incomingDamage: float, emitSignal: bool = true) -> float:
+	if asBoss:
+		incomingDamage *= UpgradeManager.boss_damage_multiplier() # Boss Bane
 	stats.hp -= incomingDamage
 	AchievementManager.register_enemy_hit(incomingDamage)
 	

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Ignition</title>
+  <path d="M10 92 C24 94 34 82 42 72" fill="none" stroke="#FF5E8C" stroke-opacity="0.55" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="4 4"/>
+  <path d="M50 56 C42 44 45 28 50 12 C55 28 58 44 50 56 Z" fill="#FF5E8C" fill-opacity="0.85"/>
+  <path d="M45 60 C33 57 26 45 27 32 C35 41 42 48 45 60 Z" fill="#FF5E8C" fill-opacity="0.5"/>
+  <path d="M55 60 C67 57 74 45 73 32 C65 41 58 48 55 60 Z" fill="#FF5E8C" fill-opacity="0.5"/>
+  <circle cx="50" cy="66" r="9" fill="#FFE0EA"/>
+  <circle cx="50" cy="66" r="15" fill="none" stroke="#FF5E8C" stroke-opacity="0.4" stroke-width="1.8"/>
+</svg>

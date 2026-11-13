@@ -62,6 +62,7 @@ func get_all_enemies_in_rad(rad: float) -> Array[Node2D]:
 
 ## Registers damage and returns current HP.
 func get_hit(incomingDamage: float) -> float:
+	incomingDamage *= UpgradeManager.damage_taken_multiplier() # Resilience
 	if not avatarWrapperNode.isHitAnimationPlaying:
 		avatarWrapperNode.handle_hit_animation()
 		global.activeCamera.shake(8.0)
@@ -80,6 +81,7 @@ func get_hit(incomingDamage: float) -> float:
 
 
 func take_heal(regenHP: float) -> void:
+	regenHP *= UpgradeManager.healing_multiplier() # Recovery
 	stats.currentHP += regenHP
 	global.add_damage_text(global_position, regenHP, 6)
 
@@ -103,6 +105,7 @@ func _ready() -> void:
 		hp_changed.emit(cHP, mHP)
 	)
 	global.PLAYER = self
+	_apply_permanent_upgrades()
 	
 	var cameraZoom: Vector2 = $Camera2D.zoom
 	var windowDim: Vector2 = get_viewport_rect().size
@@ -110,6 +113,32 @@ func _ready() -> void:
 	
 	var imgDim: Vector2 = Vector2(400.0, 576.0)
 	$MapBase.scale = windowDim / imgDim
+
+
+## Bonuses from upgrades bought with Echoes on the Upgrades screen.
+func _apply_permanent_upgrades() -> void:
+	# Swiftness
+	var speedMultiplier: float = UpgradeManager.move_speed_multiplier()
+	RUN_SPEED *= speedMultiplier
+	WALK_SPEED *= speedMultiplier
+	speed = RUN_SPEED
+	
+	# Vitality
+	var bonusHP: float = UpgradeManager.max_hp_bonus()
+	if bonusHP > 0.0:
+		stats.increase_max_hp(bonusHP)
+	
+	# Regeneration: a quiet heal every few seconds (no floating number, the
+	# amounts are tiny). Recovery boosts it like any other healing.
+	if UpgradeManager.regeneration_per_tick() > 0.0:
+		var regenTimer := Timer.new()
+		regenTimer.wait_time = UpgradeManager.REGENERATION_INTERVAL
+		regenTimer.autostart = true
+		regenTimer.timeout.connect(func():
+			if stats.currentHP > 0.0:
+				stats.currentHP += UpgradeManager.regeneration_per_tick() * UpgradeManager.healing_multiplier()
+		)
+		add_child(regenTimer)
 
 
 func _physics_process(_delta: float) -> void:

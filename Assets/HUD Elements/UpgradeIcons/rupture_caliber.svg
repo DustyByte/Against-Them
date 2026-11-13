@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Caliber</title>
+  <path d="M26 22 L74 22 M26 16 L26 28 M74 16 L74 28" stroke="#E9CDA6" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M26 34 L26 40 M74 34 L74 40" stroke="#E9CDA6" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="50" cy="62" r="24" fill="#E9CDA6" fill-opacity="0.14" stroke="#E9CDA6" stroke-width="2.6"/>
+  <circle cx="50" cy="62" r="15" fill="none" stroke="#E9CDA6" stroke-opacity="0.5" stroke-width="2"/>
+  <circle cx="50" cy="62" r="7" fill="#FBF1E3"/>
+</svg>

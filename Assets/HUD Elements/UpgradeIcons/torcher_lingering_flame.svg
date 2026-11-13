@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Lingering Flame</title>
+  <path d="M22 60 C14 52 16 40 22 28 C28 40 32 52 22 60 Z" fill="#EE8B5C"/>
+  <path d="M22 56 C19 52 20 46 22 42 C24 46 25 52 22 56 Z" fill="#FFE5D6"/>
+  <path d="M32 52 C40 44 46 60 54 52 S68 44 74 52 S86 58 92 50" fill="none" stroke="#EE8B5C" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M32 52 C40 44 46 60 54 52" fill="none" stroke="#FFE5D6" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M14 78 L92 78" stroke="#EE8B5C" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/>
+  <path d="M22 72 L22 84 M40 74 L40 82 M62 74 L62 82 M88 74 L88 82" stroke="#EE8B5C" stroke-opacity="0.7" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

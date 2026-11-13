@@ -52,10 +52,24 @@ func add_echoes(amount: int) -> void:
 	AchievementManager.register_echoes_earned(amount, echoes)
 
 
-func award_run_echoes(waves_completed: int, bosses_killed: int) -> int:
+## Removes Echoes for a purchase. Returns false (and spends nothing) if the
+## player doesn't have enough.
+func spend_echoes(amount: int) -> bool:
+	if amount < 0 or amount > echoes:
+		return false
+
+	echoes -= amount
+	save_progress()
+	echoes_changed.emit(echoes)
+	return true
+
+
+## Includes the Boss Bounty and Harvest upgrade bonuses.
+func award_run_echoes(waves_completed: int, bosses_killed: int, kills: int = 0) -> int:
 	var earned: int = (
 		maxi(waves_completed, 0) * ECHOES_PER_WAVE
-		+ maxi(bosses_killed, 0) * ECHOES_PER_BOSS
+		+ maxi(bosses_killed, 0) * (ECHOES_PER_BOSS + UpgradeManager.boss_bounty_per_boss())
+		+ UpgradeManager.harvest_echoes(kills)
 	)
 
 	add_echoes(earned)

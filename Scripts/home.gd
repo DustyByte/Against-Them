@@ -22,12 +22,14 @@ const INTRO_SLIDE: float = 24.0
 @onready var _menu: Control = $UI/Menu
 @onready var _column: VBoxContainer = $UI/Menu/Column
 @onready var _descend_btn: Panel = $UI/Menu/Column/Descend
-@onready var _vault_btn: Panel = $UI/Menu/Column/Vault
+@onready var _upgrades_btn: Panel = $UI/Menu/Column/Upgrades
 @onready var _achievements_btn: Panel = $UI/Menu/Column/Achievements
 @onready var _settings_btn: Panel = $UI/Menu/Column/Settings
 @onready var _discord_btn: Panel = $UI/Menu/Column/Discord
 @onready var _quit_btn: Panel = $UI/Menu/Column/Quit
-@onready var _echoes_value: Label = $UI/Menu/Column/Vault/Margin/HBox/EchoesValue
+# The Echoes counter lives outside the menu so it stays visible on sub screens.
+@onready var _echoes_counter: Control = $UI/EchoesCounter
+@onready var _echoes_value: Label = $UI/EchoesCounter/HBox/Value
 @onready var _status_light: ColorRect = $UI/Menu/Footer/StatusLight
 @onready var _version: Label = $UI/Menu/Version
 @onready var _fade: ColorRect = $UI/Fade
@@ -55,7 +57,7 @@ func _ready() -> void:
 	_version.text = "v" + global.GAME_VERSION
 
 	_connect_button(_descend_btn, _on_descend_pressed)
-	_connect_button(_vault_btn, func(): pass)
+	_connect_button(_upgrades_btn, _on_upgrades_pressed)
 	_connect_button(_achievements_btn, _on_achievements_pressed)
 	_connect_button(_settings_btn, _on_settings_pressed)
 	_connect_button(_discord_btn, OS.shell_open.bind(DISCORD_LINK))
@@ -142,20 +144,29 @@ func _on_echoes_changed(total: int) -> void:
 
 
 func _on_settings_pressed() -> void:
-	_open_sub_screen(preload("res://Scenes/HUD/settings.tscn").instantiate())
+	_open_sub_screen(preload("res://Scenes/HUD/settings.tscn").instantiate(), false)
+
+
+func _on_upgrades_pressed() -> void:
+	_open_sub_screen(preload("res://Scenes/HUD/upgrades.tscn").instantiate())
 
 
 func _on_achievements_pressed() -> void:
 	_open_sub_screen(preload("res://Scenes/HUD/achievements.tscn").instantiate())
 
 
-func _open_sub_screen(screen: Control) -> void:
+## `show_echoes` keeps the Echoes counter visible over the sub screen.
+func _open_sub_screen(screen: Control, show_echoes: bool = true) -> void:
 	_menu.visible = false
+	_echoes_counter.visible = show_echoes
 	screen.returnPressed.connect(func():
 		_menu.visible = true
+		_echoes_counter.visible = true
 		screen.queue_free()
 	)
 	$UI.add_child(screen)
+	# Draw the sub screen beneath the Echoes counter (and the fade) so the counter stays on top.
+	$UI.move_child(screen, _echoes_counter.get_index())
 
 
 ## Descend: the planet swells as Echoe drops toward it and the view fades out.
@@ -169,6 +180,7 @@ func _on_descend_pressed() -> void:
 	tween.tween_property(_orbit_back, "modulate:a", 0.0, 0.25)
 	tween.tween_property(_orbit_front, "modulate:a", 0.0, 0.25)
 	tween.tween_property(_menu, "modulate:a", 0.0, 0.25)
+	tween.tween_property(_echoes_counter, "modulate:a", 0.0, 0.25)
 	tween.tween_property(_fade, "color:a", 1.0, 0.45).set_delay(0.15)
 	await tween.finished
 
@@ -190,6 +202,14 @@ func _play_intro() -> void:
 		tween.tween_property(item, "modulate:a", 1.0, 0.45).set_delay(delay)
 		tween.tween_property(item, "position:x", target_x, 0.55).set_delay(delay).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		delay += INTRO_STAGGER
+
+	# The resource counter drops in from the top edge.
+	var counter_y: float = _echoes_counter.position.y
+	_echoes_counter.modulate.a = 0.0
+	_echoes_counter.position.y = counter_y - INTRO_SLIDE
+	var counter_tween := create_tween().set_parallel()
+	counter_tween.tween_property(_echoes_counter, "modulate:a", 1.0, 0.45).set_delay(0.15)
+	counter_tween.tween_property(_echoes_counter, "position:y", counter_y, 0.55).set_delay(0.15).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 
 	for orbit in [_orbit_back, _orbit_front]:
 		orbit.modulate.a = 0.0

@@ -28,7 +28,8 @@ func handleBulletConnect(body: Node2D) -> void:
 		AchievementManager.hit(body, carryingDamage, &"torcher")
 		body.get_knocked_back(shotDirection, carryingKnockBackIntensity)
 		global.add_damage_text(body.global_position, carryingDamage, global.DAMAGE_TYPES.INFERNO)
-		global.ON_RUN_FEATURES.burn_inflict(body)
+		# Ignition and Lingering Flame only boost Torcher's own burns.
+		global.ON_RUN_FEATURES.burn_inflict(body, 3.0 * UpgradeManager.torcher_burn_damage_multiplier(), UpgradeManager.torcher_burn_duration_multiplier())
 		return 
 	
 	collision_mask = 0

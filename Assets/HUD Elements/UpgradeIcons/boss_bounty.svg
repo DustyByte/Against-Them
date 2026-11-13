@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Boss Bounty</title>
+  <polygon points="36,46 58,58 58,82 36,94 14,82 14,58" fill="#DDB967" fill-opacity="0.12" stroke="#DDB967" stroke-opacity="0.7" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M36 46 L33 60 L40 68 L34 80 L36 94" fill="none" stroke="#DDB967" stroke-opacity="0.7" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M52 48 L60 40 M58 54 L68 50 M46 42 L50 32" stroke="#DDB967" stroke-width="2.2" stroke-linecap="round"/>
+  <polygon points="76,8 64,28 76,56" fill="#F7E7BF"/>
+  <polygon points="76,8 88,28 76,56" fill="#A5823F"/>
+  <polygon points="76,8 88,28 76,56 64,28" fill="none" stroke="#FFF4D6" stroke-width="1.6" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Fast Hands</title>
+  <circle cx="50" cy="50" r="34" fill="none" stroke="#5FE0C4" stroke-opacity="0.2" stroke-width="5"/>
+  <path d="M50 16 A34 34 0 1 0 79.4 33" fill="none" stroke="#5FE0C4" stroke-width="5" stroke-linecap="round"/>
+  <path d="M88.1 36.1 L79.4 33 L77.7 42.1" fill="none" stroke="#5FE0C4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M38 38 L50 50 L38 62 M52 38 L64 50 L52 62" fill="none" stroke="#DDFBF4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

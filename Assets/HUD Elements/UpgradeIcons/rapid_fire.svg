@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Rapid Fire</title>
+  <path d="M10 30 L52 30" stroke="#FF9F5E" stroke-opacity="0.35" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="58" cy="30" r="5" fill="#FF9F5E" fill-opacity="0.55"/>
+  <path d="M18 50 L66 50" stroke="#FF9F5E" stroke-opacity="0.6" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="73" cy="50" r="6" fill="#FF9F5E" fill-opacity="0.85"/>
+  <path d="M26 70 L80 70" stroke="#FF9F5E" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="87" cy="70" r="7" fill="#FFE6D6"/>
+</svg>

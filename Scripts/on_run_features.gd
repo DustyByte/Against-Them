@@ -7,6 +7,7 @@ static var explosionBP: PackedScene = preload("res://Scenes/Effects/explosion_pa
 
 ## `source` credits kills for achievements: Lightning Strike / Hexa Snail by default.
 static func lightning_strike(target: CharacterBody2D, damage: float, toChainAmount: int = 0, source: StringName = &"lightning") -> void:
+	damage *= UpgradeManager.lightning_damage_multiplier() # Electromancy
 	var worldAddChild: Callable = global.WORLD.add_child
 	var lightning: Lightning = lightningBP.instantiate()
 	var targetGlobalPosition: Vector2 = target.global_position
@@ -75,14 +76,17 @@ static func lightning_strike(target: CharacterBody2D, damage: float, toChainAmou
 			await tree.create_timer(0.1).timeout
 
 
-static func burn_inflict(on: CharacterBody2D, damage: float = 3.0) -> void:
+## `durationMultiplier` lengthens the burn (Torcher's Lingering Flame).
+static func burn_inflict(on: CharacterBody2D, damage: float = 3.0, durationMultiplier: float = 1.0) -> void:
 	var burnEmission: Burn = global.FREQUENT_EFFECTS_BLUEPRINTS.BURN_EMISSION.instantiate()
-	burnEmission.set_damage(damage)
+	burnEmission.set_damage(damage * UpgradeManager.burn_damage_multiplier()) # Pyromancy
+	burnEmission.set_duration_multiplier(durationMultiplier)
 	on.add_child(burnEmission)
 	AchievementManager.register_burn_applied()
 
 
 static func freeze_inflict(on: CharacterBody2D, duration: float = 2.0) -> void:
+	duration *= UpgradeManager.freeze_duration_multiplier() # Cryomancy
 	if on.asBoss:
 		return
 	
@@ -99,7 +103,7 @@ static func freeze_inflict(on: CharacterBody2D, duration: float = 2.0) -> void:
 
 static func bleed_inflict(on: CharacterBody2D, damage: float) -> void:
 	var bleed : Bleed = bleedBP.instantiate()
-	bleed.set_damage(damage)
+	bleed.set_damage(damage * UpgradeManager.bleed_damage_multiplier()) # Hemomancy
 	on.add_child(bleed)
 
 

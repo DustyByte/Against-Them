@@ -6,7 +6,7 @@ extends Panel
 @export var ready_text: String = "Watch Ad"
 @export var loading_text: String = "Loading..."
 @export var reward_callback: Callable = func(reward_type: String, reward_amount: int):
-	var options: Array[Option] = global.PROGRESSION_CHOICE_SYSTEM.give_selectable_options(6)
+	var options: Array[Option] = global.PROGRESSION_CHOICE_SYSTEM.give_selectable_options(UpgradeManager.level_up_option_count()) # 6, +1 with Extra Choice
 	$"../../..".present_options(options)
 @export var disabled: bool = false
 var _is_ready: bool = true

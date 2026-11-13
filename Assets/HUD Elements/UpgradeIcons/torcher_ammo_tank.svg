@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
+  <title>Ammo Tank</title>
+  <path d="M16 62 A34 34 0 0 1 21.6 43.4" fill="none" stroke="#FFB46E" stroke-opacity="0.45" stroke-width="6" stroke-linecap="round"/>
+  <path d="M26.4 37.4 A34 34 0 0 1 41.8 29" fill="none" stroke="#FFB46E" stroke-opacity="0.45" stroke-width="6" stroke-linecap="round"/>
+  <path d="M48.5 28 A34 34 0 0 1 58.2 29" fill="none" stroke="#FFB46E" stroke-opacity="0.45" stroke-width="6" stroke-linecap="round"/>
+  <path d="M64.6 31.4 A34 34 0 0 1 73.6 37.4" fill="none" stroke="#FFB46E" stroke-opacity="0.45" stroke-width="6" stroke-linecap="round"/>
+  <path d="M78.4 43.4 A34 34 0 0 1 84 62" fill="none" stroke="#FFEBD8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M50 62 L76 46" stroke="#FFEBD8" stroke-width="3.2" stroke-linecap="round"/>
+  <circle cx="50" cy="62" r="6" fill="#FFB46E"/>
+  <rect x="24" y="74" width="52" height="12" rx="4" fill="#FFB46E" fill-opacity="0.18" stroke="#FFB46E" stroke-width="2.2"/>
+</svg>
