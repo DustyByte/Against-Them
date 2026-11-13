@@ -90,6 +90,35 @@ func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0
 	knockBackVelocity += knockBackDirection * knockBackIntensity * 3
 
 
+const REVIVE_SHOCKWAVE_RADIUS := 450.0
+const REVIVE_SHOCKWAVE_PUSH_NEAR := 240.0
+const REVIVE_SHOCKWAVE_PUSH_FAR := 140.0
+
+## Called once the player revives: pushes every nearby enemy away so the
+## player isn't surrounded the moment the world resumes. Knockback only.
+func revive_shockwave() -> void:
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if not is_instance_valid(enemy) or not enemy.has_method("get_knocked_back"):
+			continue
+		var distance: float = global_position.distance_to(enemy.global_position)
+		if distance > REVIVE_SHOCKWAVE_RADIUS:
+			continue
+		var direction: Vector2 = global_position.direction_to(enemy.global_position)
+		if direction == Vector2.ZERO:
+			direction = Vector2.RIGHT.rotated(randf() * TAU)
+		var push: float = lerpf(REVIVE_SHOCKWAVE_PUSH_NEAR, REVIVE_SHOCKWAVE_PUSH_FAR, distance / REVIVE_SHOCKWAVE_RADIUS)
+		enemy.get_knocked_back(direction, push)
+
+	var ring: Node2D = preload("res://Scripts/revive_shockwave.gd").new()
+	ring.maxRadius = REVIVE_SHOCKWAVE_RADIUS
+	ring.global_position = global_position
+	global.WORLD.add_child(ring)
+
+	global.activeCamera.shake(10.0)
+	global.WORLD.audio_2d_play(preload("res://Assets/SFX/GravityBombImpact.wav"), global_position, "game_world")
+	global.vibrate_handheld(150, 0.3)
+
+
 func handle_death() -> void:
 	get_tree().paused = true
 	
