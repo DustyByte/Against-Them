@@ -1,17 +1,21 @@
-[gd_scene load_steps=12 format=3 uid="uid://dlqeqn5pu8vf8"]
+[gd_scene load_steps=15 format=3 uid="uid://dlqeqn5pu8vf8"]
 
 [ext_resource type="Script" uid="uid://kaosiieesv7u" path="res://Scripts/on_run_hud.gd" id="1_div4g"]
 [ext_resource type="Texture2D" uid="uid://rlmfaevuagj7" path="res://Assets/Shader Textures/FireButton.png" id="2_usva3"]
 [ext_resource type="Texture2D" uid="uid://br8q6eumndyrr" path="res://Assets/Shader Textures/FireButtonPressed.png" id="3_nrs1e"]
 [ext_resource type="Script" uid="uid://bytcphue4ndvk" path="res://Scripts/weapon_hanger.gd" id="4_3j417"]
-[ext_resource type="Shader" uid="uid://33vkdmxuwfpo" path="res://Shaders/linear_texture_mapper.gdshader" id="5_k5in4"]
-[ext_resource type="Texture2D" uid="uid://6daugom02swt" path="res://Assets/HUD Elements/PauseButton.png" id="6_6e0tg"]
+[ext_resource type="Shader" path="res://Shaders/pause_button.gdshader" id="5_k5in4"]
+[ext_resource type="Shader" path="res://Shaders/fire_button.gdshader" id="10_fire"]
+[ext_resource type="Script" path="res://Scripts/exp_bar.gd" id="7_expbar"]
+[ext_resource type="Shader" path="res://Shaders/exp_bar.gdshader" id="8_expshader"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="9_font"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y282y"]
-bg_color = Color(0.47843137, 0.47843137, 0.47843137, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxFlat_y282y"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3j417"]
-bg_color = Color(0.78039217, 0.7607843, 1, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxFlat_3j417"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_expbar"]
+shader = ExtResource("8_expshader")
 
 [sub_resource type="Theme" id="Theme_k5in4"]
 ProgressBar/styles/background = SubResource("StyleBoxFlat_y282y")
@@ -22,7 +26,11 @@ radius = 126.55
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h5qi5"]
 shader = ExtResource("5_k5in4")
-shader_parameter/my_texture = ExtResource("6_6e0tg")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pause"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fire"]
+shader = ExtResource("10_fire")
 
 [node name="OnRunHUD" type="Control"]
 process_mode = 3
@@ -35,16 +43,46 @@ grow_vertical = 2
 script = ExtResource("1_div4g")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-custom_minimum_size = Vector2(771, 37)
+custom_minimum_size = Vector2(840, 76)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -385.0
-offset_top = 33.0
+offset_left = -420.0
+offset_top = 14.0
+offset_right = 420.0
+offset_bottom = 90.0
+mouse_filter = 2
 theme = SubResource("Theme_k5in4")
 value = 47.5
 show_percentage = false
+script = ExtResource("7_expbar")
+
+[node name="Visual" type="ColorRect" parent="ProgressBar"]
+material = SubResource("ShaderMaterial_expbar")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Level" type="Label" parent="ProgressBar"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 20.0
+offset_right = 57.0
+offset_bottom = 56.0
+pivot_offset = Vector2(28, 18)
+theme_override_colors/font_color = Color(0.96, 0.98, 1, 1)
+theme_override_colors/font_outline_color = Color(0.01, 0.03, 0.05, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("9_font")
+theme_override_font_sizes/font_size = 22
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="FireButton" type="TextureButton" parent="."]
 visible = false
@@ -67,7 +105,17 @@ anchor_top = 0.666
 anchor_right = 0.8
 anchor_bottom = 0.666
 
+[node name="FireVisual" type="ColorRect" parent="Control"]
+material = SubResource("ShaderMaterial_fire")
+layout_mode = 0
+offset_left = -110.0
+offset_top = -110.0
+offset_right = 110.0
+offset_bottom = 110.0
+mouse_filter = 2
+
 [node name="TouchScreenButton" type="TouchScreenButton" parent="Control"]
+self_modulate = Color(1, 1, 1, 0)
 position = Vector2(-86, -86)
 scale = Vector2(0.675, 0.675)
 texture_normal = ExtResource("2_usva3")
@@ -77,7 +125,7 @@ action = "X"
 
 [node name="WeaponHanger" type="VBoxContainer" parent="."]
 layout_mode = 0
-theme_override_constants/separation = 28
+theme_override_constants/separation = 6
 script = ExtResource("4_3j417")
 
 [node name="PauseButtonMarginContainer" type="MarginContainer" parent="."]
@@ -94,6 +142,16 @@ theme_override_constants/margin_right = 28
 
 [node name="Panel" type="Panel" parent="PauseButtonMarginContainer"]
 z_index = 2
-material = SubResource("ShaderMaterial_h5qi5")
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_pause")
+
+[node name="Visual" type="ColorRect" parent="PauseButtonMarginContainer/Panel"]
+material = SubResource("ShaderMaterial_h5qi5")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

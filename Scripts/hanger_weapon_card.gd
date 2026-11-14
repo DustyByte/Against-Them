@@ -1,13 +1,29 @@
 class_name HangerWeaponCard
-extends Panel
+extends Control
+## One weapon in the run HUD's hanger: ammo count (or reload progress), the
+## weapon in a hexagon, and a highlight when it's the selected weapon.
+## Drawn by weapon_card.gdshader; the weapon's accent color is taken from the
+## pastel circle behind its hanger picture.
 
-@onready var reloadPB: ProgressBar = $ProgressBar
+const STATE_TIME := 0.2
+const FALLBACK_ACCENT := Color(0.62, 0.88, 0.95)
+
+@onready var _visual: ColorRect = $Visual
+@onready var _status: Label = $Status
 @onready var ammoCountIndicator: Label = $AmmoIndicator
-@onready var ammoIcon: Panel = $AmmoIcon
-@onready var avatar: Sprite2D = $Avatar
-var selectedColor: Color = Color(1, 1, 1, 0.5)
-var deselectedColor: Color = Color(1, 1, 1, 0.0)
+var _mat: ShaderMaterial
 var displayingWeapon: Weapon = null
+var _accent: Color = FALLBACK_ACCENT
+var _selected: float = 0.0
+var _selectTween: Tween
+var _isSelected: bool = false
+
+
+func _ready() -> void:
+	_mat = _visual.material
+	_mat.set_shader_parameter("rect_size", size)
+	_mat.set_shader_parameter("selected", _selected)
+	get_parent().set_hanger_on_screen_pivot_center_right(1.0, 0.3)
 
 
 func set_weapon_ref(ref: Weapon) -> void:
@@ -15,84 +31,78 @@ func set_weapon_ref(ref: Weapon) -> void:
 
 
 func set_avatar(avatarTexture: Texture) -> void:
-	avatar.texture = avatarTexture
+	_mat.set_shader_parameter("icon_tex", avatarTexture)
+	_accent = _accent_from(avatarTexture)
+	_mat.set_shader_parameter("accent", _accent)
+	if _isSelected:
+		_share_accent()
 
 
 func switch_state_reload() -> void:
-	reloadPB.visible = true
-	ammoCountIndicator.visible = false
-	ammoIcon.visible = false
+	_status.text = "RELOAD"
+	ammoCountIndicator.modulate.a = 0.35
+	_mat.set_shader_parameter("reloading", 1.0)
+	_mat.set_shader_parameter("bar_value", 0.0)
 
 
 func switch_state_ammo() -> void:
-	reloadPB.visible = false
-	ammoCountIndicator.visible = true
-	ammoIcon.visible = true
+	_status.text = "AMMO"
+	ammoCountIndicator.modulate.a = 1.0
+	_mat.set_shader_parameter("reloading", 0.0)
 
 
 func set_ammo_count(count: int) -> void:
 	ammoCountIndicator.text = str(count)
+	var maxAmmo: int = displayingWeapon.stats.maxAmmo if displayingWeapon else 0
+	_mat.set_shader_parameter("bar_value", float(count) / maxAmmo if maxAmmo > 0 else 1.0)
 
 
 func set_reload_bar_values(val: float, maxVal: float) -> void:
-	reloadPB.max_value = maxVal
-	reloadPB.value = val
+	_mat.set_shader_parameter("bar_value", clampf(val / maxVal, 0.0, 1.0) if maxVal > 0.0 else 0.0)
 
 
 func switch_state_selected() -> void:
-	material.set_shader_parameter('color', selectedColor)
+	_isSelected = true
+	_animate_selected(1.0)
+	_share_accent()
 
 
 func switch_state_deselected() -> void:
-	material.set_shader_parameter('color', deselectedColor)
+	_isSelected = false
+	_animate_selected(0.0)
 
 
-var initammoIndicatorFontsize: int = 10
-func increase_card_size(by: float) -> void:
-	size *= by
-	custom_minimum_size = size
-	var current_stylebox: StyleBoxFlat = get_theme_stylebox("panel")
-	var unique_stylebox: StyleBoxFlat = current_stylebox.duplicate()
-	unique_stylebox.corner_radius_top_right = int(float(current_stylebox.corner_radius_top_right) * by)
-	unique_stylebox.corner_radius_bottom_right = int(float(current_stylebox.corner_radius_bottom_right) * by)
-	add_theme_stylebox_override("panel", unique_stylebox)
-	
-	avatar.scale *= by
-	avatar.position *= by
-	
-	reloadPB.size *= by
-	reloadPB.position *= by
-	var current_bg: StyleBoxFlat = reloadPB.get_theme_stylebox("background")
-	var unique_bg: StyleBoxFlat = current_bg.duplicate()
-	unique_bg.set_corner_radius_all(int(float(current_bg.corner_radius_top_left) * by))
-	reloadPB.add_theme_stylebox_override("background", unique_bg)
-	var current_fill: StyleBoxFlat = reloadPB.get_theme_stylebox("fill")
-	var unique_fill: StyleBoxFlat = current_fill.duplicate()
-	unique_fill.set_corner_radius_all(int(float(current_fill.corner_radius_top_left) * by))
-	reloadPB.add_theme_stylebox_override("fill", unique_fill)
-	
-	$UltIndicator.size *= by
-	$UltIndicator.position *= by
-	var ult_current_stylebox: StyleBoxFlat = $UltIndicator.get_theme_stylebox("panel")
-	var ult_unique_stylebox: StyleBoxFlat = ult_current_stylebox.duplicate()
-	ult_unique_stylebox.set_corner_radius_all(int(float(current_stylebox.corner_radius_top_right) * by))
-	$UltIndicator.add_theme_stylebox_override("panel", ult_unique_stylebox)
-	
-	ammoIcon.size *= by
-	ammoIcon.position *= by
-	
-	initammoIndicatorFontsize = int(float(initammoIndicatorFontsize)*by)
-	ammoCountIndicator.position *= by
-	ammoCountIndicator.add_theme_font_size_override("font_size", initammoIndicatorFontsize)
-	
-	$TouchScreenButton.scale *= by
-	$TouchScreenButton.position *= by
+## The fire button takes the selected weapon's color.
+func _share_accent() -> void:
+	if global.ON_RUN_HUD:
+		global.ON_RUN_HUD.set_fire_accent(_accent)
+
+
+func _animate_selected(target: float) -> void:
+	if _selectTween:
+		_selectTween.kill()
+	_selectTween = create_tween()
+	_selectTween.tween_method(func(v: float):
+		_selected = v
+		_mat.set_shader_parameter("selected", v)
+		_status.modulate.a = 0.6 + 0.4 * v
+	, _selected, target, STATE_TIME)
+
+
+## The hanger pictures are weapons on a pastel circle; that circle's color
+## becomes the weapon's accent. Read once, when the card is set up.
+func _accent_from(tex: Texture) -> Color:
+	var img: Image = tex.get_image() if tex else null
+	if img == null:
+		return FALLBACK_ACCENT
+	if img.is_compressed():
+		img.decompress()
+	var c: Color = img.get_pixel(int(img.get_width() * 0.5), int(img.get_height() * 0.12))
+	if c.a < 0.5:
+		return FALLBACK_ACCENT
+	# The circles are soft pastels; push the saturation so the glow reads.
+	return Color.from_hsv(c.h, clampf(c.s * 2.2, 0.35, 0.75), clampf(c.v * 1.05, 0.8, 1.0))
 
 
 func _on_touch_screen_button_released() -> void:
 	global.PLAYERS_WEAPON_SYSTEM.select_weapon(displayingWeapon)
-
-
-func _ready() -> void:
-	increase_card_size(get_viewport_rect().size.y * 0.085 / size.y) # 0.1 is an imaginative value that will be visually appealing
-	get_parent().set_hanger_on_screen_pivot_center_right(1.0, 0.3)

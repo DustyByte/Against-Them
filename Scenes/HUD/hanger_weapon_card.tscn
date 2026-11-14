@@ -1,133 +1,66 @@
-[gd_scene load_steps=18 format=3 uid="uid://dm7u6u3jfw2dk"]
+[gd_scene load_steps=7 format=3 uid="uid://dm7u6u3jfw2dk"]
 
-[ext_resource type="Shader" uid="uid://dfh2ub8phs2eg" path="res://Shaders/gradient_fade.gdshader" id="1_mmdyw"]
 [ext_resource type="Script" uid="uid://cgg3ds3dma028" path="res://Scripts/hanger_weapon_card.gd" id="2_7g7cx"]
-[ext_resource type="Texture2D" uid="uid://qtjug5bi6xd0" path="res://Assets/Weapons/Rupture/RuptureHangerUse.png" id="2_tvreu"]
+[ext_resource type="Shader" path="res://Shaders/weapon_card.gdshader" id="3_card"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="3_7g7cx"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ws5qu"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_card"]
 resource_local_to_scene = true
-shader = ExtResource("1_mmdyw")
-shader_parameter/color = Color(1, 1, 1, 0.49803922)
+shader = ExtResource("3_card")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jphr4"]
-bg_color = Color(0.51, 0.51, 0.51, 1)
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-
-[sub_resource type="Theme" id="Theme_m58cx"]
-Panel/styles/panel = SubResource("StyleBoxFlat_jphr4")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_diwi0"]
-bg_color = Color(0.5803922, 0.9254902, 0.5568628, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="Theme" id="Theme_ry834"]
-Panel/styles/panel = SubResource("StyleBoxFlat_diwi0")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6xt72"]
-bg_color = Color(0.31764707, 0.31764707, 0.31764707, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d64pg"]
-bg_color = Color(0.5254902, 0.87058824, 0.8745098, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="Theme" id="Theme_0m4ny"]
-ProgressBar/styles/background = SubResource("StyleBoxFlat_6xt72")
-ProgressBar/styles/fill = SubResource("StyleBoxFlat_d64pg")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8xm3"]
-bg_color = Color(0.8235294, 0.74509805, 0.9254902, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="Theme" id="Theme_8gplb"]
-Label/colors/font_color = Color(0.74, 1, 0.96099997, 1)
-Label/font_sizes/font_size = 14
-Label/fonts/font = ExtResource("3_7g7cx")
-Panel/styles/panel = SubResource("StyleBoxFlat_j8xm3")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j54dk"]
-bg_color = Color(0.8235294, 0.74509805, 0.9254902, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="Theme" id="Theme_a5wpc"]
-resource_local_to_scene = true
-Label/colors/font_color = Color(0.74, 1, 0.96099997, 1)
-Label/font_sizes/font_size = 10
-Label/fonts/font = ExtResource("3_7g7cx")
-Panel/styles/panel = SubResource("StyleBoxFlat_j54dk")
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("3_7g7cx")
+spacing_glyph = 3
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tvreu"]
-size = Vector2(100, 21)
+size = Vector2(300, 86)
 
-[node name="HangerWeaponCard" type="Panel"]
-material = SubResource("ShaderMaterial_ws5qu")
-custom_minimum_size = Vector2(100, 25)
-offset_right = 100.0
-offset_bottom = 25.0
-theme = SubResource("Theme_m58cx")
+[node name="HangerWeaponCard" type="Control"]
+custom_minimum_size = Vector2(300, 86)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 86.0
+mouse_filter = 2
 script = ExtResource("2_7g7cx")
 
-[node name="Avatar" type="Sprite2D" parent="."]
-position = Vector2(87.00001, 12.5)
-scale = Vector2(0.23204608, 0.23204608)
-texture = ExtResource("2_tvreu")
+[node name="Visual" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_card")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="UltIndicator" type="Panel" parent="."]
+[node name="Status" type="Label" parent="."]
 layout_mode = 0
-offset_left = 60.0
-offset_top = 15.0
-offset_right = 68.0
-offset_bottom = 23.0
-theme = SubResource("Theme_ry834")
-
-[node name="ProgressBar" type="ProgressBar" parent="."]
-layout_mode = 0
-offset_left = 25.0
-offset_top = 4.5
-offset_right = 69.0
-offset_bottom = 11.5
-theme = SubResource("Theme_0m4ny")
-show_percentage = false
-
-[node name="AmmoIcon" type="Panel" parent="."]
-layout_mode = 0
-offset_left = 47.0
-offset_top = 4.0
-offset_right = 49.0
-offset_bottom = 12.0
-theme = SubResource("Theme_8gplb")
+offset_left = 34.0
+offset_top = 22.0
+offset_right = 140.0
+offset_bottom = 42.0
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.65)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 11
+text = "AMMO"
+vertical_alignment = 1
 
 [node name="AmmoIndicator" type="Label" parent="."]
 layout_mode = 0
-offset_left = 50.0
-offset_top = 5.0
-offset_right = 78.0
-offset_bottom = 14.0
-theme = SubResource("Theme_a5wpc")
+offset_left = 110.0
+offset_top = 12.0
+offset_right = 216.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0.96, 0.98, 1, 1)
+theme_override_fonts/font = ExtResource("3_7g7cx")
+theme_override_font_sizes/font_size = 30
 text = "32"
-horizontal_alignment = 1
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="."]
-position = Vector2(51, 12)
-scale = Vector2(1, 1.2372218)
+position = Vector2(150, 43)
 shape = SubResource("RectangleShape2D_tvreu")
 visibility_mode = 1
 

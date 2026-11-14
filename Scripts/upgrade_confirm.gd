@@ -18,13 +18,13 @@ var _can_confirm: bool = false
 
 
 func _ready() -> void:
-	_cancel.gui_input.connect(_on_button_input.bind(cancelled))
+	_cancel.gui_input.connect(_on_button_input.bind(_cancel, cancelled))
 	_confirm.gui_input.connect(func(event: InputEvent):
 		if _can_confirm:
-			_on_button_input(event, confirmed)
+			_on_button_input(event, _confirm, confirmed)
 	)
 	# Tapping the dimmed area outside the dialog also cancels.
-	_dim.gui_input.connect(_on_button_input.bind(cancelled))
+	_dim.gui_input.connect(_on_button_input.bind(_dim, cancelled))
 
 
 func setup(title: String, next_rank: int, max_rank: int, cost: int, echoes_owned: int) -> void:
@@ -43,7 +43,8 @@ func setup_with_message(title: String, message: String, cost: int, echoes_owned:
 	_confirm.modulate.a = 1.0 if _can_confirm else 0.35
 
 
-func _on_button_input(event: InputEvent, result: Signal) -> void:
-	if event is InputEventScreenTouch and event.is_pressed():
+func _on_button_input(event: InputEvent, control: Control, result: Signal) -> void:
+	if event is InputEventScreenTouch:
 		accept_event()
+	if Tap.is_tap(control, event):
 		result.emit()

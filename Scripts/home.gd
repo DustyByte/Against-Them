@@ -114,27 +114,42 @@ func _connect_button(button: Panel, action: Callable) -> void:
 	button.gui_input.connect(func(event: InputEvent):
 		if _is_leaving:
 			return
-		if event is InputEventScreenTouch and event.is_pressed():
+		var was_held := Tap.is_held(button)
+		if Tap.is_tap(button, event):
 			play_ui_sfx()
 			_flash(button)
 			action.call()
+		elif Tap.is_held(button) and not was_held:
+			_set_highlight(button, 0.1, 0.06)    # finger down: show it's armed
+		elif was_held and not Tap.is_held(button):
+			_set_highlight(button, 0.0, 0.2)     # slid off / lifted elsewhere: cancelled
 	)
 
 
 ## Used by the Settings screen (settings_menu.gd looks it up on this node) to
-## make its own buttons respond to taps with the menu sound.
-func _check_if_touch_then_execute(event: InputEvent, functionToExecute: Callable) -> void:
-	if event is InputEventScreenTouch and event.is_pressed():
+## make its own buttons respond to taps (on release) with the menu sound.
+func _check_if_touch_then_execute(event: InputEvent, control: Control, functionToExecute: Callable) -> void:
+	if Tap.is_tap(control, event):
 		play_ui_sfx()
 		functionToExecute.call()
 
 
 ## Brief highlight on the tapped row so every press is acknowledged.
 func _flash(button: Panel) -> void:
-	var highlight: ColorRect = button.get_node("Highlight")
+	var tween := _set_highlight(button, 0.22, 0.06)
+	tween.tween_property(button.get_node("Highlight"), "color:a", 0.0, 0.35).set_trans(Tween.TRANS_SINE)
+
+
+## Tweens the row's highlight, replacing any highlight tween already running.
+func _set_highlight(button: Panel, alpha: float, time: float) -> Tween:
+	if button.has_meta(&"highlight_tween"):
+		var old: Tween = button.get_meta(&"highlight_tween")
+		if old.is_valid():
+			old.kill()
 	var tween := create_tween()
-	tween.tween_property(highlight, "color:a", 0.22, 0.06)
-	tween.tween_property(highlight, "color:a", 0.0, 0.35).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(button.get_node("Highlight"), "color:a", alpha, time)
+	button.set_meta(&"highlight_tween", tween)
+	return tween
 
 
 func play_ui_sfx() -> void:

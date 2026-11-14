@@ -118,7 +118,7 @@ func _make_tab(index: int, tab_name: String) -> Panel:
 	tab.add_child(label)
 
 	tab.gui_input.connect(func(event: InputEvent):
-		if event is InputEventScreenTouch and event.is_pressed() and index != _current and _overlay == null:
+		if Tap.is_tap(tab, event) and index != _current and _overlay == null:
 			_play_ui_sfx()
 			_select_tab(index)
 	)
@@ -191,7 +191,7 @@ func _open_skin_viewer(skin: Dictionary) -> void:
 func _on_return_gui_input(event: InputEvent) -> void:
 	if _overlay != null:
 		return
-	if event is InputEventScreenTouch and event.is_pressed():
+	if Tap.is_tap(_return_button, event):
 		_play_ui_sfx()
 		returnPressed.emit()
 

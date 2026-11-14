@@ -576,7 +576,7 @@ color = Color(0.62, 0.88, 0.95, 1)
 
 [node name="StatusText" type="Label" parent="UI/Menu/Footer"]
 layout_mode = 2
-text = "ROGUE PLANET  ·  ENERGY SIGNATURE DETECTED"
+text = "ROGUE PLANET  ·  UMBRA"
 label_settings = SubResource("LabelSettings_footer")
 vertical_alignment = 1
 

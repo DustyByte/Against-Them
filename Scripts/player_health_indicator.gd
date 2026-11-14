@@ -2,6 +2,9 @@ extends Node2D
 ## Echo's HP readout: a hexagonal glass vessel whose fluid level is the HP.
 ## The fluid shifts teal -> amber -> crimson as HP drops, sloshes and flashes
 ## on hits, and the frame pulses when HP runs low.
+## Idle vessels cost nothing on the CPU: _process only runs while the slosh,
+## flash or warning is changing, and shader values are only sent then. (Waves,
+## bubbles and the warning pulse run on the shader's own clock.)
 
 const COLOR_FULL := Color(0.35, 0.95, 0.85)
 const COLOR_MID := Color(0.95, 0.75, 0.35)
@@ -38,6 +41,9 @@ func _ready() -> void:
 	_fill = _ratio(playerStats.currentHP, playerStats.maxHP)
 	_apply_level(_fill)
 	_update_text(playerStats.currentHP, playerStats.maxHP)
+	_danger = _wanted_danger()
+	_send_effects()
+	set_process(false)
 
 
 func update_indicator(currentHP: float, maxHP: float) -> void:
@@ -55,13 +61,28 @@ func update_indicator(currentHP: float, maxHP: float) -> void:
 		_fillTween.kill()
 	_fillTween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_fillTween.tween_method(_apply_level, _fill, target, FILL_TIME).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	set_process(true)
 
 
 func _process(delta: float) -> void:
 	_slosh = move_toward(_slosh, 0.0, delta * 0.9)
 	_flash = move_toward(_flash, 0.0, delta * 4.0)
-	var wantDanger: float = 1.0 if (_fill < DANGER_BELOW and _lastHP > 0.0) else 0.0
+	var wantDanger: float = _wanted_danger()
 	_danger = move_toward(_danger, wantDanger, delta * 2.0)
+	_send_effects()
+	
+	# Slosh, flash and warning have all arrived and the level has finished
+	# draining: nothing left to animate here, so go idle.
+	var fillMoving: bool = _fillTween != null and _fillTween.is_running()
+	if _slosh == 0.0 and _flash == 0.0 and _danger == wantDanger and not fillMoving:
+		set_process(false)
+
+
+func _wanted_danger() -> float:
+	return 1.0 if (_fill < DANGER_BELOW and _lastHP > 0.0) else 0.0
+
+
+func _send_effects() -> void:
 	_mat.set_shader_parameter("slosh", _slosh)
 	_mat.set_shader_parameter("flash", _flash)
 	_mat.set_shader_parameter("danger", _danger)

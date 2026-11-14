@@ -17,14 +17,14 @@ var latestVersion: String = ""
 func _ready() -> void:
 	_installed.text = "v" + global.GAME_VERSION
 	_latest.text = ("v" + latestVersion) if latestVersion != "" else "-"
-	_update_btn.gui_input.connect(_check_if_touch.bind(_on_update_pressed))
+	_update_btn.gui_input.connect(_check_if_touch.bind(_update_btn, _on_update_pressed))
 	if setAsMustUpdate:
 		_title.text = "UPDATE REQUIRED"
 		_message.text = "This version is no longer supported.\nUpdate from the Play Store to keep playing."
 		_maybe_later_btn.visible = false
 	else:
 		_message.text = "A new version of Against Them is on the Play Store."
-		_maybe_later_btn.gui_input.connect(_check_if_touch.bind(_on_maybe_later_pressed))
+		_maybe_later_btn.gui_input.connect(_check_if_touch.bind(_maybe_later_btn, _on_maybe_later_pressed))
 	_play_entrance()
 
 func _play_entrance() -> void:
@@ -38,8 +38,8 @@ func _play_entrance() -> void:
 	tween.tween_property(_dialog, "modulate:a", 1.0, 0.25).set_delay(0.06)
 	tween.tween_property(_dialog, "scale", Vector2.ONE, 0.35).set_delay(0.06).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
-func _check_if_touch(event: InputEvent, funcToCall: Callable) -> void:
-	if event is InputEventScreenTouch and event.is_pressed():
+func _check_if_touch(event: InputEvent, control: Control, funcToCall: Callable) -> void:
+	if Tap.is_tap(control, event):
 		funcToCall.call()
 
 ## Opens the game's Play Store page (the store app if possible, else the

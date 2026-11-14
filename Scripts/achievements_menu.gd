@@ -61,7 +61,7 @@ func _on_claim_requested(achievement_id: String, card: Node) -> void:
 
 
 func _on_return_gui_input(event: InputEvent) -> void:
-	if event is InputEventScreenTouch and event.is_pressed():
+	if Tap.is_tap(_return_button, event):
 		_play_ui_sfx()
 		returnPressed.emit()
 

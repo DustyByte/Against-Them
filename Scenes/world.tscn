@@ -42,7 +42,6 @@ script = ExtResource("7_o06y3")
 [node name="JoyStick" parent="CanvasLayer" instance=ExtResource("2_5a7ea")]
 process_mode = 3
 position = Vector2(215, 719)
-knobColor = Color(0.8745098, 0.7490196, 0.91764706, 0.5019608)
 
 [node name="PlayerHealthIndicator" parent="CanvasLayer" instance=ExtResource("6_5v1tr")]
 screenPositionX = 0.1

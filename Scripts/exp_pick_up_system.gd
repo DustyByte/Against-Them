@@ -35,6 +35,7 @@ func revaluate_exp_barand_milestone() -> void:
 	currentExpMilestone = currentLevel * BASE_LEVEL_EXP_REQUIREMENT * LEVEL_EXP_REQUIREMENT_GROWTH
 	expBar.max_value = currentExpMilestone
 	expBar.value = 0.0
+	expBar.set("level", currentLevel)   # level badge on the bar
 
 
 func _ready() -> void:

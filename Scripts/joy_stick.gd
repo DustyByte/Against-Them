@@ -5,14 +5,17 @@ var screenSize: Vector2 = Vector2.ZERO
 var joyStickPosition: Vector2 = Vector2.ZERO
 var knobPosition: Vector2 = Vector2.ZERO
 var knobRadius: float = 0.0
+const JOYSTICK_SHADER: Shader = preload("res://Shaders/joystick.gdshader")
+const VISUAL_PAD := 16.0          # room for the glows around the base and knob
+var _visual: ColorRect
+var _mat: ShaderMaterial
+var _heldTween: Tween
+var _held: float = 0.0            # current "held" look, mirrored to the shader
 # Resting size; the knob grows by KNOB_HELD_GROWTH while held. Set, never
 # added to, so uneven press/release pairs can't make it drift.
 var knobBaseRadius: float = 0.0
 const KNOB_HELD_GROWTH := 10.0
-@export var knobColor: Color = Color(1, 1, 1, 0.5)
 var borderRadius: float = 0.0
-@export var borderColor: Color = Color(1, 1, 1, 0.25)
-@export var borderFill: bool = false
 @export var fromLeft: float = 0.200
 @export var fromTop: float = 0.666
 var joyStickInputDeadZoneRadius: float = 0.0
@@ -31,11 +34,45 @@ func _ready() -> void:
 	knobRadius = knobBaseRadius
 	borderRadius = knobBaseRadius * 2
 	joyStickInputDeadZoneRadius = borderRadius * 3
+	_build_visual()
 
 
-func _draw() -> void:
-	draw_circle(to_local(joyStickPosition), borderRadius, borderColor, borderFill, 1, true)
-	draw_circle(to_local(knobPosition), knobRadius, knobColor, true)
+## The joystick is drawn by joystick.gdshader on one rect centered on the base.
+## It only changes when the touch does, so there is no per-frame work.
+func _build_visual() -> void:
+	_mat = ShaderMaterial.new()
+	_mat.shader = JOYSTICK_SHADER
+	_visual = ColorRect.new()
+	_visual.material = _mat
+	_visual.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var half: float = borderRadius + knobBaseRadius + KNOB_HELD_GROWTH + VISUAL_PAD
+	_visual.size = Vector2.ONE * half * 2.0
+	_visual.position = to_local(joyStickPosition) - _visual.size * 0.5
+	add_child(_visual)
+	_mat.set_shader_parameter("rect_size", _visual.size)
+	_mat.set_shader_parameter("base_radius", borderRadius)
+	_mat.set_shader_parameter("held", 0.0)
+	_update_visual()
+
+
+func _update_visual() -> void:
+	if _mat == null:
+		return
+	_mat.set_shader_parameter("knob_radius", knobRadius)
+	_mat.set_shader_parameter("knob_offset", knobPosition - joyStickPosition)
+
+
+## Eases the "held" look in or out.
+func _set_held_look(on: bool) -> void:
+	if _mat == null:
+		return
+	if _heldTween:
+		_heldTween.kill()
+	_heldTween = create_tween()
+	_heldTween.tween_method(func(v: float):
+		_held = v
+		_mat.set_shader_parameter("held", v)
+	, _held, 1.0 if on else 0.0, 0.12 if on else 0.25)
 
 
 func is_inside_deadzone(pos: Vector2) -> bool:
@@ -106,7 +143,8 @@ func hold_knob(holdingFrom: Vector2 = Vector2.ZERO) -> void:
 		else:
 			move_knob(joyStickPosition + (borderRadius * JSToTouchDirection))
 	
-	queue_redraw()
+	_set_held_look(true)
+	_update_visual()
 
 
 func release_knob() -> void:
@@ -114,9 +152,10 @@ func release_knob() -> void:
 	knobRadius = knobBaseRadius
 	knobPosition = joyStickPosition
 	output.direction = Vector2.ZERO
-	queue_redraw()
+	_set_held_look(false)
+	_update_visual()
 
 
 func move_knob(to: Vector2) -> void:
 	knobPosition = to
-	queue_redraw()
+	_update_visual()

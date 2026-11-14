@@ -24,7 +24,7 @@ func setup(skin: Dictionary) -> void:
 	var dim := ColorRect.new()
 	dim.color = Color(0.0, 0.0, 0.0, 0.72)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	dim.gui_input.connect(_on_close_input)
+	dim.gui_input.connect(_on_close_input.bind(dim))
 	add_child(dim)
 
 	var center := CenterContainer.new()
@@ -56,14 +56,14 @@ func setup(skin: Dictionary) -> void:
 	for anim in ["idle", "run"]:
 		var b := _button(anim.to_upper(), Vector2(150, 50))
 		b.gui_input.connect(func(event: InputEvent):
-			if event is InputEventScreenTouch and event.is_pressed():
+			if Tap.is_tap(b, event):
 				_show_animation(anim))
 		modes.add_child(b)
 		_mode_buttons[anim] = b
 	_highlight_mode("idle")
 
 	var close := _button("CLOSE", Vector2(0, 60))
-	close.gui_input.connect(_on_close_input)
+	close.gui_input.connect(_on_close_input.bind(close))
 	column.add_child(close)
 
 
@@ -81,9 +81,10 @@ func _highlight_mode(anim: String) -> void:
 		_mode_buttons[key].modulate.a = 1.0 if key == anim else 0.45
 
 
-func _on_close_input(event: InputEvent) -> void:
-	if event is InputEventScreenTouch and event.is_pressed():
+func _on_close_input(event: InputEvent, control: Control) -> void:
+	if event is InputEventScreenTouch:
 		accept_event()
+	if Tap.is_tap(control, event):
 		closed.emit()
 
 

@@ -89,7 +89,7 @@ func _can_claim() -> bool:
 
 
 func _on_claim_gui_input(event: InputEvent) -> void:
-	if event is InputEventScreenTouch and event.is_pressed() and _can_claim():
+	if Tap.is_tap(_claim_button, event) and _can_claim():
 		claim_requested.emit(achievement_id)
 
 

@@ -149,7 +149,7 @@ func _make_category_header(category: String) -> Control:
 func _on_return_gui_input(event: InputEvent) -> void:
 	if _confirm_dialog != null:
 		return
-	if event is InputEventScreenTouch and event.is_pressed():
+	if Tap.is_tap(_return_button, event):
 		_play_ui_sfx()
 		returnPressed.emit()
 
