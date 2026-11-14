@@ -10,7 +10,12 @@ const TOGGLE_TIME := 0.18
 @onready var _ui_sfx_row: PanelContainer = get_node(COLUMN_PATH + "Left/UISFXRow")
 @onready var _world_sfx_row: PanelContainer = get_node(COLUMN_PATH + "Left/WorldSFXRow")
 @onready var _haptic_row: PanelContainer = get_node(COLUMN_PATH + "Left/HapticRow")
-@onready var _languages: VBoxContainer = get_node(COLUMN_PATH + "Right/Languages")
+@onready var _languages: VBoxContainer = get_node(COLUMN_PATH + "Right/Scroll/List/Languages")
+@onready var _account_avatar: AvatarPortrait = $Center/Dialog/VBox/Account/HBox/Avatar
+@onready var _account_name: Label = $Center/Dialog/VBox/Account/HBox/Text/Name
+@onready var _account_hint: Label = $Center/Dialog/VBox/Account/HBox/Text/Hint
+@onready var _switch_btn: Panel = $Center/Dialog/VBox/Account/HBox/SwitchButton
+@onready var _delete_btn: Panel = $Center/Dialog/VBox/Account/HBox/DeleteButton
 @onready var _return_button: Panel = $Center/Dialog/VBox/ReturnButton
 @onready var _dim: ColorRect = $Dim
 @onready var _dialog: PanelContainer = $Center/Dialog
@@ -35,6 +40,11 @@ func _ready() -> void:
 		s.is_heptic_feedback_enabled = on)
 
 	_build_language_list()
+	_show_account()
+	PlayerProfile.changed.connect(_show_account)
+	var home := $"../.."
+	_switch_btn.gui_input.connect(_check_if_touch_then_execute.bind(_switch_btn, home.open_switch_account))
+	_delete_btn.gui_input.connect(_check_if_touch_then_execute.bind(_delete_btn, home.open_delete_account))
 	_return_button.gui_input.connect(_check_if_touch_then_execute.bind(_return_button, func(): returnPressed.emit()))
 	_play_entrance()
 
@@ -114,6 +124,17 @@ func _refresh_language_list() -> void:
 		option.get_node("HBox/Radio/Dot").visible = picked
 		option.get_node("HBox/Radio").modulate.a = 1.0 if picked else 0.45
 		option.get_node("HBox/Status").visible = picked
+
+
+# --- Account -----------------------------------------------------------------
+
+func _show_account() -> void:
+	_account_avatar.avatar = PlayerProfile.avatar
+	_account_name.text = PlayerProfile.username
+	var status := "" if PlayerProfile.claimed else "   ·   GUEST"
+	if PlayerProfile.signed_out:
+		status = "   ·   SIGNED OUT"
+	_account_hint.text = "ID  " + PlayerProfile.player_id + status
 
 
 # --- Entrance ----------------------------------------------------------------

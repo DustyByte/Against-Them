@@ -97,11 +97,7 @@ var _save_timer: Timer
 func _ready() -> void:
 	for achievement: Dictionary in AchievementData.ACHIEVEMENTS:
 		_by_id[achievement["id"]] = achievement
-		if achievement.has("stat"):
-			var stat: String = achievement["stat"]
-			if not _pending_by_stat.has(stat):
-				_pending_by_stat[stat] = []
-			_pending_by_stat[stat].append(achievement)
+	_index_pending()
 
 	var had_echo_stats: bool = load_progress()
 	if not had_echo_stats:
@@ -118,6 +114,42 @@ func _ready() -> void:
 	_save_timer.timeout.connect(_save_if_dirty)
 	add_child(_save_timer)
 	_save_timer.start()
+
+
+## stat -> achievements reading it; completed ones are dropped as they complete.
+func _index_pending() -> void:
+	_pending_by_stat.clear()
+	for achievement: Dictionary in AchievementData.ACHIEVEMENTS:
+		if achievement.has("stat"):
+			var stat: String = achievement["stat"]
+			if not _pending_by_stat.has(stat):
+				_pending_by_stat[stat] = []
+			_pending_by_stat[stat].append(achievement)
+
+
+## Re-reads the save file (after a cloud save replaced it).
+func reload_from_disk() -> void:
+	_stats.clear()
+	_claimed_ids.clear()
+	load_progress()
+	_index_pending()
+	_changed_stats = _pending_by_stat.duplicate()
+	_refresh_completed(false)
+	_dirty = false
+
+
+## Writes unsaved stats now (before the save files are read for a cloud save).
+func flush() -> void:
+	_save_if_dirty()
+
+
+## Erases every stat and claimed achievement (used when the account is deleted).
+func reset_progress() -> void:
+	_stats.clear()
+	_claimed_ids.clear()
+	_changed_stats.clear()
+	_index_pending()
+	save_progress()
 
 
 func _notification(what: int) -> void:
@@ -452,6 +484,11 @@ func _is_at_one_hp(hp: float) -> bool:
 
 
 # --- Queries used by the achievements screen ---------------------------------
+
+## A raw stat counter (0 if it has never been raised). Used by the profile card.
+func get_stat(stat: String) -> int:
+	return int(_stats.get(stat, 0))
+
 
 func get_progress(achievement_id: String) -> int:
 	var achievement: Dictionary = _find(achievement_id)

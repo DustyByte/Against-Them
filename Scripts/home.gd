@@ -29,6 +29,10 @@ const INTRO_SLIDE: float = 24.0
 @onready var _settings_btn: Panel = $UI/Menu/Column/Settings
 @onready var _discord_btn: Panel = $UI/Menu/DiscordButton
 @onready var _quit_btn: Panel = $UI/Menu/Column/Quit
+@onready var _profile_btn: Panel = $UI/Menu/ProfileNotch
+@onready var _profile_avatar: AvatarPortrait = $UI/Menu/ProfileNotch/Avatar
+@onready var _profile_name: Label = $UI/Menu/ProfileNotch/Text/Username
+@onready var _profile_id: Label = $UI/Menu/ProfileNotch/Text/PlayerId
 # The Echoes counter lives outside the menu so it stays visible on sub screens.
 @onready var _echoes_counter: Control = $UI/EchoesCounter
 @onready var _echoes_value: Label = $UI/EchoesCounter/HBox/Value
@@ -57,6 +61,8 @@ func _ready() -> void:
 	_echoes_value.text = str(MetaProgression.echoes)
 	MetaProgression.echoes_changed.connect(_on_echoes_changed)
 	_version.text = "v" + global.GAME_VERSION
+	_show_profile()
+	PlayerProfile.changed.connect(_show_profile)
 
 	_connect_button(_descend_btn, _on_descend_pressed)
 	_connect_button(_shop_btn, _on_shop_pressed)
@@ -66,9 +72,11 @@ func _ready() -> void:
 	_connect_button(_settings_btn, _on_settings_pressed)
 	_connect_button(_discord_btn, OS.shell_open.bind(DISCORD_LINK))
 	_connect_button(_quit_btn, get_tree().quit)
+	_connect_button(_profile_btn, _on_profile_pressed)
 
 	_play_intro()
 	_pulse_status_light()
+	_maybe_prompt_account()
 
 
 func _process(delta: float) -> void:
@@ -162,6 +170,53 @@ func _on_echoes_changed(total: int) -> void:
 	_echoes_value.text = str(total)
 
 
+func _show_profile() -> void:
+	_profile_avatar.avatar = PlayerProfile.avatar
+	_profile_name.text = PlayerProfile.username
+	_profile_id.text = "ID  " + PlayerProfile.player_id
+
+
+## The profile card pops up over the home screen (the menu stays behind the dim).
+func _on_profile_pressed() -> void:
+	_show_popup(preload("res://Scenes/HUD/profile_card.tscn").instantiate())
+
+
+## The username + password popup. Also opened from the profile card.
+func open_account_setup() -> void:
+	_open_account_dialog(0)   # CLAIM
+
+
+## Settings > Switch Account.
+func open_switch_account() -> void:
+	_open_account_dialog(1)   # LOGIN
+
+
+## Settings > Delete Account.
+func open_delete_account() -> void:
+	_open_account_dialog(2)   # DELETE
+
+
+func _open_account_dialog(mode: int) -> void:
+	var dialog: Control = preload("res://Scenes/HUD/account_setup.tscn").instantiate()
+	dialog.mode = mode
+	_show_popup(dialog)
+
+
+## Back from the first descend: ask the player to claim a username (once).
+func _maybe_prompt_account() -> void:
+	if not PlayerProfile.should_prompt_account():
+		return
+	PlayerProfile.mark_account_prompt_shown()
+	await get_tree().create_timer(0.9).timeout   # let the home screen settle in first
+	if not _is_leaving:
+		open_account_setup()
+
+
+func _show_popup(popup: Control) -> void:
+	$UI.add_child(popup)
+	$UI.move_child(popup, _fade.get_index())   # above the menu, counters and other popups
+
+
 func _on_settings_pressed() -> void:
 	_open_sub_screen(preload("res://Scenes/HUD/settings.tscn").instantiate(), false)
 
@@ -230,8 +285,8 @@ func _play_intro() -> void:
 		tween.tween_property(item, "position:x", target_x, 0.55).set_delay(delay).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		delay += INTRO_STAGGER
 
-	# The resource counter and the Discord button drop in from the top edge.
-	for notch: Control in [_echoes_counter, _discord_btn]:
+	# The profile, the resource counter and the Discord button drop in from the top edge.
+	for notch: Control in [_profile_btn, _echoes_counter, _discord_btn]:
 		var notch_y: float = notch.position.y
 		notch.modulate.a = 0.0
 		notch.position.y = notch_y - INTRO_SLIDE

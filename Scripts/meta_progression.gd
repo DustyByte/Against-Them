@@ -52,6 +52,19 @@ func add_echoes(amount: int) -> void:
 	AchievementManager.register_echoes_earned(amount, echoes)
 
 
+## Re-reads the save file (after a cloud save replaced it).
+func reload_from_disk() -> void:
+	load_progress()
+	echoes_changed.emit(echoes)
+
+
+## Back to zero Echoes (used when the account is deleted).
+func reset_progress() -> void:
+	echoes = 0
+	save_progress()
+	echoes_changed.emit(echoes)
+
+
 ## Removes Echoes for a purchase. Returns false (and spends nothing) if the
 ## player doesn't have enough.
 func spend_echoes(amount: int) -> bool:

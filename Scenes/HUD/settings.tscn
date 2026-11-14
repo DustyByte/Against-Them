@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://csqy5xcmirdmg" path="res://Scripts/settings_menu.gd" id="1"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_gsc5x"]
+[ext_resource type="Script" path="res://Scripts/avatar_portrait.gd" id="3_avatar"]
 
 [sub_resource type="FontVariation" id="FontVariation_spaced"]
 base_font = ExtResource("2_gsc5x")
@@ -114,6 +115,30 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.62, 0.88, 0.95, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_account_btn"]
+bg_color = Color(0.62, 0.88, 0.95, 0.1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.6)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_delete_btn"]
+bg_color = Color(1, 0.45, 0.4, 0.06)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.5, 0.45, 0.55)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -417,28 +442,39 @@ theme_override_fonts/font = SubResource("FontVariation_wide")
 theme_override_font_sizes/font_size = 14
 text = "LANGUAGE"
 
-[node name="Languages" type="VBoxContainer" parent="Center/Dialog/VBox/Columns/Right"]
+[node name="Scroll" type="ScrollContainer" parent="Center/Dialog/VBox/Columns/Right"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="List" type="VBoxContainer" parent="Center/Dialog/VBox/Columns/Right/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Languages" type="VBoxContainer" parent="Center/Dialog/VBox/Columns/Right/Scroll/List"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="Option" type="PanelContainer" parent="Center/Dialog/VBox/Columns/Right/Languages"]
+[node name="Option" type="PanelContainer" parent="Center/Dialog/VBox/Columns/Right/Scroll/List/Languages"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_row")
 
-[node name="HBox" type="HBoxContainer" parent="Center/Dialog/VBox/Columns/Right/Languages/Option"]
+[node name="HBox" type="HBoxContainer" parent="Center/Dialog/VBox/Columns/Right/Scroll/List/Languages/Option"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 18
 
-[node name="Radio" type="Panel" parent="Center/Dialog/VBox/Columns/Right/Languages/Option/HBox"]
+[node name="Radio" type="Panel" parent="Center/Dialog/VBox/Columns/Right/Scroll/List/Languages/Option/HBox"]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_radio")
 
-[node name="Dot" type="Panel" parent="Center/Dialog/VBox/Columns/Right/Languages/Option/HBox/Radio"]
+[node name="Dot" type="Panel" parent="Center/Dialog/VBox/Columns/Right/Scroll/List/Languages/Option/HBox/Radio"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -454,37 +490,126 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_radio_dot")
 
-[node name="Text" type="VBoxContainer" parent="Center/Dialog/VBox/Columns/Right/Languages/Option/HBox"]
+[node name="Text" type="VBoxContainer" parent="Center/Dialog/VBox/Columns/Right/Scroll/List/Languages/Option/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_constants/separation = 7
 
-[node name="Native" type="Label" parent="Center/Dialog/VBox/Columns/Right/Languages/Option/HBox/Text"]
+[node name="Native" type="Label" parent="Center/Dialog/VBox/Columns/Right/Scroll/List/Languages/Option/HBox/Text"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.94, 0.96, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "English"
 
-[node name="English" type="Label" parent="Center/Dialog/VBox/Columns/Right/Languages/Option/HBox/Text"]
+[node name="English" type="Label" parent="Center/Dialog/VBox/Columns/Right/Scroll/List/Languages/Option/HBox/Text"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.7, 0.78, 1)
 theme_override_font_sizes/font_size = 14
 text = "English"
 
-[node name="Status" type="Label" parent="Center/Dialog/VBox/Columns/Right/Languages/Option/HBox"]
+[node name="Status" type="Label" parent="Center/Dialog/VBox/Columns/Right/Scroll/List/Languages/Option/HBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.85)
 theme_override_fonts/font = SubResource("FontVariation_wide")
 theme_override_font_sizes/font_size = 12
 text = "ACTIVE"
 
-[node name="ComingSoon" type="Label" parent="Center/Dialog/VBox/Columns/Right"]
+[node name="ComingSoon" type="Label" parent="Center/Dialog/VBox/Columns/Right/Scroll/List"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.55, 0.62, 0.7, 0.8)
 theme_override_font_sizes/font_size = 14
 text = "More languages are on their way."
 autowrap_mode = 3
+
+[node name="AccountGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AccountHeader" type="Label" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.75)
+theme_override_fonts/font = SubResource("FontVariation_wide")
+theme_override_font_sizes/font_size = 14
+text = "ACCOUNT"
+
+[node name="Account" type="PanelContainer" parent="Center/Dialog/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_row")
+
+[node name="HBox" type="HBoxContainer" parent="Center/Dialog/VBox/Account"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Avatar" type="Panel" parent="Center/Dialog/VBox/Account/HBox"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("3_avatar")
+
+[node name="Text" type="VBoxContainer" parent="Center/Dialog/VBox/Account/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 7
+alignment = 1
+
+[node name="Name" type="Label" parent="Center/Dialog/VBox/Account/HBox/Text"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Guest"
+text_overrun_behavior = 3
+
+[node name="Hint" type="Label" parent="Center/Dialog/VBox/Account/HBox/Text"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.7, 0.78, 1)
+theme_override_font_sizes/font_size = 14
+text = "ID  --------"
+
+[node name="SwitchButton" type="Panel" parent="Center/Dialog/VBox/Account/HBox"]
+custom_minimum_size = Vector2(250, 56)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_account_btn")
+
+[node name="Label" type="Label" parent="Center/Dialog/VBox/Account/HBox/SwitchButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.85, 0.95, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 17
+text = "SWITCH ACCOUNT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeleteButton" type="Panel" parent="Center/Dialog/VBox/Account/HBox"]
+custom_minimum_size = Vector2(250, 56)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_delete_btn")
+
+[node name="Label" type="Label" parent="Center/Dialog/VBox/Account/HBox/DeleteButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.62, 0.58, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 17
+text = "DELETE ACCOUNT"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="BottomGap" type="Control" parent="Center/Dialog/VBox"]
 custom_minimum_size = Vector2(0, 10)

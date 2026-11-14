@@ -1,0 +1,371 @@
+[gd_scene load_steps=20 format=3]
+
+[ext_resource type="Script" path="res://Scripts/profile_card.gd" id="1_card"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_font"]
+[ext_resource type="Script" path="res://Scripts/avatar_portrait.gd" id="3_avatar"]
+[ext_resource type="Texture2D" path="res://Assets/HUD Elements/edit_icon.svg" id="4_edit"]
+
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("2_font")
+spacing_glyph = 4
+
+[sub_resource type="FontVariation" id="FontVariation_wide"]
+base_font = ExtResource("2_font")
+spacing_glyph = 7
+
+[sub_resource type="Theme" id="Theme_card"]
+Label/colors/font_color = Color(0.8, 0.86, 0.92, 1)
+Label/font_sizes/font_size = 18
+Label/fonts/font = SubResource("FontVariation_spaced")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
+bg_color = Color(0.03, 0.04, 0.065, 0.95)
+border_width_left = 1
+border_width_top = 3
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.7)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 48.0
+content_margin_top = 34.0
+content_margin_right = 48.0
+content_margin_bottom = 36.0
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_picker"]
+bg_color = Color(0.035, 0.05, 0.08, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.55)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 26.0
+content_margin_top = 20.0
+content_margin_right = 26.0
+content_margin_bottom = 24.0
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rule"]
+bg_color = Color(0.62, 0.88, 0.95, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_divider"]
+bg_color = Color(0.62, 0.88, 0.95, 0.14)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stat"]
+bg_color = Color(0.62, 0.88, 0.95, 0.035)
+border_width_left = 3
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.16)
+corner_radius_top_left = 6
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 6
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_edit"]
+bg_color = Color(0.1, 0.17, 0.22, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.62, 0.88, 0.95, 0.9)
+corner_radius_top_left = 23
+corner_radius_top_right = 23
+corner_radius_bottom_right = 23
+corner_radius_bottom_left = 23
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close"]
+bg_color = Color(0.62, 0.88, 0.95, 0.16)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_claim"]
+bg_color = Color(0.62, 0.88, 0.95, 0.08)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.55)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="ProfileCard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_card")
+script = ExtResource("1_card")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.01, 0.02, 0.6)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Dialog" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(880, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+
+[node name="VBox" type="VBoxContainer" parent="Center/Dialog"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Caption" type="Label" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.75)
+theme_override_font_sizes/font_size = 14
+text = "ACCOUNT PROFILE"
+
+[node name="CaptionGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Identity" type="HBoxContainer" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="AvatarHolder" type="Control" parent="Center/Dialog/VBox/Identity"]
+custom_minimum_size = Vector2(136, 136)
+layout_mode = 2
+
+[node name="Avatar" type="Panel" parent="Center/Dialog/VBox/Identity/AvatarHolder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_avatar")
+
+[node name="EditButton" type="Panel" parent="Center/Dialog/VBox/Identity/AvatarHolder"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 14.0
+offset_bottom = 14.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_edit")
+
+[node name="Icon" type="TextureRect" parent="Center/Dialog/VBox/Identity/AvatarHolder/EditButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_edit")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Info" type="VBoxContainer" parent="Center/Dialog/VBox/Identity"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Username" type="Label" parent="Center/Dialog/VBox/Identity/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.98, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_wide")
+theme_override_font_sizes/font_size = 36
+text = "Wanderer"
+text_overrun_behavior = 3
+
+[node name="Rule" type="Panel" parent="Center/Dialog/VBox/Identity/Info"]
+custom_minimum_size = Vector2(56, 3)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_rule")
+
+[node name="PlayerId" type="Label" parent="Center/Dialog/VBox/Identity/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.7, 0.78, 0.95)
+theme_override_font_sizes/font_size = 16
+text = "PLAYER ID  ·  00000000"
+
+[node name="ClaimGap" type="Control" parent="Center/Dialog/VBox/Identity/Info"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ClaimButton" type="Panel" parent="Center/Dialog/VBox/Identity/Info"]
+custom_minimum_size = Vector2(250, 46)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_claim")
+
+[node name="Label" type="Label" parent="Center/Dialog/VBox/Identity/Info/ClaimButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+text = "CLAIM USERNAME"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IdentityGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Divider" type="Panel" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_divider")
+
+[node name="DividerGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="StatsHeader" type="Label" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.75)
+theme_override_font_sizes/font_size = 14
+text = "COMBAT RECORD"
+
+[node name="StatsGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Stats" type="GridContainer" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 14
+columns = 3
+
+[node name="Stat" type="PanelContainer" parent="Center/Dialog/VBox/Stats"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat")
+
+[node name="VBox" type="VBoxContainer" parent="Center/Dialog/VBox/Stats/Stat"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Value" type="Label" parent="Center/Dialog/VBox/Stats/Stat/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.97, 1, 1)
+theme_override_font_sizes/font_size = 34
+text = "0"
+
+[node name="Name" type="Label" parent="Center/Dialog/VBox/Stats/Stat/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.7, 0.78, 0.9)
+theme_override_font_sizes/font_size = 13
+text = "STAT"
+
+[node name="BottomGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CloseButton" type="Panel" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(320, 62)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_close")
+
+[node name="Label" type="Label" parent="Center/Dialog/VBox/CloseButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.96, 0.97, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "CLOSE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PickerBlocker" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.25)
+
+[node name="Picker" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_picker")
+
+[node name="VBox" type="VBoxContainer" parent="Picker"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Caption" type="Label" parent="Picker/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.75)
+theme_override_font_sizes/font_size = 14
+text = "CHOOSE PORTRAIT"
+
+[node name="Options" type="HBoxContainer" parent="Picker/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 18

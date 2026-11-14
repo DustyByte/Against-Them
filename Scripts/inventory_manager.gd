@@ -120,6 +120,31 @@ func _roll_day_if_needed() -> void:
 		daily_ads_changed.emit(0, DAILY_AD_LIMIT)
 
 
+## Re-reads the save file (after a cloud save replaced it).
+func reload_from_disk() -> void:
+	anchor_shards = 0
+	_ads_watched_today = 0
+	_ads_date = ""
+	_owned_skins.clear()
+	equipped_skin = "default"
+	_load()
+	anchor_shards_changed.emit(anchor_shards)
+	skins_changed.emit()
+	equipped_skin_changed.emit(equipped_skin)
+
+
+## Empties the inventory (used when the account is deleted). The daily ad
+## counter is kept, so deleting an account doesn't reset the ad limit.
+func reset_progress() -> void:
+	anchor_shards = 0
+	_owned_skins.clear()
+	equipped_skin = "default"
+	_save()
+	anchor_shards_changed.emit(anchor_shards)
+	skins_changed.emit()
+	equipped_skin_changed.emit(equipped_skin)
+
+
 # --- Saving -------------------------------------------------------------------
 
 func _load() -> void:

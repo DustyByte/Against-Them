@@ -1,0 +1,334 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://Scripts/account_setup.gd" id="1_setup"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_font"]
+
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("2_font")
+spacing_glyph = 4
+
+[sub_resource type="FontVariation" id="FontVariation_wide"]
+base_font = ExtResource("2_font")
+spacing_glyph = 7
+
+[sub_resource type="FontVariation" id="FontVariation_input"]
+base_font = ExtResource("2_font")
+spacing_glyph = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field"]
+bg_color = Color(0.015, 0.02, 0.035, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.25)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field_focus"]
+bg_color = Color(0.62, 0.88, 0.95, 0.04)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.62, 0.88, 0.95, 0.85)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+shadow_color = Color(0.62, 0.88, 0.95, 0.15)
+shadow_size = 8
+
+[sub_resource type="Theme" id="Theme_setup"]
+Label/colors/font_color = Color(0.8, 0.86, 0.92, 1)
+Label/font_sizes/font_size = 18
+Label/fonts/font = SubResource("FontVariation_spaced")
+LineEdit/colors/caret_color = Color(0.62, 0.88, 0.95, 1)
+LineEdit/colors/font_color = Color(0.96, 0.98, 1, 1)
+LineEdit/colors/font_placeholder_color = Color(0.55, 0.65, 0.72, 0.45)
+LineEdit/colors/selection_color = Color(0.62, 0.88, 0.95, 0.3)
+LineEdit/constants/caret_width = 2
+LineEdit/font_sizes/font_size = 24
+LineEdit/fonts/font = SubResource("FontVariation_input")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_field_focus")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_field")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
+bg_color = Color(0.03, 0.04, 0.065, 0.96)
+border_width_left = 1
+border_width_top = 3
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.7)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 48.0
+content_margin_top = 32.0
+content_margin_right = 48.0
+content_margin_bottom = 34.0
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rule"]
+bg_color = Color(0.62, 0.88, 0.95, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_show"]
+bg_color = Color(0.62, 0.88, 0.95, 0.06)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.3)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_later"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.28)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_confirm"]
+bg_color = Color(0.62, 0.88, 0.95, 0.85)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.62, 0.88, 0.95, 0.25)
+shadow_size = 10
+
+[node name="AccountSetup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_setup")
+script = ExtResource("1_setup")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.01, 0.02, 0.7)
+
+[node name="Dialog" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(760, 0)
+layout_mode = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+
+[node name="VBox" type="VBoxContainer" parent="Dialog"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Caption" type="Label" parent="Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.75)
+theme_override_font_sizes/font_size = 14
+text = "ACCOUNT"
+
+[node name="CaptionGap" type="Control" parent="Dialog/VBox"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.98, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_wide")
+theme_override_font_sizes/font_size = 38
+text = "CLAIM YOUR NAME"
+
+[node name="TitleGap" type="Control" parent="Dialog/VBox"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Rule" type="Panel" parent="Dialog/VBox"]
+custom_minimum_size = Vector2(56, 3)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_rule")
+
+[node name="RuleGap" type="Control" parent="Dialog/VBox"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Hint" type="Label" parent="Dialog/VBox"]
+custom_minimum_size = Vector2(660, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.7, 0.78, 0.95)
+theme_override_constants/line_spacing = 8
+theme_override_font_sizes/font_size = 15
+text = "Your first descent is done. Pick a unique username and a password to make this account yours."
+autowrap_mode = 3
+
+[node name="Form" type="VBoxContainer" parent="Dialog/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="FormGap" type="Control" parent="Dialog/VBox/Form"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="UsernameLabel" type="Label" parent="Dialog/VBox/Form"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.75)
+theme_override_font_sizes/font_size = 13
+text = "USERNAME"
+
+[node name="UsernameGap" type="Control" parent="Dialog/VBox/Form"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Username" type="LineEdit" parent="Dialog/VBox/Form"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+placeholder_text = "3-16 letters, numbers or _"
+max_length = 16
+context_menu_enabled = false
+virtual_keyboard_type = 0
+clear_button_enabled = false
+caret_blink = true
+
+[node name="UsernameError" type="Label" parent="Dialog/VBox/Form"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.55, 0.5, 1)
+theme_override_font_sizes/font_size = 13
+vertical_alignment = 1
+
+[node name="PasswordLabel" type="Label" parent="Dialog/VBox/Form"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.75)
+theme_override_font_sizes/font_size = 13
+text = "PASSWORD"
+
+[node name="PasswordGap" type="Control" parent="Dialog/VBox/Form"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PasswordRow" type="HBoxContainer" parent="Dialog/VBox/Form"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Password" type="LineEdit" parent="Dialog/VBox/Form/PasswordRow"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "At least 8 characters"
+max_length = 64
+context_menu_enabled = false
+virtual_keyboard_type = 6
+secret = true
+caret_blink = true
+
+[node name="Show" type="Panel" parent="Dialog/VBox/Form/PasswordRow"]
+custom_minimum_size = Vector2(104, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_show")
+
+[node name="Label" type="Label" parent="Dialog/VBox/Form/PasswordRow/Show"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.9)
+theme_override_font_sizes/font_size = 14
+text = "SHOW"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PasswordError" type="Label" parent="Dialog/VBox/Form"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.55, 0.5, 1)
+theme_override_font_sizes/font_size = 13
+vertical_alignment = 1
+
+[node name="Status" type="Label" parent="Dialog/VBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.55, 0.5, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ButtonsGap" type="Control" parent="Dialog/VBox"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Dialog/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Later" type="Panel" parent="Dialog/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_later")
+
+[node name="Label" type="Label" parent="Dialog/VBox/Buttons/Later"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.7, 0.78, 0.85, 1)
+theme_override_font_sizes/font_size = 22
+text = "LATER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Confirm" type="Panel" parent="Dialog/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.6
+theme_override_styles/panel = SubResource("StyleBoxFlat_confirm")
+
+[node name="Label" type="Label" parent="Dialog/VBox/Buttons/Confirm"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.02, 0.05, 0.08, 1)
+theme_override_font_sizes/font_size = 22
+text = "CONFIRM"
+horizontal_alignment = 1
+vertical_alignment = 1

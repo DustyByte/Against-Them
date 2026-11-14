@@ -24,6 +24,8 @@ MetaProgression="*res://Scripts/meta_progression.gd"
 AchievementManager="*res://Scripts/achievement_manager.gd"
 UpgradeManager="*res://Scripts/upgrade_manager.gd"
 InventoryManager="*res://Scripts/inventory_manager.gd"
+PlayerProfile="*res://Scripts/player_profile.gd"
+CloudSave="*res://Scripts/cloud_save.gd"
 
 [display]
 

@@ -178,6 +178,25 @@ func boss_bounty_per_boss() -> int:
 	return get_rank("boss_bounty")
 
 
+## Re-reads the save file (after a cloud save replaced it).
+func reload_from_disk() -> void:
+	var before: Dictionary = _ranks.duplicate()
+	_ranks.clear()
+	_load()
+	for upgrade_id: String in _by_id:
+		if before.get(upgrade_id, 0) != get_rank(upgrade_id):
+			rank_changed.emit(upgrade_id, get_rank(upgrade_id))
+
+
+## Drops every bought rank (used when the account is deleted).
+func reset_progress() -> void:
+	var owned: Array = _ranks.keys()
+	_ranks.clear()
+	_save()
+	for upgrade_id: String in owned:
+		rank_changed.emit(upgrade_id, 0)
+
+
 # --- Saving ------------------------------------------------------------------
 
 func _load() -> void:
