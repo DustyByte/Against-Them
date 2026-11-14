@@ -17,7 +17,6 @@ const SHADER_MATERIALS: Array[ShaderMaterial] = [
 	preload("res://Shaders/Material/freeze_shader_mat.tres"),
 	preload("res://Shaders/Material/gravity_bomb_explosion_shader_mat.tres"),
 	preload("res://Shaders/Material/gravity_bomb_inward_pull_shader_mat.tres"),
-	preload("res://Shaders/Material/health_indicator_mat.tres"),
 	preload("res://Shaders/Material/scale_shader_mat.tres"),
 	preload("res://Shaders/Material/tornado_trail_shader_mat.tres"),
 	preload("res://Shaders/Material/wave_heading_fade_mat.tres")
@@ -34,7 +33,7 @@ const SHADERS: Array[Shader] = [
 	preload("res://Shaders/hit.gdshader"),
 	preload("res://Shaders/lighting_light.gdshader"),
 	preload("res://Shaders/lightning.gdshader"),
-	preload("res://Shaders/liquid.gdshader"),
+	preload("res://Shaders/hp_vessel.gdshader"),
 	preload("res://Shaders/starryGlow.gdshader"),
 	preload("res://Shaders/suction.gdshader"),
 	preload("res://Shaders/tornado.gdshader"),

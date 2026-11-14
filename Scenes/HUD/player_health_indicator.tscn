@@ -1,23 +1,59 @@
 [gd_scene load_steps=6 format=3 uid="uid://bdbgnos3wjblv"]
 
 [ext_resource type="Script" uid="uid://bx83g3mwfb5l2" path="res://Scripts/player_health_indicator.gd" id="1_rffon"]
-[ext_resource type="Texture2D" uid="uid://bttmio6si76ta" path="res://Assets/HUD Elements/Player Health/Back.png" id="2_wllir"]
-[ext_resource type="Material" uid="uid://bolro80wfu8gk" path="res://Shaders/Material/health_indicator_mat.tres" id="3_nae3a"]
-[ext_resource type="Texture2D" uid="uid://ekiin5l07qfj" path="res://Assets/HUD Elements/Player Health/FluidBaseSprite.png" id="4_s05rr"]
-[ext_resource type="Texture2D" uid="uid://bj0klfoxpss53" path="res://Assets/HUD Elements/Player Health/Front.png" id="5_rq42e"]
+[ext_resource type="Shader" path="res://Shaders/hp_vessel.gdshader" id="2_vessel"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="3_font"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vessel"]
+resource_local_to_scene = true
+shader = ExtResource("2_vessel")
+
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("3_font")
+spacing_glyph = 3
 
 [node name="PlayerHealthIndicator" type="Node2D"]
 script = ExtResource("1_rffon")
 
-[node name="Back" type="Sprite2D" parent="."]
-texture = ExtResource("2_wllir")
+[node name="Vessel" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_vessel")
+offset_left = -90.0
+offset_top = -90.0
+offset_right = 90.0
+offset_bottom = 90.0
+mouse_filter = 2
 
-[node name="FluidBaseSprite" type="Sprite2D" parent="."]
-material = ExtResource("3_nae3a")
-position = Vector2(1.1122741e-07, 0.2277078)
-rotation = 3.1415927
-scale = Vector2(1, 1.4872826)
-texture = ExtResource("4_s05rr")
+[node name="Readout" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
 
-[node name="Front" type="Sprite2D" parent="."]
-texture = ExtResource("5_rq42e")
+[node name="Value" type="Label" parent="Readout"]
+layout_mode = 0
+offset_left = -70.0
+offset_top = -34.0
+offset_right = 70.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0.96, 0.98, 1, 1)
+theme_override_colors/font_outline_color = Color(0.01, 0.03, 0.05, 0.85)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 34
+text = "50"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Max" type="Label" parent="Readout"]
+layout_mode = 0
+offset_left = -70.0
+offset_top = 12.0
+offset_right = 70.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(0.9, 0.96, 1, 0.65)
+theme_override_colors/font_outline_color = Color(0.01, 0.03, 0.05, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 13
+text = "/ 50"
+horizontal_alignment = 1
+vertical_alignment = 1
