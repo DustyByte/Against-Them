@@ -1,6 +1,6 @@
 extends Node
 
-const GAME_VERSION: String = "2.0.3"
+const GAME_VERSION: String = "2.1.0"
 
 var EXP_DROP_POLYGON_ARRAY: PackedVector2Array = PackedVector2Array([
 		Vector2(-3.53553390593, 0.0),
