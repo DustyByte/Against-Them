@@ -23,6 +23,10 @@ var selectedWeaponAimingTowards: Vector2 = Vector2.RIGHT
 var joystickDirection: Vector2 = Vector2.RIGHT
 var isWalking: bool = false
 var hitAS: AudioStream = preload("res://Assets/SFX/QuckZap.wav")
+## Seconds between hits from an enemy that keeps touching Echo.
+const CONTACT_DAMAGE_INTERVAL: float = 0.6
+var _touchingEnemies: Array = []
+var _contactDamageTimer: float = 0.0
 
 
 func get_nearest_attackable_or_null() -> Node2D:
@@ -185,12 +189,45 @@ func _physics_process(_delta: float) -> void:
 	if knockBackVelocity:
 		knockBackVelocity = knockBackVelocity.move_toward(Vector2.ZERO, knockBackDecay)
 
+	if not _touchingEnemies.is_empty():
+		_process_contact_damage(_delta)
+
 
 func _on_hit_detection_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
+		_touchingEnemies.append(body)
 		var incomingDamage: float = body.stats.damage
 		if body.get("leaping") == true:   # enemy 4's leap
 			incomingDamage *= body.LEAP_DAMAGE_MULTIPLIER
 			body.end_leap()
-		if get_hit(incomingDamage) <= 0:
-			handle_death()
+		_contact_hit(incomingDamage)
+
+
+func _on_hit_detection_area_body_exited(body: Node2D) -> void:
+	_touchingEnemies.erase(body)
+
+
+func _contact_hit(incomingDamage: float) -> void:
+	_contactDamageTimer = CONTACT_DAMAGE_INTERVAL
+	if get_hit(incomingDamage) <= 0:
+		handle_death()
+
+
+## Enemies that stay on Echo keep hurting: every CONTACT_DAMAGE_INTERVAL the
+## hardest-hitting enemy still touching deals its damage again. Runs only
+## while something is touching.
+func _process_contact_damage(delta: float) -> void:
+	_contactDamageTimer -= delta
+	if _contactDamageTimer > 0.0:
+		return
+	var strongest: float = -1.0
+	var i: int = _touchingEnemies.size() - 1
+	while i >= 0:
+		var e = _touchingEnemies[i]
+		if not is_instance_valid(e):
+			_touchingEnemies.remove_at(i)
+		elif not e.get("dead") and not e.get("shrinking"):
+			strongest = maxf(strongest, e.stats.damage)
+		i -= 1
+	if strongest >= 0.0:
+		_contact_hit(strongest)

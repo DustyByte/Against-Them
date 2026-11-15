@@ -149,3 +149,4 @@ z_index = -2
 texture = ExtResource("12_j8xm3")
 
 [connection signal="body_entered" from="HitDetectionArea" to="." method="_on_hit_detection_area_body_entered"]
+[connection signal="body_exited" from="HitDetectionArea" to="." method="_on_hit_detection_area_body_exited"]
