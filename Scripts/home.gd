@@ -1,6 +1,6 @@
 extends Node2D
 
-## Home screen: Echoe's view from orbit. A breathing planet with Echoe's ship
+## Home screen: Echo's view from orbit. A breathing planet with Echo's ship
 ## circling it, and a minimal menu on the left.
 
 const DISCORD_LINK: String = "https://discord.gg/zjXPsKS2"
@@ -87,7 +87,7 @@ func _process(delta: float) -> void:
 	planetSprite.position = _planet_rest_position + Vector2(0.0, offset_y)
 	_planet_glow.position = planetSprite.position
 
-	# Echoe's ship circling the planet.
+	# Echo's ship circling the planet.
 	var ship_angle: float = TAU * _time / SHIP_ORBIT_PERIOD
 	for orbit in [_orbit_back, _orbit_front]:
 		orbit.center = planetSprite.position
@@ -251,7 +251,7 @@ func _open_sub_screen(screen: Control, show_echoes: bool = true) -> void:
 	$UI.move_child(screen, _echoes_counter.get_index())
 
 
-## Descend: the planet swells as Echoe drops toward it and the view fades out.
+## Descend: the planet swells as Echo drops toward it and the view fades out.
 func _on_descend_pressed() -> void:
 	_is_leaving = true
 	set_process(false)

@@ -1,6 +1,6 @@
 extends Node2D
 
-## Draws half of the tilted orbit around the Home screen planet, plus Echoe's
+## Draws half of the tilted orbit around the Home screen planet, plus Echo's
 ## ship when it is on this half. Two instances are used: one behind the planet
 ## (front = false, the far half) and one in front of it (front = true).
 

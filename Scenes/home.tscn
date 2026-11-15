@@ -206,7 +206,7 @@ mouse_filter = 2
 
 [node name="Subtitle" type="Label" parent="UI/Menu/Column"]
 layout_mode = 2
-text = "ECHOE  ·  IN ORBIT  ·  AWAITING DESCENT"
+text = "ECHO  ·  IN ORBIT  ·  AWAITING DESCENT"
 label_settings = SubResource("LabelSettings_subtitle")
 
 [node name="MenuGap" type="Control" parent="UI/Menu/Column"]

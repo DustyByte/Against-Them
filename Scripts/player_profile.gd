@@ -18,12 +18,12 @@ const SECTION := "profile"
 ## Render's free tier can take most of a minute to wake up.
 const REQUEST_TIMEOUT := 70.0
 
-## Built-in portraits the player can choose from. Placeholders ("?") for now;
-## give each entry a "texture" once the art exists.
+## Built-in portraits the player can choose from. "tint" colours the frame.
+## Art is 256x256 SVG with corners rounded at 22% (see AvatarPortrait).
 const AVATARS: Array[Dictionary] = [
-	{"tint": Color(0.62, 0.88, 0.95)},   # cyan
-	{"tint": Color(0.98, 0.74, 0.38)},   # amber
-	{"tint": Color(0.76, 0.6, 0.98)},    # violet
+	{"name": "Signal", "tint": Color(0.62, 0.88, 0.95), "texture": preload("res://Assets/HUD Elements/Avatars/avatar_signal.svg")},
+	{"name": "Ember", "tint": Color(0.98, 0.74, 0.38), "texture": preload("res://Assets/HUD Elements/Avatars/avatar_ember.svg")},
+	{"name": "Umbra", "tint": Color(0.76, 0.6, 0.98), "texture": preload("res://Assets/HUD Elements/Avatars/avatar_umbra.svg")},
 ]
 
 ## Shown until the server has created the account.

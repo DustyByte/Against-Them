@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <clipPath id="round"><rect width="256" height="256" rx="56" ry="56"/></clipPath>
+    <radialGradient id="bg" cx="50%" cy="42%" r="72%">
+      <stop offset="0" stop-color="#173444"/><stop offset="1" stop-color="#060a11"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#9fdbff" stop-opacity="0.75"/>
+      <stop offset="0.45" stop-color="#9fdbff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#9fdbff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a4862"/><stop offset="1" stop-color="#2b3547"/>
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#round)">
+  <rect width="256" height="256" fill="url(#bg)"/>
+  <!-- echo ripples spreading from the eye -->
+  <g fill="none" stroke="#9fdbff" stroke-width="3">
+    <circle cx="128" cy="116" r="78" opacity="0.30"/>
+    <circle cx="128" cy="116" r="100" opacity="0.18"/>
+    <circle cx="128" cy="116" r="122" opacity="0.09"/>
+  </g>
+  <!-- cloak shoulders -->
+  <path d="M30 262 C36 204 72 176 128 174 C184 176 220 204 226 262 Z" fill="#2b3547" stroke="#121b2b" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M128 186 L128 262" stroke="#11181c" stroke-width="4" stroke-linecap="round"/>
+  <!-- hood -->
+  <path d="M128 36 C174 36 202 72 202 116 C202 150 184 176 158 186 L98 186 C72 176 54 150 54 116 C54 72 82 36 128 36 Z" fill="url(#hood)" stroke="#121b2b" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M86 70 C98 52 116 46 128 46" fill="none" stroke="#56688a" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  <!-- face opening -->
+  <ellipse cx="128" cy="122" rx="45" ry="52" fill="#11181c"/>
+  <!-- the eye -->
+  <circle cx="128" cy="116" r="44" fill="url(#glow)"/>
+  <ellipse cx="128" cy="116" rx="15" ry="21" fill="#9fdbff"/>
+  <ellipse cx="123" cy="108" rx="5" ry="7" fill="#e8f8ff"/>
+  </g>
+</svg>
