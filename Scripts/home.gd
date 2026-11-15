@@ -50,9 +50,16 @@ var _planet_rest_position: Vector2
 var _planet_base_scale: Vector2
 var _time: float = 0.0
 var _is_leaving: bool = false
+## Ripples and grass splashes when Umbra is tapped. Drawn just above the planet.
+var _umbra_touch: Node2D = null
 
 
 func _ready() -> void:
+	_umbra_touch = preload("res://Scripts/umbra_touch.gd").new()
+	_umbra_touch.name = "UmbraTouch"
+	add_child(_umbra_touch)
+	move_child(_umbra_touch, planetSprite.get_index() + 1)
+	_umbra_touch.setup(planetSprite)
 	get_viewport().size_changed.connect(_update_layout)
 	_update_layout()
 
@@ -107,6 +114,8 @@ func _update_layout() -> void:
 	planetSprite.scale = _planet_base_scale
 	_planet_rest_position = screen * PLANET_CENTER
 	planetSprite.position = _planet_rest_position
+	if _umbra_touch:
+		_umbra_touch.radius = diameter * 0.5
 
 	var glow_size: float = diameter * 1.65
 	_planet_glow.scale = Vector2.ONE * glow_size / _planet_glow.texture.get_width()
