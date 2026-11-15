@@ -2,19 +2,26 @@ extends Control
 
 ## Pops up from the Home screen's profile notch: portrait (with a picker to
 ## change it), username, player ID and lifetime combat stats.
+## Also shows other players' profiles (from a leaderboard), read-only, with the
+## stats the server has counted for them.
 
 const PICKER_OPTION_SIZE := Vector2(96, 96)
 
-## Shown in order, three per row. Values come from AchievementManager stats.
+## Shown in order, three per row. "stat" is the AchievementManager stat (your
+## own card), "server" the matching stat the server keeps (other players).
 const STATS: Array[Dictionary] = [
-	{"stat": "lifetime_kills", "name": "ENEMIES SLAIN"},
-	{"stat": "best_run_kills", "name": "MOST KILLS IN A RUN"},
-	{"stat": "best_wave_reached", "name": "HIGHEST WAVE"},
-	{"stat": "boss_kills", "name": "BOSSES SLAIN"},
-	{"stat": "runs_completed", "name": "DESCENTS"},
-	{"stat": "best_run_seconds", "name": "LONGEST SURVIVAL", "time": true},
+	{"stat": "lifetime_kills", "server": "kills", "name": "ENEMIES SLAIN"},
+	{"stat": "best_run_kills", "server": "bestRunKills", "name": "MOST KILLS IN A RUN"},
+	{"stat": "best_wave_reached", "server": "bestWave", "name": "HIGHEST WAVE"},
+	{"stat": "boss_kills", "server": "bossKills", "name": "BOSSES SLAIN"},
+	{"stat": "runs_completed", "server": "runs", "name": "DESCENTS"},
+	{"stat": "best_run_seconds", "server": "bestSeconds", "name": "LONGEST SURVIVAL", "time": true},
 ]
 
+## Set before adding the card to show another player: {"id", "name", "avatar"}.
+var other: Dictionary = {}
+
+@onready var _caption: Label = $Center/Dialog/VBox/Caption
 @onready var _dim: ColorRect = $Dim
 @onready var _dialog: PanelContainer = $Center/Dialog
 @onready var _avatar_holder: Control = $Center/Dialog/VBox/Identity/AvatarHolder
@@ -36,14 +43,20 @@ var _closing := false
 
 func _ready() -> void:
 	_on_tap = $"../.."._check_if_touch_then_execute
+	_build_stats()
+	_close_btn.gui_input.connect(_on_tap.bind(_close_btn, _close))
+	_dim.gui_input.connect(_on_backdrop_input.bind(_dim, _close))
+
+	if not other.is_empty():
+		_show_other()
+		_play_entrance()
+		return
 
 	_show_identity()
 	PlayerProfile.changed.connect(_show_identity)   # e.g. the account finishes registering
-	_build_stats()
+	_fill_stats(func(entry: Dictionary) -> int: return AchievementManager.get_stat(entry.stat))
 	_build_picker()
 
-	_close_btn.gui_input.connect(_on_tap.bind(_close_btn, _close))
-	_dim.gui_input.connect(_on_backdrop_input.bind(_dim, _close))
 	_claim_btn.gui_input.connect(_on_tap.bind(_claim_btn, $"../..".open_account_setup))
 	_edit_btn.gui_input.connect(_on_tap.bind(_edit_btn, _open_picker))
 	_avatar.gui_input.connect(_on_tap.bind(_avatar, _open_picker))
@@ -61,16 +74,51 @@ func _show_identity() -> void:
 		_refresh_picker()
 
 
+## Another player: what the leaderboard already knows shows at once, their
+## stats once the server answers.
+func _show_other() -> void:
+	_caption.text = "PLAYER PROFILE"
+	_username.text = str(other.get("name", ""))
+	_player_id.text = "PLAYER ID  ·  " + str(other.get("id", ""))
+	_avatar.avatar = int(other.get("avatar", 0))
+	_edit_btn.visible = false
+	_claim_btn.visible = false
+	_claim_gap.visible = false
+
+	var profile: Dictionary = await Leaderboards.get_profile(str(other.get("id", "")))
+	if not is_inside_tree():
+		return   # closed while loading
+	if profile.is_empty():
+		for tile in _stats.get_children():
+			tile.get_node("VBox/Value").text = "?"
+		return
+	_username.text = str(profile.get("username", _username.text))
+	_avatar.avatar = int(profile.get("avatar", _avatar.avatar))
+	var stats: Dictionary = profile.get("stats", {})
+	_fill_stats(func(entry: Dictionary) -> int: return int(stats.get(entry.server, 0)))
+
+
+## One tile per stat, values shown as "-" until filled in.
 func _build_stats() -> void:
 	var template: PanelContainer = _stats.get_node("Stat")
 	for i in STATS.size():
-		var entry: Dictionary = STATS[i]
 		var tile: PanelContainer = template if i == 0 else template.duplicate()
 		if i > 0:
 			_stats.add_child(tile)
-		var value: int = AchievementManager.get_stat(entry.stat)
-		tile.get_node("VBox/Value").text = _format_time(value) if entry.get("time", false) else _format_count(value)
-		tile.get_node("VBox/Name").text = entry.name
+		tile.get_node("VBox/Value").text = "-"
+		tile.get_node("VBox/Name").text = STATS[i].name
+
+
+## `value_of` returns a stat's value given its STATS entry.
+func _fill_stats(value_of: Callable) -> void:
+	for i in STATS.size():
+		var entry: Dictionary = STATS[i]
+		var value: int = value_of.call(entry)
+		_stats.get_child(i).get_node("VBox/Value").text = format_stat(value, entry.get("time", false))
+
+
+static func format_stat(value: int, is_time: bool) -> String:
+	return _format_time(value) if is_time else _format_count(value)
 
 
 # --- Portrait picker ---------------------------------------------------------

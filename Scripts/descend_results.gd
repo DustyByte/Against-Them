@@ -31,6 +31,7 @@ func set_stats(kills: int, wave: int, elapsed_seconds: float) -> void:
 		_count_up_echoes(earned)
 		_echoes_awarded = true
 		AchievementManager.register_run_completed()
+		Leaderboards.submit_run(AchievementManager.get_run_summary())
 
 
 func _ready() -> void:

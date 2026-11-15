@@ -1,14 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://b52w6xvo1da2a"]
+[gd_scene load_steps=17 format=3 uid="uid://b52w6xvo1da2a"]
 
-[ext_resource type="Texture2D" uid="uid://ml7v3lfqpr56" path="res://Assets/Enemies/Enemy Type 6/LegBehind0.png" id="1_i8jx5"]
 [ext_resource type="Script" uid="uid://dvg1p7i7xrjk5" path="res://Scripts/enemy_6.gd" id="1_ovp4o"]
-[ext_resource type="Texture2D" uid="uid://0imixoc61v5l" path="res://Assets/Enemies/Enemy Type 6/LegBehind1.png" id="2_ovp4o"]
-[ext_resource type="Texture2D" uid="uid://6v622sjnhma" path="res://Assets/Enemies/Enemy Type 6/BodyFront.png" id="4_ndgfc"]
-[ext_resource type="Texture2D" uid="uid://cp0naquv8phoq" path="res://Assets/Enemies/Enemy Type 6/BodyBehindImproved.png" id="4_ovp4o"]
-[ext_resource type="Texture2D" uid="uid://bn5nvi70qdnxw" path="res://Assets/Enemies/Enemy Type 6/LegFront0.png" id="5_x7fgf"]
-[ext_resource type="Texture2D" uid="uid://ct2ddb3urc4dq" path="res://Assets/Enemies/Enemy Type 6/LegFront1.png" id="6_dams6"]
-[ext_resource type="Texture2D" uid="uid://dvf86s0ajvejv" path="res://Assets/Enemies/Enemy Type 6/LegFront2.png" id="7_jersd"]
-[ext_resource type="Texture2D" uid="uid://d0ni2jo6f0qmn" path="res://Assets/Enemies/Enemy Type 6/LegFront3.png" id="8_4631n"]
+[ext_resource type="Texture2D" path="res://Assets/Enemies/EnemyAtlas.png" id="atlas_enemies"]
+[ext_resource type="Material" path="res://Shaders/Material/enemy.tres" id="enemy_material"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ri3cj"]
 radius = 35.014282
@@ -366,53 +360,94 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_ovp4o"]
 radius = 100.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6_body_behind"]
+atlas = ExtResource("atlas_enemies")
+region = Rect2(99, 4, 120, 115)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6_body_front"]
+atlas = ExtResource("atlas_enemies")
+region = Rect2(223, 4, 90, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6_leg_behind0"]
+atlas = ExtResource("atlas_enemies")
+region = Rect2(4, 238, 64, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6_leg_behind1"]
+atlas = ExtResource("atlas_enemies")
+region = Rect2(150, 238, 78, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6_leg_front0"]
+atlas = ExtResource("atlas_enemies")
+region = Rect2(94, 164, 67, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6_leg_front1"]
+atlas = ExtResource("atlas_enemies")
+region = Rect2(165, 164, 39, 61)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6_leg_front2"]
+atlas = ExtResource("atlas_enemies")
+region = Rect2(334, 164, 34, 51)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6_leg_front3"]
+atlas = ExtResource("atlas_enemies")
+region = Rect2(372, 164, 75, 46)
+
 [node name="Enemy6" type="CharacterBody2D" groups=["attackable", "enemy", "explodable"]]
 y_sort_enabled = true
 collision_layer = 4
-collision_mask = 5
+collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_ovp4o")
 
 [node name="Wrapper" type="Node2D" parent="."]
+material = ExtResource("enemy_material")
 scale = Vector2(0.5, 0.5)
 
 [node name="LegBehind0" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
 modulate = Color(1.7309889, 1.7602391, 1.4677361, 1)
 position = Vector2(-48, -35.5)
-texture = ExtResource("1_i8jx5")
+texture = SubResource("AtlasTexture_e6_leg_behind0")
 
 [node name="LegBehind1" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
 modulate = Color(1.7309889, 1.7602391, 1.4677361, 1)
 position = Vector2(55, -11.5)
-texture = ExtResource("2_ovp4o")
+texture = SubResource("AtlasTexture_e6_leg_behind1")
 
 [node name="BodyBehind" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
 position = Vector2(6, -45.5)
-texture = ExtResource("4_ovp4o")
+texture = SubResource("AtlasTexture_e6_body_behind")
 
 [node name="BodyFront" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
 position = Vector2(6, -35.5)
-texture = ExtResource("4_ndgfc")
+texture = SubResource("AtlasTexture_e6_body_front")
 
 [node name="LegFront0" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
 modulate = Color(1.7309889, 1.7602391, 1.4677361, 1)
 position = Vector2(-59.5, 6.5)
-texture = ExtResource("5_x7fgf")
+texture = SubResource("AtlasTexture_e6_leg_front0")
 
 [node name="LegFront1" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
 modulate = Color(1.7309889, 1.7602391, 1.4677361, 1)
 position = Vector2(-28.5, 23.5)
-texture = ExtResource("6_dams6")
+texture = SubResource("AtlasTexture_e6_leg_front1")
 
 [node name="LegFront2" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
 modulate = Color(1.7309889, 1.7602391, 1.4677361, 1)
 position = Vector2(13.25, 24.5)
-texture = ExtResource("7_jersd")
+texture = SubResource("AtlasTexture_e6_leg_front2")
 
 [node name="LegFront3" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
 modulate = Color(1.7309889, 1.7602391, 1.4677361, 1)
 position = Vector2(53.5, 19.5)
-texture = ExtResource("8_4631n")
+texture = SubResource("AtlasTexture_e6_leg_front3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false

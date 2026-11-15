@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://Shaders/enemy.gdshader" id="1_enemy"]
+
+[resource]
+shader = ExtResource("1_enemy")
+shader_parameter/outline = true
+shader_parameter/outline_color = Color(1, 0.47000003, 0.47000003, 1)

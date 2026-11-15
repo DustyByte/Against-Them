@@ -3,7 +3,7 @@ extends Weapon
 var maxAmmo: int = 7
 
 @onready var weaponSystem: Node2D = get_parent()
-@onready var muzzleFlash: PointLight2D = $"../PointLight2D"
+@onready var muzzleFlash: Sprite2D = $"../MuzzleFlash"
 @onready var WeaponShootAS: AudioStreamPlayer = $AudioStreamPlayer
 var muzzleFlashColor: Color = Color(0.871, 0.933, 1.0)
 var bulletBluePrintPath: String = "res://Scenes/Weapons/rupture_ammo.tscn"

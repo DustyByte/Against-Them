@@ -13,6 +13,9 @@ config_version=5
 config/name="Against Them"
 run/main_scene="uid://c4ojirv23fq4"
 config/features=PackedStringArray("4.5", "Mobile")
+run/max_fps=60
+boot_splash/bg_color=Color(0.012, 0.02, 0.04, 1)
+boot_splash/show_image=false
 config/icon="uid://cgwiohbwya2a6"
 
 [autoload]
@@ -26,6 +29,7 @@ UpgradeManager="*res://Scripts/upgrade_manager.gd"
 InventoryManager="*res://Scripts/inventory_manager.gd"
 PlayerProfile="*res://Scripts/player_profile.gd"
 CloudSave="*res://Scripts/cloud_save.gd"
+Leaderboards="*res://Scripts/leaderboards.gd"
 
 [display]
 
@@ -79,3 +83,10 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 anti_aliasing/quality/msaa_2d=1
+
+[shader_globals]
+
+enemy_time={
+"type": "float",
+"value": 0.0
+}

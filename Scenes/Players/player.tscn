@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://q0mcklnmoqmf"]
+[gd_scene load_steps=21 format=3 uid="uid://q0mcklnmoqmf"]
 
 [ext_resource type="Script" uid="uid://dfkowy554grup" path="res://Scripts/player.gd" id="1_v0iea"]
 [ext_resource type="PackedScene" uid="uid://b70qtk3vfuglf" path="res://Scenes/Players/spriteand_player_animations.tscn" id="2_6t5aa"]
@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bi7qhq164iar7" path="res://Scenes/HUD/progress_bar_custom.tscn" id="4_gfkdj"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="4_xxqkx"]
 [ext_resource type="Script" uid="uid://cdecv7i3coobq" path="res://Scripts/exp_pick_up_system.gd" id="5_fkybt"]
-[ext_resource type="Texture2D" uid="uid://b84hqal87qite" path="res://Assets/Shader Textures/ExplosionLight16.png" id="5_gfkdj"]
+[ext_resource type="Texture2D" path="res://Assets/Shader Textures/ExplosionLight64.png" id="5_gfkdj"]
 [ext_resource type="Script" uid="uid://w0ofbwgn0f7i" path="res://Scripts/on_run_camera.gd" id="6_x3wgy"]
 [ext_resource type="Script" uid="uid://jyihhchc5gmt" path="res://Scripts/muzzle_flash.gd" id="6_xxqkx"]
 [ext_resource type="Script" uid="uid://rik4mkjyngdk" path="res://Scripts/featuresand_summon_management_system.gd" id="7_3smsa"]
@@ -33,6 +33,9 @@ _limits = [0.0, 6.0, 0.0, 0.32839504]
 bake_resolution = 20
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.037299193, 6), -1.425696, -1.425696, 0, 0, Vector2(0.32839504, 0), -67.10795, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_flash"]
+blend_mode = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fkybt"]
 radius = 1000.0
@@ -88,13 +91,13 @@ vertical_alignment = 1
 [node name="ReloadProgressBar" parent="VisualWrapper/WeaponSystem" instance=ExtResource("4_gfkdj")]
 position = Vector2(0, -104)
 
-[node name="PointLight2D" type="PointLight2D" parent="VisualWrapper/WeaponSystem"]
+[node name="MuzzleFlash" type="Sprite2D" parent="VisualWrapper/WeaponSystem"]
 visible = false
+z_index = 1
+material = SubResource("CanvasItemMaterial_flash")
 position = Vector2(41, -7)
-color = Color(0.87058824, 0.93333334, 1, 1)
-energy = 0.0
+scale = Vector2(0.75, 0.75)
 texture = ExtResource("5_gfkdj")
-texture_scale = 2.0
 script = ExtResource("6_xxqkx")
 energyCurve = SubResource("Curve_j8xm3")
 
@@ -145,5 +148,4 @@ script = ExtResource("8_8erm5")
 z_index = -2
 texture = ExtResource("12_j8xm3")
 
-[connection signal="area_entered" from="ExpManagementSystem" to="ExpManagementSystem" method="_on_area_entered"]
 [connection signal="body_entered" from="HitDetectionArea" to="." method="_on_hit_detection_area_body_entered"]

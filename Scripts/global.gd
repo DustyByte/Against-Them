@@ -2,12 +2,6 @@ extends Node
 
 const GAME_VERSION: String = "2.1.0"
 
-var EXP_DROP_POLYGON_ARRAY: PackedVector2Array = PackedVector2Array([
-		Vector2(-3.53553390593, 0.0),
-		Vector2(0.0, -3.53553390593),
-		Vector2(3.53553390593, 0.0),
-		Vector2(0.0, 3.53553390593)
-	])
 enum DAMAGE_TYPES {
 	PHYSICAL,
 	ELECTRO,
@@ -101,12 +95,10 @@ var SFX_TYPES_PERM: Dictionary = {
 var IS_HEPTIC_FEEDBACK_PERMITTED: bool = true
 const DEATH_CORRODE_SHADER_MATERIAL: ShaderMaterial = preload("res://Shaders/Material/enemy_death_corrode.tres")
 const FREEZE_SHADER_MATERIAL: ShaderMaterial = preload("res://Shaders/Material/freeze_shader_mat.tres")
-const DAMAGE_TEXT_BP: PackedScene = preload("res://Scenes/HUD/damage_text.tscn")
 const ON_RUN_FEATURES: Script = preload("res://Scripts/on_run_features.gd")
 const ENEMY_DEATH_STREAM_01: AudioStream = preload("res://Assets/SFX/EnemyDying01.wav")
 const ENEMY_DEATH_STREAM_02: AudioStream = preload("res://Assets/SFX/EnemyDying02.wav")
 const ENEMY_DEATH_STREAM_03: AudioStream = preload("res://Assets/SFX/GranularExplosion.wav")
-const EXP_DROP_SIZE: float = 10.0
 
 var ON_RUN_WEAPON_HANGER: VBoxContainer = null
 var FEATURE_AND_SUMMON_MANAGEMENT_SYSTEM: Node = null
@@ -125,9 +117,7 @@ const MAX_REVIVES_PER_RUN: int = 2
 
 const DAMAGE_TEXT_OFFSET: Vector2 = Vector2(40.0, -40.0)
 func add_damage_text(globalPosEnemy: Vector2, damage: float, damageType: int, isCrit: bool = false) -> void:
-	var damageText: DamageText = DAMAGE_TEXT_BP.instantiate()
-	damageText.setup(globalPosEnemy+DAMAGE_TEXT_OFFSET, damage, damageType, isCrit)
-	WORLD.add_child.call_deferred(damageText)
+	WORLD.damageNumbers.add(globalPosEnemy + DAMAGE_TEXT_OFFSET, damage, damageType, isCrit)
 
 
 func freeze_world(duration: float):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bq10h1ud80djv"]
+[gd_scene load_steps=34 format=3 uid="uid://bq10h1ud80djv"]
 
 [ext_resource type="Script" uid="uid://bgxp1ve1bjgxc" path="res://Scripts/home.gd" id="1_1ey7h"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_ibywg"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" path="res://Assets/HUD Elements/echoe_icon.svg" id="10_echoe"]
 [ext_resource type="Texture2D" path="res://Assets/HUD Elements/discord_icon.svg" id="11_discord"]
 [ext_resource type="Script" path="res://Scripts/avatar_portrait.gd" id="12_avatar"]
+[ext_resource type="Texture2D" path="res://Assets/HUD Elements/leaderboard_icon.svg" id="13_leaderboard"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bg"]
 shader = ExtResource("7_bg")
@@ -583,6 +584,42 @@ text_overrun_behavior = 3
 layout_mode = 2
 text = "ID  00000000"
 label_settings = SubResource("LabelSettings_profile_id")
+
+[node name="LeaderboardButton" type="Panel" parent="UI/Menu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.07
+anchor_right = 0.07
+offset_left = 402.0
+offset_right = 468.0
+offset_bottom = 66.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_counter")
+
+[node name="Highlight" type="ColorRect" parent="UI/Menu/LeaderboardButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
+
+[node name="Icon" type="TextureRect" parent="UI/Menu/LeaderboardButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 17.0
+offset_top = 16.0
+offset_right = -17.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("13_leaderboard")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="DiscordButton" type="Panel" parent="UI/Menu"]
 layout_mode = 1

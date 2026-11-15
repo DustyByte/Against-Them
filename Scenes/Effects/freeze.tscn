@@ -2,5 +2,6 @@
 
 [ext_resource type="Script" uid="uid://b4o4ox2btj6gb" path="res://Scripts/freeze.gd" id="1_qpq7d"]
 
-[node name="Freeze" type="Node"]
+[node name="Freeze" type="Timer"]
+one_shot = true
 script = ExtResource("1_qpq7d")

@@ -6,11 +6,13 @@ const ENEMY_TYPE: int = 6
 
 var asBoss: bool = false
 var followSpeed: float = 200.0
+## Size EnemyCrowd keeps around this enemy (its collision circle). 0 once it
+## stops taking up room (exploded, shrinking into a black hole).
+var crowdRadius: float = 35.0
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
 @onready var avatarWrapper: Node2D = $Wrapper
 @onready var rangeArea: Area2D = $Area2D
 @onready var player: CharacterBody2D = global.PLAYER
-var expDropBluePrint: PackedScene = preload("res://Scenes/Systems/exp_drop.tscn")
 var explosionParticlesBP: PackedScene = preload("res://Scenes/Effects/explosion_particles.tscn")
 var stats: EnemyStats = EnemyStats.new(global.ENEMY_BASE_STATS.Type_6)
 var knockBackVelocity: Vector2 = Vector2.ZERO
@@ -21,6 +23,7 @@ var direction: Vector2
 var attackables: Array[Node2D] = []
 var marks: Dictionary = {}
 var shrinking: bool = false
+var dead: bool = false
 var freezeEffect: Freeze = null
 
 
@@ -29,6 +32,10 @@ func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0
 
 
 func get_hit(incomingDamage: float, emitSignal: bool = true) -> float:
+	# Already exploding: further hits must not set off a second explosion.
+	# Positive, as this hit killed nothing.
+	if dead:
+		return 1.0
 	stats.hp -= incomingDamage
 	AchievementManager.register_enemy_hit(incomingDamage)
 	
@@ -43,6 +50,7 @@ func get_hit(incomingDamage: float, emitSignal: bool = true) -> float:
 
 
 func deactivate() -> void:
+	crowdRadius = 0.0
 	visible = false
 	collision_layer = 0
 	collision_mask = 0
@@ -51,13 +59,23 @@ func deactivate() -> void:
 
 func handle_death() -> void:
 	if shrinking:
+		# Swallowed by a black hole: gone without exploding. (This used to just
+		# return, so the enemy was never freed and its wave could never end.)
+		if dead:
+			return
+		dead = true
+		AchievementManager.register_enemy_death(self)
+		deactivate()
+		drop_exp()
+		queue_free()
 		return
 	explodeand_die()
 
 
 func explodeand_die(body: CharacterBody2D = null) -> void: # body here is always player, couldn't name player as it is already in use.
-	if shrinking:
+	if shrinking or dead:
 		return
+	dead = true
 	
 	# Blowing up on contact with the player (body set) is not a kill by the player.
 	AchievementManager.register_enemy_death(self, body == null)
@@ -93,21 +111,19 @@ func explodeand_die(body: CharacterBody2D = null) -> void: # body here is always
 
 
 func drop_exp() -> void:
-	var expDrop: Area2D = expDropBluePrint.instantiate()
-	
-	expDrop.set_exp_type(global.EXP_DROP_TYPES.TYPE_2 if randf() < 0.01 else global.EXP_DROP_TYPES.TYPE_3)
-	expDrop.global_position = global_position
-	
-	global.WORLD.add_child.call_deferred(expDrop)
+	global.WORLD.expDrops.add(global_position, global.EXP_DROP_TYPES.TYPE_2 if randf() < 0.01 else global.EXP_DROP_TYPES.TYPE_3)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	direction = global_position.direction_to(player.global_position)
 	followVelocity = direction * followSpeed
 	
 	velocity = followVelocity + knockBackVelocity + externalNonDecayVelocity
 	
-	move_and_slide()
+	# Moved directly instead of move_and_slide(): enemies collide with nothing
+	# (EnemyCrowd keeps them apart and the world has no solid objects), which
+	# saves a physics motion test per enemy per frame.
+	position += velocity * delta
 	
 	if knockBackVelocity:
 		knockBackVelocity = knockBackVelocity.move_toward(Vector2.ZERO, knockBackDecay)
@@ -118,3 +134,4 @@ func _physics_process(_delta: float) -> void:
 
 func _ready() -> void:
 	rangeArea.body_entered.connect(explodeand_die)
+	global.WORLD.enemyCrowd.add(self)

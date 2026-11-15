@@ -48,7 +48,9 @@ func hit(body: Node2D) -> void:
 	iceFlakes.visible = true
 	iceFlakes.emitting = true
 	set_process(false)
-	iceFlakes.finished.connect(queue_free)
+	# Two bodies can be hit in the same physics step; connect only once.
+	if not iceFlakes.finished.is_connected(queue_free):
+		iceFlakes.finished.connect(queue_free)
 
 
 func explode_into_icicles(from: Vector2, icicleAmount: int = 4) -> void:

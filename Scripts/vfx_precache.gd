@@ -43,7 +43,7 @@ const SHADERS: Array[Shader] = [
 	preload("res://Shaders/suction.gdshader"),
 	preload("res://Shaders/tornado.gdshader"),
 	preload("res://Shaders/wave_heading_fade.gdshader"),
-	preload("res://Shaders/tornado.gdshader")
+	preload("res://Shaders/enemy.gdshader"),
 ]
 const BACKGROUND_IMAGE_DIMENSION: Vector2 = Vector2(1024, 1024)
 

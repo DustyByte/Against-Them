@@ -77,11 +77,13 @@ static func lightning_strike(target: CharacterBody2D, damage: float, toChainAmou
 
 
 ## `durationMultiplier` lengthens the burn (Torcher's Lingering Flame).
+## Each enemy has at most one Burn; burning it again adds a stack to that one.
 static func burn_inflict(on: CharacterBody2D, damage: float = 3.0, durationMultiplier: float = 1.0) -> void:
-	var burnEmission: Burn = global.FREQUENT_EFFECTS_BLUEPRINTS.BURN_EMISSION.instantiate()
-	burnEmission.set_damage(damage * UpgradeManager.burn_damage_multiplier()) # Pyromancy
-	burnEmission.set_duration_multiplier(durationMultiplier)
-	on.add_child(burnEmission)
+	var burn: Burn = on.marks.get("burn")
+	if burn == null or burn.is_queued_for_deletion():
+		burn = burnBP.instantiate()
+		on.add_child(burn)
+	burn.add_stack(damage * UpgradeManager.burn_damage_multiplier(), durationMultiplier) # Pyromancy
 	AchievementManager.register_burn_applied()
 
 
@@ -90,7 +92,7 @@ static func freeze_inflict(on: CharacterBody2D, duration: float = 2.0) -> void:
 	if on.asBoss:
 		return
 	
-	if on.freezeEffect:
+	if is_instance_valid(on.freezeEffect) and not on.freezeEffect.is_queued_for_deletion():
 		on.freezeEffect.add_duration(duration)
 		return
 	
@@ -101,10 +103,13 @@ static func freeze_inflict(on: CharacterBody2D, duration: float = 2.0) -> void:
 	on.add_child(freeze)
 
 
+## Each enemy has at most one Bleed; bleeding it again adds a stack to that one.
 static func bleed_inflict(on: CharacterBody2D, damage: float) -> void:
-	var bleed : Bleed = bleedBP.instantiate()
-	bleed.set_damage(damage * UpgradeManager.bleed_damage_multiplier()) # Hemomancy
-	on.add_child(bleed)
+	var bleed: Bleed = on.marks.get("bleed")
+	if bleed == null or bleed.is_queued_for_deletion():
+		bleed = bleedBP.instantiate()
+		on.add_child(bleed)
+	bleed.add_stack(damage * UpgradeManager.bleed_damage_multiplier()) # Hemomancy
 
 
 static func overload_explode(target: CharacterBody2D, oeDmg: float, targetGlobalPosition: Vector2, whereToAddChild: Node2D, detector: BodyDetect, source: StringName = &"lightning") -> void:

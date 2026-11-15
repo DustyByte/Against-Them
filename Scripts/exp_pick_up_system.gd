@@ -4,8 +4,12 @@ extends Area2D
 signal levelUp
 
 const ATTRACTING_SPEED: float = 600.0
-const BASE_LEVEL_EXP_REQUIREMENT: float = 3.0
-const LEVEL_EXP_REQUIREMENT_GROWTH: float = 1.5
+## EXP needed to finish level 1. Each later level needs LEVEL_EXP_GROWTH
+## times more than the one before (exponential), so a big drop (the red, 100
+## EXP) is worth a level or more when first seen and soon only part of one:
+## level 13 needs 65, level 16 128, level 20 312, level 25 953.
+const LEVEL_1_EXP_REQUIREMENT: float = 4.5
+const LEVEL_EXP_GROWTH: float = 1.25
 
 @onready var player: CharacterBody2D = $".."
 @onready var expBar: ProgressBar = global.ON_RUN_HUD.expBar
@@ -13,36 +17,36 @@ const LEVEL_EXP_REQUIREMENT_GROWTH: float = 1.5
 @onready var weaponSystem: Node2D = $"../VisualWrapper/WeaponSystem"
 @onready var carryingWeapons: Array[Weapon] = global.PLAYERS_WEAPON_SYSTEM.carryingWeapons
 var carryingWeaponsStats: Array[Dictionary]
-var expDropsBeingPickedUp: Array[Area2D] = []
+# Pickup reach. Grows with the Magnetism upgrade and the Greed option, which
+# change this circle's radius. This Area2D no longer monitors anything: the
+# drops are plain data in global.WORLD.expDrops, checked by distance.
+var rangeShape: CircleShape2D = null
 var currentLevel: int = 1
 var currentExpMilestone: float = 0.0
 var hasMomentumPickups: int = 0
 var hasRecycle: int = 0
 
 
-func pick_up(expDrop: Area2D) -> void:
-	expDropsBeingPickedUp.append(expDrop)
-	expDrop.handle_mm_to_cpu_migration()
-
-
-func _on_area_entered(area: Area2D) -> void:
-	if not area.isPickedUp:
-		pick_up(area)
-		area.isPickedUp = true
+## EXP needed to go from `level` to the next one.
+static func exp_requirement(level: int) -> float:
+	return LEVEL_1_EXP_REQUIREMENT * pow(LEVEL_EXP_GROWTH, level - 1)
 
 
 func revaluate_exp_barand_milestone() -> void:
-	currentExpMilestone = currentLevel * BASE_LEVEL_EXP_REQUIREMENT * LEVEL_EXP_REQUIREMENT_GROWTH
+	currentExpMilestone = exp_requirement(currentLevel)
 	expBar.max_value = currentExpMilestone
-	expBar.value = 0.0
+	expBar.value = playerStats.currentExp   # EXP carried over from the last level
 	expBar.set("level", currentLevel)   # level badge on the bar
 
 
 func _ready() -> void:
 	# Magnetism. The shape is shared with the saved scene, so change a copy.
-	var rangeShape: CollisionShape2D = $Range
-	rangeShape.shape = rangeShape.shape.duplicate()
-	rangeShape.shape.radius *= UpgradeManager.pickup_radius_multiplier()
+	monitoring = false
+	monitorable = false
+	var rangeNode: CollisionShape2D = $Range
+	rangeNode.shape = rangeNode.shape.duplicate()
+	rangeShape = rangeNode.shape
+	rangeShape.radius *= UpgradeManager.pickup_radius_multiplier()
 	
 	revaluate_exp_barand_milestone()
 	var s: int = carryingWeapons.size()
@@ -52,40 +56,30 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if expDropsBeingPickedUp.is_empty():
-		return
-	
-	for i in range(expDropsBeingPickedUp.size() - 1, -1, -1):
-		var expDrop: Area2D = expDropsBeingPickedUp[i]
+	var collected: PackedFloat32Array = global.WORLD.expDrops.update_pickup(global_position, rangeShape.radius, ATTRACTING_SPEED, delta)
+	for expAmount in collected:
+		var gainedExp: float = expAmount * UpgradeManager.exp_multiplier() # Fortune
+		var currentExp: float = playerStats.add_exp(gainedExp)
+		expBar.value = currentExp
 		
-		if expDrop.global_position.distance_squared_to(global_position) <= 400:
-			var gainedExp: float = expDrop.expAmount * UpgradeManager.exp_multiplier() # Fortune
-			var currentExp: float = playerStats.add_exp(gainedExp)
-			expBar.value += gainedExp
-			
-			if hasMomentumPickups and randf() <= 0.005:
-				for stat in carryingWeaponsStats:
-					stat.cd *= 1 - (hasMomentumPickups * 0.01)
-			
-			if hasRecycle and randf() <= 0.05:
-				var w: Weapon = weaponSystem.weapon
-				var ammo: int = w.ammoRemaining + hasRecycle
-				var maxAmmo: int = w.stats.maxAmmo
-				if maxAmmo < ammo:
-					w.ammoRemaining = maxAmmo
-				else:
-					w.ammoRemaining = ammo
-			
-			if currentExp >= currentExpMilestone:
-				currentLevel += 1
-				AchievementManager.register_level_reached(currentLevel)
-				playerStats.add_exp(-currentExp)
-				levelUp.emit()
-				revaluate_exp_barand_milestone()
-			
-			expDrop.queue_free()
-			expDropsBeingPickedUp.remove_at(i)
+		if hasMomentumPickups and randf() <= 0.005:
+			for stat in carryingWeaponsStats:
+				stat.cd *= 1 - (hasMomentumPickups * 0.01)
 		
-		else:
-			var flyDirection: Vector2 = expDrop.global_position.direction_to(global_position)
-			expDrop.global_position += flyDirection * ATTRACTING_SPEED * delta
+		if hasRecycle and randf() <= 0.05:
+			var w: Weapon = weaponSystem.weapon
+			var ammo: int = w.ammoRemaining + hasRecycle
+			var maxAmmo: int = w.stats.maxAmmo
+			if maxAmmo < ammo:
+				w.ammoRemaining = maxAmmo
+			else:
+				w.ammoRemaining = ammo
+		
+		# EXP past the milestone counts towards the next level, and one big drop
+		# can be worth several levels (each one gets its own choice).
+		while currentExp >= currentExpMilestone:
+			currentExp = playerStats.add_exp(-currentExpMilestone)
+			currentLevel += 1
+			AchievementManager.register_level_reached(currentLevel)
+			revaluate_exp_barand_milestone()
+			levelUp.emit()

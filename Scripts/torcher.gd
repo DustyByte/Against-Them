@@ -1,7 +1,7 @@
 extends Weapon
 
 var torcherAmmoBluePrintPath: String = "res://Scenes/Weapons/torcher_ammo.tscn"
-@onready var muzzleFlash: PointLight2D = $"../PointLight2D"
+@onready var muzzleFlash: Sprite2D = $"../MuzzleFlash"
 @onready var WeaponShootAS: AudioStreamPlayer = $AudioStreamPlayer
 var muzzleFlashColor: Color = Color(1.0, 0.41, 0.42, 1.0)
 

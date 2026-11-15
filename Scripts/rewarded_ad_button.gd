@@ -17,7 +17,6 @@ func _ready() -> void:
 	AdMobManager.rewarded_ad_loaded.connect(_on_rewarded_ad_loaded)
 	AdMobManager.rewarded_ad_failed_to_load.connect(_on_rewarded_ad_failed_to_load)
 	AdMobManager.rewarded_earned.connect(_on_rewarded_earned)
-	AdMobManager.rewarded_ad_shown.connect(_on_rewarded_ad_shown)
 	AdMobManager.rewarded_ad_dismissed.connect(_on_rewarded_ad_dismissed)
 	AdMobManager.rewarded_ad_failed_to_show.connect(_on_rewarded_ad_failed_to_show)
 	
@@ -26,7 +25,7 @@ func _ready() -> void:
 func _on_button_pressed(event: InputEvent) -> void:
 	if event is InputEventScreenTouch and event.is_pressed():
 		if not _is_ready:
-			print("Ad not ready yet")
+			AdMobManager.retry_now() # skip the wait between load attempts
 			_throw_ad_error_label()
 			return
 		
@@ -34,29 +33,22 @@ func _on_button_pressed(event: InputEvent) -> void:
 		AdMobManager.show_rewarded_ad()
 
 func _on_rewarded_ad_loaded() -> void:
-	print("Fropm reqarded ad button _on_rewarded_ad_loaded ")
 	_is_ready = true
 	_update_button_state()
 
-func _on_rewarded_ad_failed_to_load(error: String) -> void:
-	print("Failed to load rewarded ad: ", error)
+func _on_rewarded_ad_failed_to_load(_error: String) -> void:
 	_is_ready = false
 	_update_button_state()
 
 func _on_rewarded_earned(reward_type: String, reward_amount: int) -> void:
-	print("Reward earned: ", reward_amount, " ", reward_type)
 	if reward_callback:
 		reward_callback.call(reward_type, reward_amount)
-
-func _on_rewarded_ad_shown() -> void:
-	print("Rewarded ad shown")
 
 func _on_rewarded_ad_dismissed() -> void:
 	disabled = false
 	_update_button_state()
 
-func _on_rewarded_ad_failed_to_show(error: String) -> void:
-	print(error)
+func _on_rewarded_ad_failed_to_show(_error: String) -> void:
 	disabled = false
 	_update_button_state()
 	

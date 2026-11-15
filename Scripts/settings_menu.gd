@@ -29,6 +29,8 @@ func _ready() -> void:
 	_check_if_touch_then_execute = $"../.."._check_if_touch_then_execute
 	var s := SettingsManager.settings
 
+	if AdMobManager.has_ad_choices():
+		_add_ad_choices_row()   # before the toggles are wired, since it copies one
 	_setup_toggle(_ui_sfx_row, s.ui_sfx, func(on: bool):
 		global.SFX_TYPES_PERM["ui"] = on
 		s.ui_sfx = on)
@@ -83,6 +85,28 @@ func _show_toggle(row: PanelContainer, on: bool, animate: bool) -> void:
 	tween.tween_property(fill, "modulate:a", fill_a, TOGGLE_TIME)
 	tween.tween_property(knob, "self_modulate", knob_tint, TOGGLE_TIME)
 	tween.tween_property(name_label, "modulate", name_tint, TOGGLE_TIME)
+
+
+# --- Ads ---------------------------------------------------------------------
+
+## Players who were asked for ad consent (EEA/UK) must be able to change their
+## choice later. Built from the Feedback header and Haptic row so it matches.
+func _add_ad_choices_row() -> void:
+	var left := _haptic_row.get_parent()
+	var header: Label = left.get_node("FeedbackHeader").duplicate()
+	header.text = "ADS"
+	var row: PanelContainer = _haptic_row.duplicate()
+	row.get_node("HBox/Toggle").free()
+	row.get_node("HBox/Text/Name").text = "Ad Privacy Choices"
+	row.get_node("HBox/Text/Hint").text = "Change what ads may use about you"
+	var arrow := Label.new()
+	arrow.text = "›"
+	arrow.add_theme_font_size_override("font_size", 34)
+	arrow.add_theme_color_override("font_color", Color(0.62, 0.88, 0.95, 0.85))
+	row.get_node("HBox").add_child(arrow)
+	left.add_child(header)
+	left.add_child(row)
+	row.gui_input.connect(_check_if_touch_then_execute.bind(row, AdMobManager.show_ad_choices))
 
 
 # --- Language ----------------------------------------------------------------

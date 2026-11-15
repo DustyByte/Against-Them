@@ -26,3 +26,4 @@ func on_hit_connect(body: Node2D) -> void:
 	body.collision_layer = 0
 	body.collision_mask = 0
 	body.shrinking = true
+	body.crowdRadius = 0.0

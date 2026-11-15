@@ -3,7 +3,7 @@ extends Node2D
 ## Home screen: Echo's view from orbit. A breathing planet with Echo's ship
 ## circling it, and a minimal menu on the left.
 
-const DISCORD_LINK: String = "https://discord.gg/zjXPsKS2"
+const DISCORD_LINK: String = "https://discord.gg/5BBKuufMV"
 
 # Planet placement as fractions of the screen; size is relative to screen height.
 const PLANET_CENTER: Vector2 = Vector2(0.71, 0.53)
@@ -33,6 +33,7 @@ const INTRO_SLIDE: float = 24.0
 @onready var _profile_avatar: AvatarPortrait = $UI/Menu/ProfileNotch/Avatar
 @onready var _profile_name: Label = $UI/Menu/ProfileNotch/Text/Username
 @onready var _profile_id: Label = $UI/Menu/ProfileNotch/Text/PlayerId
+@onready var _leaderboard_btn: Panel = $UI/Menu/LeaderboardButton
 # The Echoes counter lives outside the menu so it stays visible on sub screens.
 @onready var _echoes_counter: Control = $UI/EchoesCounter
 @onready var _echoes_value: Label = $UI/EchoesCounter/HBox/Value
@@ -73,6 +74,7 @@ func _ready() -> void:
 	_connect_button(_discord_btn, OS.shell_open.bind(DISCORD_LINK))
 	_connect_button(_quit_btn, get_tree().quit)
 	_connect_button(_profile_btn, _on_profile_pressed)
+	_connect_button(_leaderboard_btn, _on_leaderboard_pressed)
 
 	_play_intro()
 	_pulse_status_light()
@@ -181,6 +183,15 @@ func _on_profile_pressed() -> void:
 	_show_popup(preload("res://Scenes/HUD/profile_card.tscn").instantiate())
 
 
+## Someone else's profile card, opened from a leaderboard entry
+## ({"id", "name", "avatar"}). Your own entry opens your own card.
+func show_player_profile(entry: Dictionary) -> void:
+	var card: Control = preload("res://Scenes/HUD/profile_card.tscn").instantiate()
+	if str(entry.get("id", "")) != PlayerProfile.player_id:
+		card.other = entry
+	_show_popup(card)
+
+
 ## The username + password popup. Also opened from the profile card.
 func open_account_setup() -> void:
 	_open_account_dialog(0)   # CLAIM
@@ -215,6 +226,10 @@ func _maybe_prompt_account() -> void:
 func _show_popup(popup: Control) -> void:
 	$UI.add_child(popup)
 	$UI.move_child(popup, _fade.get_index())   # above the menu, counters and other popups
+
+
+func _on_leaderboard_pressed() -> void:
+	_open_sub_screen(preload("res://Scenes/HUD/leaderboard.tscn").instantiate(), false)
 
 
 func _on_settings_pressed() -> void:
@@ -286,7 +301,7 @@ func _play_intro() -> void:
 		delay += INTRO_STAGGER
 
 	# The profile, the resource counter and the Discord button drop in from the top edge.
-	for notch: Control in [_profile_btn, _echoes_counter, _discord_btn]:
+	for notch: Control in [_profile_btn, _leaderboard_btn, _echoes_counter, _discord_btn]:
 		var notch_y: float = notch.position.y
 		notch.modulate.a = 0.0
 		notch.position.y = notch_y - INTRO_SLIDE

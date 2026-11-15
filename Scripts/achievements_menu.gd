@@ -11,29 +11,53 @@ const HEADER_FONT: FontFile = preload("res://Resources/Copperplate.otf")
 
 func _ready() -> void:
 	_return_button.gui_input.connect(_on_return_gui_input)
-	_build_cards()
-
-
-func _build_cards() -> void:
 	for category: String in AchievementData.CATEGORIES:
-		_card_list.add_child(_make_category_header(category))
-
+		_build_queue.append(category)
 		for achievement: Dictionary in AchievementData.ACHIEVEMENTS:
-			if achievement["category"] != category:
-				continue
+			if achievement["category"] == category:
+				_build_queue.append(achievement)
+	_build_some(FIRST_FRAME_ROWS)
 
-			var card := ACHIEVEMENT_CARD_SCENE.instantiate()
-			_card_list.add_child(card)
-			card.setup(
-				achievement["id"],
-				achievement["title"],
-				achievement["type"] == AchievementData.TYPE_LIFETIME,
-				AchievementManager.get_progress(achievement["id"]),
-				achievement["target"],
-				achievement["reward"],
-				AchievementManager.is_claimed(achievement["id"])
-			)
-			card.claim_requested.connect(_on_claim_requested.bind(card))
+
+## Cards are built a few at a time against a time budget per frame: with ~150
+## cards, building them all at once froze the screen for a moment on phones.
+## The first screenful is built right away. (The frame signal connection goes
+## away by itself if the screen is closed before everything is built.)
+const BUILD_BUDGET_MSEC: int = 8
+const FIRST_FRAME_ROWS: int = 10
+var _build_queue: Array = []   # category names (headers) and achievements, in order
+var _built: int = 0
+
+func _build_some(min_rows: int = 1) -> void:
+	var start: int = Time.get_ticks_msec()
+	var built_now: int = 0
+	while _built < _build_queue.size():
+		var item = _build_queue[_built]
+		_built += 1
+		built_now += 1
+		if item is String:
+			_card_list.add_child(_make_category_header(item))
+		else:
+			_add_card(item)
+		if built_now >= min_rows and Time.get_ticks_msec() - start >= BUILD_BUDGET_MSEC:
+			break
+	if _built < _build_queue.size():
+		get_tree().process_frame.connect(_build_some, CONNECT_ONE_SHOT)
+
+
+func _add_card(achievement: Dictionary) -> void:
+	var card := ACHIEVEMENT_CARD_SCENE.instantiate()
+	_card_list.add_child(card)
+	card.setup(
+		achievement["id"],
+		achievement["title"],
+		achievement["type"] == AchievementData.TYPE_LIFETIME,
+		AchievementManager.get_progress(achievement["id"]),
+		achievement["target"],
+		achievement["reward"],
+		AchievementManager.is_claimed(achievement["id"])
+	)
+	card.claim_requested.connect(_on_claim_requested.bind(card))
 
 
 func _make_category_header(category: String) -> Control:

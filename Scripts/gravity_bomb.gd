@@ -8,6 +8,7 @@ var target: Vector2
 var isActive: bool = false
 var damageType: int = -1
 var stats: Dictionary = {}
+var _resonance: Dictionary = {}   # enemy in range -> its connected resonate callable
 
 
 func launch(fromGlob: Vector2, toGlob: Vector2) -> void:
@@ -65,11 +66,22 @@ func resonate(d: float, resonatedFrom: CharacterBody2D) -> void:
 		
 
 func on_enemy_entered(enemy: Node2D) -> void:
-	enemy.got_hit.connect(resonate.bind(enemy))
+	if _resonance.has(enemy):
+		return
+	var callable: Callable = resonate.bind(enemy)
+	_resonance[enemy] = callable
+	enemy.got_hit.connect(callable)
 
 
+## Disconnects the exact callable connected above: a plain `resonate` doesn't
+## match the bound one, so the old disconnect failed with an error every time.
 func on_enemy_left(enemy: Node2D) -> void:
-	enemy.got_hit.disconnect(resonate)
+	var callable = _resonance.get(enemy)
+	if callable == null:
+		return
+	_resonance.erase(enemy)
+	if enemy.got_hit.is_connected(callable):
+		enemy.got_hit.disconnect(callable)
 
 
 func _ready() -> void:
@@ -80,15 +92,12 @@ func _ready() -> void:
 		body_entered.connect(on_enemy_entered)
 		body_exited.connect(on_enemy_left)
 	
-	var outTex: GradientTexture2D = $outwardEffect.texture
-	var inTex: GradientTexture2D = $inwardEffect.texture
+	# The effect textures only give the shaders (which draw from UV) a quad of
+	# the right size, so scale the sprites instead of resizing the shared
+	# textures, which regenerated them on every throw.
 	var r: float = stats.range
-	var o: int = int(r * 300.0)
-	var i: int = int(r * 200.0)
-	outTex.width = o
-	outTex.height = o
-	inTex.width = i
-	inTex.height = i
+	$outwardEffect.scale = Vector2(r, 0.65 * r)
+	$inwardEffect.scale = Vector2(r, 0.65 * r)
 	$CollisionShape2D.shape.radius = 100.0 * r
 
 var travelledDist: float = 0.0

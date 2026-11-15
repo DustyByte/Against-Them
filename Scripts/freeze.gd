@@ -1,5 +1,11 @@
 class_name Freeze
-extends Node
+extends Timer
+
+## Freezes an enemy: stops it, pauses its keyframed animation (if it has one;
+## enemies 1 and 4 bob in their shader, which the freeze material replaces) and
+## tints it icy until the time runs out. One per enemy; freezing it again adds
+## time (add_duration). Counting down as a Timer replaces a per-frame check, and
+## it stops with the enemy (paused game, dying enemy) just like that check did.
 
 var duration: float = 2.0
 @onready var parent: CharacterBody2D = get_parent()
@@ -11,6 +17,7 @@ var actualAnimSpeedScale: float = -1.0
 var ap: AnimationPlayer = null
 var freezeMarkCount: int = 1
 var wrapperUsedParentMaterial: bool = false
+var wrapperMaterial: Material = null
 
 
 func setup(durationToStayFrozen: float) -> void:
@@ -18,10 +25,14 @@ func setup(durationToStayFrozen: float) -> void:
 
 
 func handle_exit() -> void:
-	wrapper.material = null
+	# Put back the wrapper's own material (the enemy shader, or the boss one).
+	wrapper.material = wrapperMaterial
 	wrapper.use_parent_material = wrapperUsedParentMaterial
 	parent.followSpeed = actualSpeed
-	ap.speed_scale = actualAnimSpeedScale
+	if ap:
+		ap.speed_scale = actualAnimSpeedScale
+	if parent.freezeEffect == self:
+		parent.freezeEffect = null
 	queue_free()
 	
 	if m.freeze == freezeMarkCount:
@@ -32,6 +43,7 @@ func handle_exit() -> void:
 
 func add_duration(amount: float) -> void:
 	duration += amount
+	start(time_left + amount)
 	freezeMarkCount += 1
 
 
@@ -39,6 +51,7 @@ func _ready() -> void:
 	# The wrapper must use its own material, otherwise it inherits its parent's
 	# material and the freeze shader assigned below is ignored.
 	wrapperUsedParentMaterial = wrapper.use_parent_material
+	wrapperMaterial = wrapper.material
 	wrapper.use_parent_material = false
 	
 	for child in wrapperChildren:
@@ -54,19 +67,15 @@ func _ready() -> void:
 	else:
 		m['freeze'] = 1
 	
-	ap = parent.animationPlayer
-	actualAnimSpeedScale = ap.speed_scale
-	ap.speed_scale = 0.0
+	ap = parent.get("animationPlayer")
+	if ap:
+		actualAnimSpeedScale = ap.speed_scale
+		ap.speed_scale = 0.0
 
 	AchievementManager.register_frozen_count_changed(1)
+	timeout.connect(handle_exit)
+	start(duration)
 
 
 func _exit_tree() -> void:
 	AchievementManager.register_frozen_count_changed(-1)
-
-
-var x: float = 0.0
-func _process(delta: float) -> void:
-	x += delta
-	if x >= duration:
-		handle_exit()

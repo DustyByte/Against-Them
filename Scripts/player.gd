@@ -49,14 +49,13 @@ func get_random_nearby_enemy_or_null() -> CharacterBody2D:
 	return enemies.pick_random()
 
 
+## Every enemy within `rad` of the player, asked of the physics space directly.
+## (This used to resize the detection area and read it in the same frame, but
+## an area's overlaps only update on the next physics step, so it always
+## returned everything within the area's full 1000 px.)
 func get_all_enemies_in_rad(rad: float) -> Array[Node2D]:
-	var shape: CollisionShape2D = enemyDetectionRange.get_child(0)
-	var beforeRad: float = shape.shape.radius
-	
-	shape.shape.radius = rad
-	var enemies: Array[Node2D] = enemyDetectionRange.get_overlapping_bodies()
-	shape.shape.radius = beforeRad
-	
+	var enemies: Array[Node2D] = []
+	enemies.assign(global.DETECTOR.get_all_enemies_from(enemyDetectionRange.global_position, [], rad))
 	return enemies
 
 

@@ -194,6 +194,9 @@ var fieryFieldCount: int = 0
 var cryoliteCount: int = 0
 func implement_option_choice(optionChosen: Option) -> void:
 	isHandlingLevelUp = false
+	if pendingLevelUps > 0:
+		# Next queued level-up, once this choice is applied and its screen closed.
+		_show_pending_level_up.call_deferred()
 	AchievementManager.register_option_picked(optionChosen)
 	match optionChosen.name:
 		"Lightning Strike":
@@ -601,7 +604,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 				var removedAmounts: Array[float] = []
 				for key in keys:
 					var val = playerStatsActiveModifiers[key]
-					if val is Dictionary and val.has('isSummon'):
+					if val is Dictionary and val.has('isSummon') and val.has('cd'): # Lightning Strike has no cooldown
 						statDics.append(val)
 						var removedAmount: float = val.cd * 0.6
 						removedAmounts.append(removedAmount)
@@ -677,7 +680,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 			var keys: Array = playerStatsActiveModifiers.keys()
 			for key in keys:
 				var val = playerStatsActiveModifiers[key]
-				if val is Dictionary and val.has('isSummon'):
+				if val is Dictionary and val.has('isSummon') and val.has('cd'): # Lightning Strike has no cooldown
 					val.cd *= 0.7
 		
 		"Enrage The Beast":
@@ -695,9 +698,14 @@ func player_periodic_regen() -> void:
 
 
 var isHandlingLevelUp: bool = false
+## Level-ups reached while a choice was on screen (one drop can be worth several
+## levels). Each gets its own choice afterwards, with options rolled after the
+## previous pick, so a just-unlocked option can show up.
+var pendingLevelUps: int = 0
 
 func handle_player_level_up() -> void:
 	if isHandlingLevelUp:
+		pendingLevelUps += 1
 		return
 	
 	isHandlingLevelUp = true
@@ -706,6 +714,14 @@ func handle_player_level_up() -> void:
 
 	if global.ON_RUN_HUD.activeOptionDisplay == null:
 		isHandlingLevelUp = false
+		pendingLevelUps = 0   # nothing left to pick
+
+
+func _show_pending_level_up() -> void:
+	if pendingLevelUps <= 0 or isHandlingLevelUp:
+		return
+	pendingLevelUps -= 1
+	handle_player_level_up()
 
 
 func _ready() -> void:

@@ -21,18 +21,32 @@ var _current: int = 0
 var _target: int = 1
 var _claimed: bool = false
 
-var _style_claim_disabled: StyleBoxFlat
-var _style_claim_ready: StyleBoxFlat
-var _style_claim_done: StyleBoxFlat
+# Styles are made once and shared by every card (there are ~150 of them):
+# one panel style per state (only the accent border differs), claim button
+# styles and the two type badges.
+static var _style_panel_locked: StyleBoxFlat
+static var _style_panel_done: StyleBoxFlat
+static var _style_panel_claimed: StyleBoxFlat
+static var _style_claim_disabled: StyleBoxFlat
+static var _style_claim_ready: StyleBoxFlat
+static var _style_claim_done: StyleBoxFlat
+static var _style_badge_run: StyleBoxFlat
+static var _style_badge_lifetime: StyleBoxFlat
+const TINT_RUN := Color(0.95, 0.55, 0.35, 1)        # must happen inside one descend
+const TINT_LIFETIME := Color(0.72, 0.6, 0.95, 1)    # adds up across descends
 
 
 func _ready() -> void:
-	# Each card owns its own copy so changing the accent of one card does not affect the others.
-	add_theme_stylebox_override("panel", get_theme_stylebox("panel").duplicate())
-
-	_style_claim_disabled = _make_claim_style(Color(0.22, 0.22, 0.23, 1), Color(0.3, 0.3, 0.32, 1))
-	_style_claim_ready = _make_claim_style(Color(0.95, 0.8, 0.42, 1), Color(1, 0.93, 0.7, 1))
-	_style_claim_done = _make_claim_style(Color(0.12, 0.2, 0.21, 1), Color(0.45, 0.85, 0.88, 0.6))
+	if _style_panel_locked == null:
+		var base: StyleBoxFlat = get_theme_stylebox("panel")
+		_style_panel_locked = _panel_style(base, COLOR_ACCENT_LOCKED)
+		_style_panel_done = _panel_style(base, COLOR_ACCENT_DONE)
+		_style_panel_claimed = _panel_style(base, COLOR_ACCENT_CLAIMED)
+		_style_claim_disabled = _make_claim_style(Color(0.22, 0.22, 0.23, 1), Color(0.3, 0.3, 0.32, 1))
+		_style_claim_ready = _make_claim_style(Color(0.95, 0.8, 0.42, 1), Color(1, 0.93, 0.7, 1))
+		_style_claim_done = _make_claim_style(Color(0.12, 0.2, 0.21, 1), Color(0.45, 0.85, 0.88, 0.6))
+		_style_badge_run = _badge_style(TINT_RUN)
+		_style_badge_lifetime = _badge_style(TINT_LIFETIME)
 
 	_claim_button.gui_input.connect(_on_claim_gui_input)
 
@@ -62,25 +76,23 @@ func set_claimed(claimed: bool) -> void:
 
 
 func _refresh_state() -> void:
-	var panel_style: StyleBoxFlat = get_theme_stylebox("panel") as StyleBoxFlat
-
 	if _claimed:
 		_claim_label.text = "CLAIMED"
 		_claim_label.add_theme_color_override("font_color", Color(0.45, 0.85, 0.88, 0.7))
 		_claim_button.add_theme_stylebox_override("panel", _style_claim_done)
-		panel_style.border_color = COLOR_ACCENT_CLAIMED
+		add_theme_stylebox_override("panel", _style_panel_claimed)
 		modulate = Color(1, 1, 1, 0.75)
 	elif is_completed():
 		_claim_label.text = "CLAIM"
 		_claim_label.add_theme_color_override("font_color", Color(0.08, 0.08, 0.08, 1))
 		_claim_button.add_theme_stylebox_override("panel", _style_claim_ready)
-		panel_style.border_color = COLOR_ACCENT_DONE
+		add_theme_stylebox_override("panel", _style_panel_done)
 		modulate = Color.WHITE
 	else:
 		_claim_label.text = "CLAIM"
 		_claim_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 1))
 		_claim_button.add_theme_stylebox_override("panel", _style_claim_disabled)
-		panel_style.border_color = COLOR_ACCENT_LOCKED
+		add_theme_stylebox_override("panel", _style_panel_locked)
 		modulate = Color.WHITE
 
 
@@ -94,11 +106,18 @@ func _on_claim_gui_input(event: InputEvent) -> void:
 
 
 func _set_type_badge(is_lifetime: bool) -> void:
-	# Run = must happen inside one descend (warm orange); Lifetime = adds up across descends (violet).
-	var tint: Color = Color(0.72, 0.6, 0.95, 1) if is_lifetime else Color(0.95, 0.55, 0.35, 1)
 	_type_label.text = "LIFETIME" if is_lifetime else "RUN"
-	_type_label.add_theme_color_override("font_color", tint)
+	_type_label.add_theme_color_override("font_color", TINT_LIFETIME if is_lifetime else TINT_RUN)
+	_type_badge.add_theme_stylebox_override("panel", _style_badge_lifetime if is_lifetime else _style_badge_run)
 
+
+static func _panel_style(base: StyleBoxFlat, accent: Color) -> StyleBoxFlat:
+	var style: StyleBoxFlat = base.duplicate()
+	style.border_color = accent
+	return style
+
+
+static func _badge_style(tint: Color) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(tint, 0.12)
 	style.border_color = Color(tint, 0.7)
@@ -108,10 +127,10 @@ func _set_type_badge(is_lifetime: bool) -> void:
 	style.content_margin_right = 8
 	style.content_margin_top = 2
 	style.content_margin_bottom = 2
-	_type_badge.add_theme_stylebox_override("panel", style)
+	return style
 
 
-func _make_claim_style(bg: Color, border: Color) -> StyleBoxFlat:
+static func _make_claim_style(bg: Color, border: Color) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = bg
 	style.border_color = border

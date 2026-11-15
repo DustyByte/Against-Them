@@ -74,6 +74,7 @@ var _run_boss_kills: int = 0
 var _run_source_kills: Dictionary = {}
 var _recent_kill_times: Array[int] = []
 var _run_waves_completed: int = 0
+var _run_wave: int = 0
 var _run_flawless_waves: int = 0
 var _damaged_this_wave: bool = false
 var _damaged_this_run: bool = false
@@ -167,6 +168,7 @@ func start_run() -> void:
 	_run_source_kills.clear()
 	_recent_kill_times.clear()
 	_run_waves_completed = 0
+	_run_wave = 0
 	_run_flawless_waves = 0
 	_damaged_this_wave = false
 	_damaged_this_run = false
@@ -201,6 +203,16 @@ func register_run_time(elapsed_seconds: float, delta: float, player_hp: float) -
 func register_run_completed() -> void:
 	_add_stat("runs_completed", 1)
 	_refresh_completed(true)
+
+
+## The current run's numbers, as sent to the leaderboards.
+func get_run_summary() -> Dictionary:
+	return {
+		"seconds": int(_run_seconds),
+		"wave": maxi(_run_wave, 1),
+		"kills": _run_kills,
+		"bossKills": _run_boss_kills,
+	}
 
 
 ## Call when the player is revived after dying.
@@ -336,6 +348,7 @@ func register_enemy_hit(damage: float) -> void:
 
 ## Call when a wave starts (its wave banner appears).
 func register_wave_begun(wave: int) -> void:
+	_run_wave = maxi(_run_wave, wave)
 	_raise_stat("best_wave_reached", wave)
 	if _run_weapons_fired.size() <= 1:
 		_raise_stat("best_wave_one_weapon", wave)

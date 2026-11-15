@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 64 64">
+  <!-- Podium bars: middle tallest, left second, right shortest -->
+  <rect x="7" y="26" width="15" height="30" rx="2.5" fill="#E6ECFF" opacity="0.85"/>
+  <rect x="24.5" y="10" width="15" height="46" rx="2.5" fill="#E6ECFF"/>
+  <rect x="42" y="34" width="15" height="22" rx="2.5" fill="#E6ECFF" opacity="0.7"/>
+</svg>

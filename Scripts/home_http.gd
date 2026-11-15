@@ -1,6 +1,8 @@
 extends Node
 
-@export var url: String = "https://against-them-server.onrender.com/"
+## Plain-text latest game version. ("/" is now the website; it still answers
+## builds up to 2.1.0, which ask there.)
+@export var url: String = "https://against-them-server.onrender.com/latest_version"
 var http_request: HTTPRequest
 
 func _ready():

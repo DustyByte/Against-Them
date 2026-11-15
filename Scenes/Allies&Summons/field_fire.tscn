@@ -25,7 +25,6 @@ point_count = 2
 curve = SubResource("Curve_gaha4")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hrld4"]
-resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_scale = Vector3(1, 0.65, 1)
 emission_shape = 1
@@ -57,7 +56,6 @@ point_count = 2
 curve = SubResource("Curve_ah5qx")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o87gp"]
-resource_local_to_scene = true
 particle_flag_disable_z = true
 spread = 180.0
 initial_velocity_min = 255.70999
