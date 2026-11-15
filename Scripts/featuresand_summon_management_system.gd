@@ -29,6 +29,100 @@ var isAdrenalineActive: bool = false
 var relentlessPulseCount: int = 0
 var hasReapersRebate: int = 0
 var reapersRebateCount: int = 0
+var hasMonsterHunter: bool = false
+var hasSlayersTithe: bool = false
+# Caps for upgrades that used to stack without end.
+const AURA_FARM_MAX_PICKS: int = 3      # aura damage x8 at most
+const LIFE_STEAL_MAX_PICKS: int = 5     # 0.5% of icicle damage at most
+const REGEN_MAX_PICKS: int = 3          # 15 HP every 5 seconds at most
+var auraFarmCount: int = 0
+
+# Shortest cooldowns upgrades can bring things down to, in seconds. Without a
+# floor, stacking cooldown cuts reached zero or went negative (things firing
+# every frame, which also tanks the frame rate). Key: "<stats key>.<field>".
+const MIN_COOLDOWNS: Dictionary = {
+	"auraStats.cd": 0.25,
+	"silStormStats.cd": 0.75,
+	"recallKnifeStats.cd": 0.5,
+	"starStats.cd": 0.15,        # orbit time: lower is a faster orbit
+	"orbStats.cd": 0.4,
+	"gravityBombStats.cd": 1.0,
+	"gravityBombStats.hitCD": 0.1,
+	"fieryFieldStats.cd": 1.0,
+	"fieryFieldStats.hitCD": 0.1,
+	"cryoliteStats.cd": 0.2,
+}
+const DEFAULT_MIN_COOLDOWN: float = 0.2
+const MIN_WEAPON_COOLDOWN: float = 0.06   # about 16 shots a second
+
+# Cooldown options. Each one's cut is sized so CD_OPTION_MAX_PICKS picks take
+# its cooldown from the starting value to the floor above:
+# factor = (floor / start) ^ (1 / 5), rounded down so the 5th pick lands on it.
+# The option stops being offered after 5 picks, or as soon as its cooldown is
+# already at the floor (other options cutting the same cooldown get it there sooner).
+const CD_OPTION_MAX_PICKS: int = 5
+const CD_OPTION_FACTORS: Dictionary = {
+	"Faster Orbit": 0.748,         # star orbit 0.64 s -> 0.15 s
+	"Quicker Stroms": 0.757,       # 3.0 s -> 0.75 s
+	"Quick Draw": 0.724,           # 2.5 s -> 0.5 s
+	"Rhythm Increase": 0.757,      # aura tick 1.0 s -> 0.25 s
+	"Quicker Strikes": 0.724,      # 2.0 s -> 0.4 s
+	"Crushing Weight": 0.724,      # gravity zone tick 0.5 s -> 0.1 s
+	"Relentless Pulse": 0.669,     # fire field tick 0.74 s -> 0.1 s
+	"Rapid Manifestation": 0.724,  # every summon: none starts more than 5x its floor
+	"Hasten The Beast": 0.724,
+	"Faster": 0.683,               # weapons: Torcher 0.4 s -> 0.06 s (Rupture 0.25 s gets there in 4)
+}
+const CD_OPTION_SHORTEN: float = 0.8   # Quicker Wildfire, Rapid Ignition: fire drop 5.0 s -> 1.0 s
+var _cdOptionPicks: Dictionary = {}    # option name -> times picked this run
+
+
+func cooldown_floor(statsKey: String, field: String = "cd") -> float:
+	return MIN_COOLDOWNS.get("%s.%s" % [statsKey, field], DEFAULT_MIN_COOLDOWN)
+
+
+func is_cooldown_floored(statsKey: String, field: String = "cd") -> bool:
+	return playerStatsActiveModifiers[statsKey][field] <= cooldown_floor(statsKey, field) + 0.0001
+
+
+## Counts a pick of a cooldown option and retires it after CD_OPTION_MAX_PICKS
+## picks or once `floored` (its cooldown can't go any lower). Call it after
+## make_immediate_children_available(): run on a retired option, that would
+## mark the children as used up instead.
+func _count_cd_option_pick(option: Option, floored: bool) -> void:
+	var picks: int = _cdOptionPicks.get(option.name, 0) + 1
+	_cdOptionPicks[option.name] = picks
+	if picks >= CD_OPTION_MAX_PICKS or floored:
+		option.deactivate(true)
+
+
+## Summon stat keys that have a cooldown (Lightning Strike has none).
+func _summon_cooldown_keys() -> Array:
+	var keys: Array = []
+	for key in playerStatsActiveModifiers:
+		var val = playerStatsActiveModifiers[key]
+		if val is Dictionary and val.has('isSummon') and val.has('cd'):
+			keys.append(key)
+	return keys
+
+
+## Multiplies a summon cooldown, never going below its floor.
+func scale_cooldown(statsKey: String, factor: float, field: String = "cd") -> void:
+	var s: Dictionary = playerStatsActiveModifiers[statsKey]
+	s[field] = maxf(s[field] * factor, MIN_COOLDOWNS.get("%s.%s" % [statsKey, field], DEFAULT_MIN_COOLDOWN))
+
+
+## Takes seconds off a summon cooldown, never going below its floor.
+func shorten_cooldown(statsKey: String, seconds: float, field: String = "cd") -> void:
+	var s: Dictionary = playerStatsActiveModifiers[statsKey]
+	s[field] = maxf(s[field] - seconds, MIN_COOLDOWNS.get("%s.%s" % [statsKey, field], DEFAULT_MIN_COOLDOWN))
+
+
+## Multiplies a weapon's cooldown (attack speed), never going below the floor.
+static func scale_weapon_cooldown(weaponStats: Dictionary, factor: float) -> void:
+	weaponStats.cd = maxf(weaponStats.cd * factor, MIN_WEAPON_COOLDOWN)
+var lifeStealCount: int = 0
+var regenCount: int = 0
 
 
 func handle_kill() -> void:
@@ -48,6 +142,21 @@ func handle_kill() -> void:
 		if reapersRebateCount >= 99:
 			reapersRebateCount = 0
 			player.take_heal(20.0)
+
+
+## Monster Hunter and Slayer's Tithe both pay out when a boss dies.
+func _on_boss_killed(source: StringName) -> void:
+	if hasMonsterHunter:
+		# +5% weapon damage and a better Rhythm chance (one more Rhythm stack).
+		for weaponStat in playerCarryingWeaponsStats:
+			weaponStat.damage *= 1.05
+		hasRhythmCount += 1
+	if hasSlayersTithe:
+		# Only the weapon that landed the killing blow, and for all future runs.
+		for weaponStat in playerCarryingWeaponsStats:
+			if weaponStat.get(&"weaponId", "") == String(source):
+				var base: float = global.WEAPON_STATS[String(source).to_upper()].damage
+				weaponStat.damage += UpgradeManager.add_slayers_tithe(String(source), base)
 
 
 func handle_shoot() -> void:
@@ -238,7 +347,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 		"Hexa Adapt":
 			playerStatsActiveModifiers.hexaSnailStats['hexaAdapt'] = true
 			optionChosen.make_immediate_children_available()
-			optionChosen.isAvailable = false
+			optionChosen.deactivate(true)
 		
 		"Retribution":
 			if not playerStatsActiveModifiers.has("retriStats"):
@@ -285,28 +394,29 @@ func implement_option_choice(optionChosen: Option) -> void:
 					optionChosen.deactivate(true)
 		
 		"Faster Orbit":
-			playerStatsActiveModifiers.starStats.cd *= 0.82
+			scale_cooldown("starStats", CD_OPTION_FACTORS[optionChosen.name])
 			fasterOrbitCount += 1
-			if fasterOrbitCount >= 2:
+			var orbitFloored: bool = is_cooldown_floored("starStats")
+			# Children open on the 2nd pick, or now if this is the last one.
+			if fasterOrbitCount >= 2 or orbitFloored:
 				optionChosen.make_immediate_children_available()
-				if fasterOrbitCount == 6:
-					optionChosen.deactivate(true)
+			_count_cd_option_pick(optionChosen, orbitFloored)
 		
 		"Anomaly":
 			if notAnomalyOnceTaken:
 				starOrbital.nowAsBH = true
 				starOrbital.collapse_all_stars_into_blackhole()
 				optionChosen.make_immediate_children_available()
-				optionChosen.isAvailable = false
+				optionChosen.deactivate(true)
 				notAnomalyOnceTaken = false
-				global.PROGRESSION_CHOICE_SYSTEM.ga.isAvailable = false # MORE FUSION Deactivated
+				global.PROGRESSION_CHOICE_SYSTEM.ga.deactivate(true) # More Fusion is gone once the star is a black hole
 		
 		"Feed the Monster":
 			starOrbital.increase_all_star_size(1.1)
 			optionChosen.make_immediate_children_available()
 			feedTheMonsterCount += 1
 			if feedTheMonsterCount == 3:
-				optionChosen.isAvailable = false
+				optionChosen.deactivate(true)
 		
 		"Silver Storm":
 			if not playerStatsActiveModifiers.has('silStormStats'):
@@ -321,16 +431,17 @@ func implement_option_choice(optionChosen: Option) -> void:
 		"Cold Wind":
 			playerStatsActiveModifiers.silStormStats['freeze'] = true
 			optionChosen.make_immediate_children_available()
-			optionChosen.isAvailable = false
+			optionChosen.deactivate(true)
 		
 		"Quicker Stroms":
-			playerStatsActiveModifiers.silStormStats.cd *= 0.75
+			scale_cooldown("silStormStats", CD_OPTION_FACTORS[optionChosen.name])
 			optionChosen.make_immediate_children_available()
+			_count_cd_option_pick(optionChosen, is_cooldown_floored("silStormStats"))
 		
 		"Lightning Storm":
 			playerStatsActiveModifiers.silStormStats['lightning'] = true
 			optionChosen.make_immediate_children_available()
-			optionChosen.isAvailable = false
+			optionChosen.deactivate(true)
 		
 		"Recall Dagger":
 			if not playerStatsActiveModifiers.has('recallKnifeStats'):
@@ -353,8 +464,9 @@ func implement_option_choice(optionChosen: Option) -> void:
 			playerStatsActiveModifiers.recallKnifeStats['knockBackIntensity'] += 20.0
 		
 		"Quick Draw":
-			playerStatsActiveModifiers.recallKnifeStats.cd *= 0.75
+			scale_cooldown("recallKnifeStats", CD_OPTION_FACTORS[optionChosen.name])
 			optionChosen.make_immediate_children_available()
+			_count_cd_option_pick(optionChosen, is_cooldown_floored("recallKnifeStats"))
 		
 		"Soul Harveste":
 			if not playerStatsActiveModifiers.has('recallKnifeKillMilestone'):
@@ -377,12 +489,16 @@ func implement_option_choice(optionChosen: Option) -> void:
 			optionChosen.deactivate(true)
 		
 		"Rhythm Increase":
-			playerStatsActiveModifiers.auraStats.cd *= 0.37
+			scale_cooldown("auraStats", CD_OPTION_FACTORS[optionChosen.name])
 			optionChosen.make_immediate_children_available()
+			_count_cd_option_pick(optionChosen, is_cooldown_floored("auraStats"))
 		
 		"Aura Farm":
 			playerStatsActiveModifiers.auraStats.damage *= 2.0
 			optionChosen.make_immediate_children_available()
+			auraFarmCount += 1
+			if auraFarmCount >= AURA_FARM_MAX_PICKS:
+				optionChosen.deactivate(true)
 		
 		"Broader Field":
 			playerStatsActiveModifiers.auraStats.range *= 1.25
@@ -395,7 +511,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 		"Overload":
 			_set_new_modifiers_into_player_stats(optionChosen.modifiers)
 			optionChosen.make_immediate_children_available()
-			optionChosen.isAvailable = false 
+			optionChosen.deactivate(true)
 		
 		"Overload Explosion":
 			if not playerStatsActiveModifiers.has('overloadExplosion'):
@@ -436,10 +552,13 @@ func implement_option_choice(optionChosen: Option) -> void:
 				weaponStat.maxAmmo += 1
 		
 		"Slayer's Tithe":
-			pass
+			hasSlayersTithe = true
+			optionChosen.deactivate(true)
 		
-		"Monster Hunt":
-			pass
+		"Monster Hunter":
+			hasMonsterHunter = true
+			optionChosen.make_immediate_children_available()
+			optionChosen.deactivate(true)
 		
 		"Greed":
 			$"../ExpManagementSystem/Range".shape.radius *= optionChosen.modifiers.pickUpRangeMultiplier
@@ -449,12 +568,14 @@ func implement_option_choice(optionChosen: Option) -> void:
 				optionChosen.deactivate(true)
 			
 		"Faster":
+			var weaponsFloored: bool = true
 			for weapon in global.PLAYERS_WEAPON_SYSTEM.carryingWeapons:
-				weapon.stats.cd *= optionChosen.modifiers.weaponAttackSpeedMultiplier
+				scale_weapon_cooldown(weapon.stats, CD_OPTION_FACTORS[optionChosen.name])
+				if weapon.stats.cd > MIN_WEAPON_COOLDOWN + 0.0001:
+					weaponsFloored = false
 			optionChosen.make_immediate_children_available()
 			fasterCount += 1
-			if fasterCount >= 6:
-				optionChosen.deactivate(true)
+			_count_cd_option_pick(optionChosen, weaponsFloored)
 		
 		"Fiery Field":
 			if not playerStatsActiveModifiers.has("fieryFieldStats"):
@@ -507,11 +628,14 @@ func implement_option_choice(optionChosen: Option) -> void:
 				playerStatsActiveModifiers.cryoliteStats['lifeSteal'] = 0.001
 			
 			playerStatsActiveModifiers.cryoliteStats.lifeSteal += 0.001
+			lifeStealCount += 1
+			if lifeStealCount >= LIFE_STEAL_MAX_PICKS:
+				optionChosen.deactivate(true)
 		
 		"Icicle Explosion":
 			playerStatsActiveModifiers.cryoliteStats.icicleExplosion = true
 			optionChosen.make_immediate_children_available()
-			optionChosen.isAvailable = false
+			optionChosen.deactivate(true)
 		
 		"Laser Orb":
 			if not playerStatsActiveModifiers.has('orbStats'):
@@ -530,19 +654,21 @@ func implement_option_choice(optionChosen: Option) -> void:
 			optionChosen.make_immediate_children_available()
 			thickerBeamCount += 1
 			if thickerBeamCount == 7:
-				optionChosen.isAvailable = false
+				optionChosen.deactivate(true)
 		
 		"Quicker Strikes":
-			playerStatsActiveModifiers.orbStats.cd *= 0.8
+			scale_cooldown("orbStats", CD_OPTION_FACTORS[optionChosen.name])
 			optionChosen.make_immediate_children_available()
+			_count_cd_option_pick(optionChosen, is_cooldown_floored("orbStats"))
 		
 		"Focus":
 			playerStatsActiveModifiers.orbStats.hasLock = true
 			optionChosen.make_immediate_children_available()
-			optionChosen.isAvailable = false
+			optionChosen.deactivate(true)
 		
 		"Eliminate":
-			pass
+			playerStatsActiveModifiers.orbStats['eliminate'] = true
+			optionChosen.deactivate(true)
 		
 		"Adrenaline":
 			var method: Callable = func():
@@ -580,16 +706,14 @@ func implement_option_choice(optionChosen: Option) -> void:
 			
 			player.got_hit.connect(method)
 			optionChosen.make_immediate_children_available()
-			optionChosen.isAvailable = false
+			optionChosen.deactivate(true)
 		
 		"Rapid Manifestation":
 			optionChosen.make_immediate_children_available()
-			var keys: Array = playerStatsActiveModifiers.keys()
-			for key in keys:
-				var val = playerStatsActiveModifiers[key]
-				if val is Dictionary and val.has('isSummon'):
-					if val.has("cd"):
-						val.cd *= 0.8696 # cd = cd/1.15
+			# Counted by picks only: a summon taken later starts at its full cooldown.
+			for key in _summon_cooldown_keys():
+				scale_cooldown(key, CD_OPTION_FACTORS[optionChosen.name])
+			_count_cd_option_pick(optionChosen, false)
 		
 		"Summon Adrenaline":
 			optionChosen.make_immediate_children_available()
@@ -622,7 +746,8 @@ func implement_option_choice(optionChosen: Option) -> void:
 		
 		"Crushing Weight":
 			optionChosen.make_immediate_children_available()
-			playerStatsActiveModifiers.gravityBombStats.hitCD *= 0.5
+			scale_cooldown("gravityBombStats", CD_OPTION_FACTORS[optionChosen.name], "hitCD")
+			_count_cd_option_pick(optionChosen, is_cooldown_floored("gravityBombStats", "hitCD"))
 		
 		"Extended Singularity":
 			optionChosen.make_immediate_children_available()
@@ -638,8 +763,9 @@ func implement_option_choice(optionChosen: Option) -> void:
 			optionChosen.make_immediate_children_available()
 		
 		"Quicker Wildfire":
-			playerStatsActiveModifiers.fieryFieldStats.cd -= 0.5
+			shorten_cooldown("fieryFieldStats", CD_OPTION_SHORTEN)
 			optionChosen.make_immediate_children_available()
+			_count_cd_option_pick(optionChosen, is_cooldown_floored("fieryFieldStats"))
 		
 		"Brittle Veins":
 			playerStatsActiveModifiers.fieryFieldStats.hasBrittleVeins = true
@@ -649,15 +775,16 @@ func implement_option_choice(optionChosen: Option) -> void:
 		"Rapid Ignition":
 			var s: Dictionary = playerStatsActiveModifiers.fieryFieldStats
 			s.radius *= 1.2
-			s.cd -= 0.1
+			shorten_cooldown("fieryFieldStats", CD_OPTION_SHORTEN)
 			optionChosen.make_immediate_children_available()
+			# Also grows the radius, so it stays on offer for all 5 picks.
+			_count_cd_option_pick(optionChosen, false)
 		
 		"Relentless Pulse":
-			playerStatsActiveModifiers.fieryFieldStats.hitCD *= 0.5
+			scale_cooldown("fieryFieldStats", CD_OPTION_FACTORS[optionChosen.name], "hitCD")
 			optionChosen.make_immediate_children_available()
 			relentlessPulseCount += 1
-			if relentlessPulseCount == 3:
-				optionChosen.deactivate(true)
+			_count_cd_option_pick(optionChosen, is_cooldown_floored("fieryFieldStats", "hitCD"))
 		
 		"Reaper’s Rebate":
 			hasReapersRebate += 1
@@ -666,6 +793,9 @@ func implement_option_choice(optionChosen: Option) -> void:
 		"Regen":
 			optionChosen.make_immediate_children_available()
 			player_periodic_regen()
+			regenCount += 1
+			if regenCount >= REGEN_MAX_PICKS:
+				optionChosen.deactivate(true)
 		
 		"Momentum Pickups":
 			expManager.hasMomentumPickups += 1
@@ -677,11 +807,10 @@ func implement_option_choice(optionChosen: Option) -> void:
 		
 		"Hasten The Beast":
 			optionChosen.make_immediate_children_available()
-			var keys: Array = playerStatsActiveModifiers.keys()
-			for key in keys:
-				var val = playerStatsActiveModifiers[key]
-				if val is Dictionary and val.has('isSummon') and val.has('cd'): # Lightning Strike has no cooldown
-					val.cd *= 0.7
+			# Counted by picks only: a summon taken later starts at its full cooldown.
+			for key in _summon_cooldown_keys():
+				scale_cooldown(key, CD_OPTION_FACTORS[optionChosen.name])
+			_count_cd_option_pick(optionChosen, false)
 		
 		"Enrage The Beast":
 			optionChosen.make_immediate_children_available()
@@ -729,6 +858,7 @@ func _ready() -> void:
 	
 	expManager.levelUp.connect(handle_player_level_up)
 	global.ON_RUN_HUD.optionChosen.connect(implement_option_choice)
+	AchievementManager.boss_killed.connect(_on_boss_killed)
 	
 	var s: int = playerCarryingWeapons.size()
 	playerCarryingWeaponsStats.resize(s)

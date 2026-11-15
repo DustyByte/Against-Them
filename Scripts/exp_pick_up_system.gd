@@ -64,7 +64,8 @@ func _process(delta: float) -> void:
 		
 		if hasMomentumPickups and randf() <= 0.005:
 			for stat in carryingWeaponsStats:
-				stat.cd *= 1 - (hasMomentumPickups * 0.01)
+				var factor: float = maxf(1.0 - hasMomentumPickups * 0.01, 0.5)
+				global.FEATURE_AND_SUMMON_MANAGEMENT_SYSTEM.scale_weapon_cooldown(stat, factor)
 		
 		if hasRecycle and randf() <= 0.05:
 			var w: Weapon = weaponSystem.weapon

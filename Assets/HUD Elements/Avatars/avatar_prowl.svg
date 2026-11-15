@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <clipPath id="round"><rect width="256" height="256" rx="56" ry="56"/></clipPath>
+  </defs>
+  <g clip-path="url(#round)">
+  <rect width="256" height="256" fill="#08110e"/>
+  <!-- faint moon and stars -->
+  <circle cx="196" cy="62" r="34" fill="#132722"/>
+  <g fill="#b8f5cf">
+    <circle cx="40" cy="44" r="2.5" opacity="0.7"/>
+    <circle cx="76" cy="26" r="1.8" opacity="0.5"/>
+    <circle cx="226" cy="132" r="2" opacity="0.5"/>
+    <circle cx="28" cy="120" r="2" opacity="0.45"/>
+    <circle cx="150" cy="30" r="1.6" opacity="0.5"/>
+  </g>
+  <!-- shoulders -->
+  <path d="M30 262 C38 214 80 192 128 192 C176 192 218 214 226 262 Z" fill="#38405a" stroke="#121b2b" stroke-width="5" stroke-linejoin="round"/>
+  <!-- ears -->
+  <path d="M62 118 L70 42 L116 86 Z" fill="#465068" stroke="#121b2b" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M194 118 L186 42 L140 86 Z" fill="#465068" stroke="#121b2b" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M75 98 L79 62 L101 84 Z" fill="#74415b"/>
+  <path d="M181 98 L177 62 L155 84 Z" fill="#74415b"/>
+  <!-- head -->
+  <path d="M58 142 C58 100 90 80 128 80 C166 80 198 100 198 142 C198 184 166 206 128 206 C90 206 58 184 58 142 Z" fill="#465068" stroke="#121b2b" stroke-width="5"/>
+  <!-- glowing slit eyes -->
+  <path d="M76 138 C84 124 112 122 120 138 C112 152 84 152 76 138 Z" fill="#7dffa8"/>
+  <path d="M136 138 C144 124 172 122 180 138 C172 152 144 152 136 138 Z" fill="#7dffa8"/>
+  <ellipse cx="98" cy="138" rx="3.5" ry="11" fill="#0b1210"/>
+  <ellipse cx="158" cy="138" rx="3.5" ry="11" fill="#0b1210"/>
+  <circle cx="104" cy="133" r="2.6" fill="#f2fff6"/>
+  <circle cx="164" cy="133" r="2.6" fill="#f2fff6"/>
+  <!-- nose, mouth, whiskers -->
+  <path d="M120 160 L136 160 L128 169 Z" fill="#e88aa8" stroke="#121b2b" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M128 169 C126 178 116 180 110 174 M128 169 C130 178 140 180 146 174" fill="none" stroke="#121b2b" stroke-width="3" stroke-linecap="round"/>
+  <g stroke="#a9b6c9" stroke-width="2.2" stroke-linecap="round" opacity="0.7" fill="none">
+    <path d="M100 164 L50 156"/>
+    <path d="M100 170 L48 174"/>
+    <path d="M156 164 L206 156"/>
+    <path d="M156 170 L208 174"/>
+  </g>
+  </g>
+</svg>

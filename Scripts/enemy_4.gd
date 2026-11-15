@@ -7,6 +7,27 @@ const BOSS_MATERIAL: Material = preload("res://Shaders/Material/enemy_boss.tres"
 ## Length of one hop: the speed curve below and the body bob in enemy.gdshader.
 const HOP_TIME: float = 0.8
 
+## Leap: when Echo is LEAP_MIN_RANGE to LEAP_MAX_RANGE away and no other enemy
+## is in the way, this enemy lunges straight at where Echo stands, with no
+## warning, and hits for LEAP_DAMAGE_MULTIPLIER times its normal damage. Only
+## one leap at a time across the whole field: after any enemy 4 leaps, none
+## leaps again until the shared cooldown (world.enemyLeapReadyAt) is over.
+const LEAP_MIN_RANGE: float = 110.0
+const LEAP_MAX_RANGE: float = 260.0
+const LEAP_SPEED: float = 1100.0        # px/s, a 260 px leap takes about 0.28 s
+const LEAP_OVERSHOOT: float = 50.0      # carries on past the spot it aimed at
+const LEAP_DAMAGE_MULTIPLIER: float = 2.0
+const LEAP_CD_FIRST_WAVE: float = 7.0   # shared cooldown at wave 1...
+const LEAP_CD_LAST_WAVE: float = 4.0    # ...shrinking to this by LEAP_CD_END_WAVE
+const LEAP_CD_END_WAVE: int = 50
+## How often each enemy looks for a leap. Each starts at a random point of the
+## interval, so the line-of-sight checks spread over frames.
+const LEAP_CHECK_INTERVAL: float = 0.25
+const ENEMY_COLLISION_LAYER: int = 4
+
+## One ray query shared by every enemy 4 (filled in before each check).
+static var _leapRay: PhysicsRayQueryParameters2D = null
+
 var asBoss: bool = false
 var followSpeed : float = 100.0
 ## Size EnemyCrowd keeps around this enemy (its collision circle). 0 once it
@@ -27,6 +48,10 @@ var shrinking: bool = false
 var dead: bool = false
 var freezeEffect: Freeze = null
 var reverseInertia: float = 3.0
+var leaping: bool = false
+var leapDirection: Vector2 = Vector2.ZERO
+var leapDistanceLeft: float = 0.0
+var leapCheckTimer: float = randf() * LEAP_CHECK_INTERVAL
 
 
 func set_as_boss() -> void:
@@ -82,10 +107,77 @@ func handle_death() -> void:
 
 
 func drop_exp() -> void:
-	global.WORLD.expDrops.add(global_position, global.EXP_DROP_TYPES.TYPE_2 if randf() < 0.01 else global.EXP_DROP_TYPES.TYPE_3)
+	global.WORLD.expDrops.add(global_position, global.EXP_DROP_TYPES.TYPE_3 if randf() < 0.01 else global.EXP_DROP_TYPES.TYPE_2)
+
+
+## Shared leap cooldown for the current wave: 7 s at wave 1 down to 4 s.
+static func leap_cooldown() -> float:
+	var wave: int = 1
+	if is_instance_valid(global.WAVE_MANAGER):
+		wave = global.WAVE_MANAGER.currentWave
+	var t: float = clampf(float(wave - 1) / float(LEAP_CD_END_WAVE - 1), 0.0, 1.0)
+	return lerpf(LEAP_CD_FIRST_WAVE, LEAP_CD_LAST_WAVE, t)
+
+
+## Called by the player when this enemy's leap lands, and when the leap runs out.
+func end_leap() -> void:
+	leaping = false
+
+
+func _can_leap() -> bool:
+	# Frozen enemies have followSpeed 0; shrinking ones are falling into a black hole.
+	return not shrinking and followSpeed > 0.0
+
+
+func _try_leap(delta: float) -> void:
+	leapCheckTimer -= delta
+	if leapCheckTimer > 0.0:
+		return
+	leapCheckTimer = LEAP_CHECK_INTERVAL
+
+	var world: Node2D = global.WORLD
+	if world.elapsedTime < world.enemyLeapReadyAt or not _can_leap():
+		return
+	var toPlayer: Vector2 = player.global_position - global_position
+	var distSq: float = toPlayer.length_squared()
+	if distSq < LEAP_MIN_RANGE * LEAP_MIN_RANGE or distSq > LEAP_MAX_RANGE * LEAP_MAX_RANGE:
+		return
+
+	# Only leap with a clear line: any enemy body on the way blocks it.
+	if _leapRay == null:
+		_leapRay = PhysicsRayQueryParameters2D.new()
+		_leapRay.collision_mask = ENEMY_COLLISION_LAYER
+	var exclude: Array[RID] = [get_rid()]
+	_leapRay.from = global_position
+	_leapRay.to = player.global_position
+	_leapRay.exclude = exclude
+	if not get_world_2d().direct_space_state.intersect_ray(_leapRay).is_empty():
+		return
+
+	world.enemyLeapReadyAt = world.elapsedTime + leap_cooldown()
+	var dist: float = sqrt(distSq)
+	leapDirection = toPlayer / dist
+	leapDistanceLeft = dist + LEAP_OVERSHOOT
+	leaping = true
 
 
 func _physics_process(delta: float) -> void:
+	if leaping:
+		if not _can_leap():
+			leaping = false
+		else:
+			var step: float = minf(LEAP_SPEED * delta, leapDistanceLeft)
+			position += leapDirection * step + (knockBackVelocity + externalNonDecayVelocity) * delta
+			leapDistanceLeft -= step
+			if leapDistanceLeft <= 0.0:
+				leaping = false
+			if knockBackVelocity:
+				knockBackVelocity = knockBackVelocity.move_toward(Vector2.ZERO, knockBackDecay)
+			externalNonDecayVelocity = Vector2.ZERO
+			avatarWrapper.scale.x = -1.0 if leapDirection.x > 0 else 1.0
+			time = fmod(time + delta, HOP_TIME)   # stays in step with the shader's bob
+			return
+
 	direction = global_position.direction_to(player.global_position)
 	followVelocity = direction * speedCurve.sample_baked(time) * followSpeed
 
@@ -105,6 +197,8 @@ func _physics_process(delta: float) -> void:
 	time += delta
 	if time >= HOP_TIME:
 		time -= HOP_TIME   # keeps the hops in step with the shader's bob
+
+	_try_leap(delta)
 
 
 func _ready() -> void:

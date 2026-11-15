@@ -3,6 +3,11 @@ extends Node2D
 
 const BEAM_MAX_REACH: float = 1500.0
 const BREATHE_ANIMATION_RANGE: float = 10.0
+# Eliminate: every second the beam stays locked on the same enemy, it gets
+# 20% thicker and stronger, up to 3x. Resets when that enemy dies.
+const ELIMINATE_INTERVAL: float = 1.0
+const ELIMINATE_GROWTH: float = 0.2
+const ELIMINATE_MAX: float = 3.0
 
 @onready var beam: Line2D = $Beam/Line2D
 @onready var player: Player = global.PLAYER
@@ -22,6 +27,8 @@ var towards: Vector2 = Vector2.RIGHT
 var lockedHitTime: float = 0.0
 var isLockedOn: bool = false
 var lockedEnemy: CharacterBody2D = null
+var lockedDuration: float = 0.0
+var eliminateBoost: float = 1.0
 
 
 func setup(givenStats: Dictionary) -> void:
@@ -30,7 +37,7 @@ func setup(givenStats: Dictionary) -> void:
 
 func hit() -> void:
 	var enemies: Array[Node2D] = beamArea.get_overlapping_bodies()
-	var d: float = stats.damage
+	var d: float = stats.damage * eliminateBoost
 	for enemy in enemies:
 		AchievementManager.hit(enemy, d, &"laser_orb")
 		global.add_damage_text(enemy.global_position, d, damageType)
@@ -49,7 +56,7 @@ func discharge_reset() -> void:
 
 
 func adjust_beam_thickness() -> void:
-	var beamThickness: float = stats.beamThickness
+	var beamThickness: float = stats.beamThickness * eliminateBoost
 	beamInitWidth = beamThickness
 	collisionShape.size.y = beamThickness + 3
 
@@ -96,6 +103,9 @@ func lock_discharge() -> void:
 		isLockedOn = false
 		lockedEnemy = null
 		lockedHitTime = 0.0
+		lockedDuration = 0.0
+		eliminateBoost = 1.0
+		adjust_beam_thickness()
 		tree.create_timer(stats.cd).timeout.connect(lock_discharge)
 	)
 	discharge_make_ready()
@@ -115,6 +125,13 @@ func _process(delta: float) -> void:
 		towards = global_position.direction_to(lockedEnemy.global_position) # add sprite offset here
 		beamArea.rotation = towards.angle()
 		lockedHitTime += delta
+		if stats.get("eliminate", false):
+			lockedDuration += delta
+			var boost: float = minf(1.0 + ELIMINATE_GROWTH * floorf(lockedDuration / ELIMINATE_INTERVAL), ELIMINATE_MAX)
+			if boost != eliminateBoost:
+				eliminateBoost = boost
+				adjust_beam_thickness()
+				beam.width = beamInitWidth * beamCurve.sample_baked(0.2)
 		if lockedHitTime >= 0.3:
 			hit()
 			lockedHitTime = 0.0
@@ -131,6 +148,9 @@ func animate() -> void:
 
 
 func _ready() -> void:
+	# Own copy of the beam shape: Eliminate thickens each orb's beam separately.
+	collisionShape = collisionShape.duplicate()
+	collision.shape = collisionShape
 	adjust_beam_thickness()
 	get_tree().create_timer(stats.cd).timeout.connect(lock_discharge if stats.hasLock else discharge)
 	avatarOffsetYinit = avatar.offset.y

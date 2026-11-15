@@ -27,9 +27,12 @@ func augment_children(childrenToAugment: Array[Option]) -> void:
 	children += childrenToAugment
 
 
+## Children already used up this run (force-deactivated) stay unavailable, so
+## repicking a parent can't offer a one-time option again.
 func make_immediate_children_available() -> void:
 	for child in children:
-		child.isAvailable = not isForceDeactivated
+		if not child.isForceDeactivated:
+			child.isAvailable = not isForceDeactivated
 
 
 func duplicate_deep() -> Option:

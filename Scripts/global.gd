@@ -19,7 +19,7 @@ const EXP_DROP_TYPES: Dictionary = {
 	},
 	TYPE_2 = {
 		expAmount = 10,
-		color = Color.DARK_SLATE_BLUE
+		color = Color(0.5, 0.62, 1.0)   # bright periwinkle; DARK_SLATE_BLUE vanished on the dark ground
 	},
 	TYPE_3 = {
 		expAmount = 100,

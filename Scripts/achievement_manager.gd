@@ -14,6 +14,8 @@ extends Node
 
 signal achievement_completed(achievement_id: String)
 signal achievement_claimed(achievement_id: String)
+## A boss died. `source` is what dealt the killing blow (e.g. &"rupture").
+signal boss_killed(source: StringName)
 
 const AchievementData = preload("res://Scripts/achievement_data.gd")
 
@@ -328,6 +330,8 @@ func _register_boss_kill(boss: Node, source: StringName) -> void:
 	if source in WEAPON_SOURCES:
 		_add_stat("boss_kills_%s" % source, 1)
 		_raise_stat("best_weapon_boss_kills", int(_stats.get("boss_kills_%s" % source, 0)))
+
+	boss_killed.emit(source)
 
 
 ## Call when an enemy is made a boss.

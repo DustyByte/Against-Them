@@ -111,7 +111,7 @@ func explodeand_die(body: CharacterBody2D = null) -> void: # body here is always
 
 
 func drop_exp() -> void:
-	global.WORLD.expDrops.add(global_position, global.EXP_DROP_TYPES.TYPE_2 if randf() < 0.01 else global.EXP_DROP_TYPES.TYPE_3)
+	global.WORLD.expDrops.add(global_position, global.EXP_DROP_TYPES.TYPE_3 if randf() < 0.01 else global.EXP_DROP_TYPES.TYPE_2)
 
 
 func _physics_process(delta: float) -> void:

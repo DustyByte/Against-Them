@@ -24,6 +24,9 @@ const AVATARS: Array[Dictionary] = [
 	{"name": "Signal", "tint": Color(0.62, 0.88, 0.95), "texture": preload("res://Assets/HUD Elements/Avatars/avatar_signal.svg")},
 	{"name": "Ember", "tint": Color(0.98, 0.74, 0.38), "texture": preload("res://Assets/HUD Elements/Avatars/avatar_ember.svg")},
 	{"name": "Umbra", "tint": Color(0.76, 0.6, 0.98), "texture": preload("res://Assets/HUD Elements/Avatars/avatar_umbra.svg")},
+	{"name": "Prowl", "tint": Color(0.55, 0.95, 0.68), "texture": preload("res://Assets/HUD Elements/Avatars/avatar_prowl.svg")},
+	{"name": "Frost", "tint": Color(0.55, 0.7, 1.0), "texture": preload("res://Assets/HUD Elements/Avatars/avatar_frost.svg")},
+	{"name": "Kraken", "tint": Color(1.0, 0.55, 0.7), "texture": preload("res://Assets/HUD Elements/Avatars/avatar_kraken.svg")},
 ]
 
 ## Shown until the server has created the account.

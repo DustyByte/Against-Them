@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <clipPath id="round"><rect width="256" height="256" rx="56" ry="56"/></clipPath>
+  </defs>
+  <g clip-path="url(#round)">
+  <rect width="256" height="256" fill="#06121a"/>
+  <!-- stars -->
+  <g fill="#ffe3ec">
+    <circle cx="24" cy="132" r="2.2" opacity="0.6"/>
+    <circle cx="86" cy="20" r="1.8" opacity="0.55"/>
+    <circle cx="176" cy="22" r="2.4" opacity="0.7"/>
+    <circle cx="236" cy="118" r="2" opacity="0.55"/>
+    <circle cx="20" cy="40" r="1.6" opacity="0.5"/>
+    <circle cx="242" cy="160" r="1.6" opacity="0.45"/>
+    <circle cx="196" cy="96" r="1.5" opacity="0.4"/>
+    <circle cx="34" cy="168" r="1.5" opacity="0.4"/>
+  </g>
+  <!-- bubbles -->
+  <g fill="none" stroke="#8fe3ff">
+    <circle cx="42" cy="58" r="7" stroke-width="2" opacity="0.5"/>
+    <circle cx="30" cy="92" r="4" stroke-width="2" opacity="0.4"/>
+    <circle cx="212" cy="40" r="6" stroke-width="2" opacity="0.45"/>
+    <circle cx="226" cy="76" r="3.5" stroke-width="1.8" opacity="0.4"/>
+    <circle cx="58" cy="28" r="3" stroke-width="1.6" opacity="0.35"/>
+  </g>
+  <!-- tentacles: outline pass, then colour pass -->
+  <g fill="none" stroke="#1f0d16" stroke-width="30" stroke-linecap="round">
+    <path d="M88 168 C70 196 40 196 36 222 C34 240 50 248 58 236"/>
+    <path d="M104 172 C96 206 82 226 88 270"/>
+    <path d="M120 174 C118 210 110 236 118 270"/>
+    <path d="M136 174 C138 210 146 236 138 270"/>
+    <path d="M152 172 C160 206 174 226 168 270"/>
+    <path d="M168 168 C186 196 216 196 220 222 C222 240 206 248 198 236"/>
+  </g>
+  <g fill="none" stroke="#d65f80" stroke-width="21" stroke-linecap="round">
+    <path d="M88 168 C70 196 40 196 36 222 C34 240 50 248 58 236"/>
+    <path d="M104 172 C96 206 82 226 88 270"/>
+    <path d="M120 174 C118 210 110 236 118 270"/>
+    <path d="M136 174 C138 210 146 236 138 270"/>
+    <path d="M152 172 C160 206 174 226 168 270"/>
+    <path d="M168 168 C186 196 216 196 220 222 C222 240 206 248 198 236"/>
+  </g>
+  <g fill="#f3b3c2">
+    <circle cx="44" cy="214" r="3.5"/>
+    <circle cx="40" cy="230" r="3"/>
+    <circle cx="212" cy="214" r="3.5"/>
+    <circle cx="216" cy="230" r="3"/>
+    <circle cx="88" cy="232" r="3"/>
+    <circle cx="168" cy="232" r="3"/>
+  </g>
+  <!-- head with spots -->
+  <path d="M64 118 C64 64 96 38 128 38 C160 38 192 64 192 118 C192 150 176 170 158 178 L98 178 C80 170 64 150 64 118 Z" fill="#d65f80" stroke="#1f0d16" stroke-width="5" stroke-linejoin="round"/>
+  <g fill="#ec8ea6">
+    <circle cx="100" cy="70" r="7"/>
+    <circle cx="148" cy="62" r="5"/>
+    <circle cx="168" cy="88" r="6"/>
+    <circle cx="84" cy="96" r="4"/>
+    <circle cx="126" cy="54" r="3.5"/>
+  </g>
+  <!-- eyes with horizontal pupils -->
+  <circle cx="102" cy="124" r="15" fill="#ffe07a" stroke="#1f0d16" stroke-width="3"/>
+  <circle cx="154" cy="124" r="15" fill="#ffe07a" stroke="#1f0d16" stroke-width="3"/>
+  <rect x="92" y="120.5" width="20" height="7" rx="3.5" fill="#1a0a10"/>
+  <rect x="144" y="120.5" width="20" height="7" rx="3.5" fill="#1a0a10"/>
+  <circle cx="108" cy="117" r="2.6" fill="#fffbe8"/>
+  <circle cx="160" cy="117" r="2.6" fill="#fffbe8"/>
+  <!-- smile -->
+  <path d="M116 152 C122 159 134 159 140 152" fill="none" stroke="#1f0d16" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+</svg>

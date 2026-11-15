@@ -43,7 +43,7 @@ var ca := Option.new("Severe Judgement", {
 	killMileStoneIncreaseDBy = 0.4
 }, 'Killing 500 enemies with Retribution increases Retribution Damage by 40%', 'II.I', "res://Assets/HUD Elements/OptionIcons/Retri.png")
 
-var cb := Option.new("More Fat For you", {
+var cb := Option.new("More Fat For You", {
 	killMileStoneIncreaseMaxHPBy = 100.0
 }, "Killing 500 enemies with Retribution Increases your Max HP by 100.", 'II.II', "res://Assets/HUD Elements/OptionIcons/Retri.png")
 
@@ -59,7 +59,7 @@ var d := Option.new("Silver Storm", {
 
 var da := Option.new('Cold Wind', {}, "Freezes enemies on its path.", 'II.I', "res://Assets/HUD Elements/OptionIcons/SilverStorm.png")
 
-var db := Option.new("Quicker Stroms", {}, "Reduce SilverStorm CD by 25%.", 'II.II', "res://Assets/HUD Elements/OptionIcons/SilverStorm.png")
+var db := Option.new("Quicker Stroms", {}, "Reduce SilverStorm CD by 24%.", 'II.II', "res://Assets/HUD Elements/OptionIcons/SilverStorm.png")
 
 var dadba := Option.new("Lightning Storm", {}, 'Lightning falls on enemies on the Storms path.', 'III.I', "res://Assets/HUD Elements/OptionIcons/SilverStorm.png")
 
@@ -76,7 +76,7 @@ var e := Option.new("Recall Dagger", {
 
 var ea := Option.new('Heavy Dagger', {}, "Dagger gets a KnockBack effect.", 'II.I', "res://Assets/HUD Elements/OptionIcons/RecallKnife.png")
 
-var eb := Option.new("Quick Draw", {}, "Dagger CD Reduced by 25%", 'II.II', "res://Assets/HUD Elements/OptionIcons/RecallKnife.png") 
+var eb := Option.new("Quick Draw", {}, "Dagger CD Reduced by 28%.", 'II.II', "res://Assets/HUD Elements/OptionIcons/RecallKnife.png") 
 
 var eaeba := Option.new("Accumulate", {}, "Gain a stack for each enemy hit during the outward throw. Each stack increases the dagger's return damage by 2. Stacks reset on next throw.", 'III.I', "res://Assets/HUD Elements/OptionIcons/RecallKnife.png")
 
@@ -93,7 +93,7 @@ var f := Option.new("Aura", {
 	}
 }, "Gain an aura that deals 10 Exotic damage to all nearby enemies.", 'I', "res://Assets/HUD Elements/OptionIcons/Aura.png", true)
 
-var fa := Option.new("Rhythm Increase", {}, "Aura deals damage more frequently.", 'II.I', "res://Assets/HUD Elements/OptionIcons/Aura.png")
+var fa := Option.new("Rhythm Increase", {}, "Aura damage tick CD Reduced by 24%.", 'II.I', "res://Assets/HUD Elements/OptionIcons/Aura.png")
 
 var fb := Option.new("Aura Farm", {}, "Aura Damage doubled.", 'II.II', "res://Assets/HUD Elements/OptionIcons/Aura.png")
 
@@ -113,7 +113,7 @@ var g := Option.new("Miniature Star", {
 
 var ga := Option.new("More Fusion", {}, "Star increases in size by 25%.", 'II.I', "res://Assets/HUD Elements/OptionIcons/MiniStar.png")
 
-var gb := Option.new("Faster Orbit", {}, "Star Orbits 20% faster.", 'II.II', "res://Assets/HUD Elements/OptionIcons/MiniStar.png")
+var gb := Option.new("Faster Orbit", {}, "Star orbit time Reduced by 25%.", 'II.II', "res://Assets/HUD Elements/OptionIcons/MiniStar.png")
 
 var gagba := Option.new("Anomaly", {}, "Star collapses into a black hole.", 'III.I', "res://Assets/HUD Elements/OptionIcons/MiniStar.png")
 
@@ -132,11 +132,11 @@ var h := Option.new("Laser Orb", {
 
 var ha := Option.new("Thiccer Beam", {}, "Increase Beam Thickness and damage", 'II.I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
 
-var hb := Option.new("Quicker Strikes", {}, "Reduce Laser CD by 20%.", 'II.II', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
+var hb := Option.new("Quicker Strikes", {}, "Reduce Laser CD by 28%.", 'II.II', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
 
 var hba := Option.new("Focus", {}, "Locks on and Keeps beaming an enemy until it dies. No effect on Boss.", 'III.I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
 
-var hahbaa := Option.new("Eliminate", {}, "Keeps Increasing beam thickness periodically if enemy takes longer to die.", 'IV.I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
+var hahbaa := Option.new("Eliminate", {}, "While Focus is locked on, the beam grows 20% thicker and stronger every second, up to 3x.", 'IV.I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
 
 var i := Option.new("Overload", {
 	overload = true,
@@ -168,7 +168,7 @@ var kaa := Option.new("Monster Hunter", {}, "Killing a boss increases weapon dam
 
 var kakba := Option.new("Rhythm Accumulate", {}, "Ammo +1. If the chance to gain damage in Rhythm fails to trigger, then add the chance to next kill. Resets upon weapon damage gain from Rhythm.", 'III.II', "res://Assets/HUD Elements/OptionIcons/StrongerWeapon.png")
 
-var kaakakbaa := Option.new("Slayer's Tithe", {}, "Killing a boss will permanently increase weapons damage by 0.5% for all future descends. Only that weapons damage is increased which dealt the last blow.", 'IV.I', "res://Assets/HUD Elements/OptionIcons/StrongerWeapon.png")
+var kaakakbaa := Option.new("Slayer's Tithe", {}, "Killing a boss permanently adds 0.5% of the weapon's base damage, for all future descends. Only the weapon that dealt the last blow gains it.", 'IV.I', "res://Assets/HUD Elements/OptionIcons/StrongerWeapon.png")
 
 var l := Option.new("Greed", {
 	pickUpRangeMultiplier = 1.5
@@ -178,13 +178,11 @@ var la : = Option.new("Momentum Pickups", {}, "Picking up an exp has 0.5% chance
 
 var laa := Option.new("Recycle", {}, "Picking up an exp has 5% chance to refill 1 ammo of the selected Weapon.", 'III.I', "res://Assets/HUD Elements/OptionIcons/Greed.png")
 
-var m := Option.new("Faster", {
-	weaponAttackSpeedMultiplier = 1.0 / 1.15 # Cooldown factor for +15% attack speed.
-}, "Weapon Attack Speed +15%", 'I', "res://Assets/HUD Elements/OptionIcons/Faster.png", true)
+var m := Option.new("Faster", {}, "Weapon CD Reduced by 32%.", 'I', "res://Assets/HUD Elements/OptionIcons/Faster.png", true)
 
 var ma := Option.new('Adrenaline', {}, "Taking damage increases movement speed & attack speed by 60% for 5 seconds.", 'II.I', "res://Assets/HUD Elements/OptionIcons/Faster.png")
 
-var mb := Option.new('Rapid Manifestation', {}, "Summon Attack Speed +15%", 'II.II', "res://Assets/HUD Elements/OptionIcons/Faster.png")
+var mb := Option.new('Rapid Manifestation', {}, "All Summon CD Reduced by 28%.", 'II.II', "res://Assets/HUD Elements/OptionIcons/Faster.png")
 
 var mamba := Option.new("Summon Adrenaline", {}, "Taking Damage now increases attack speed of Summons as well for 5 seconds.", 'III.I', "res://Assets/HUD Elements/OptionIcons/Faster.png")
 
@@ -203,7 +201,7 @@ var n := Option.new("Gravity Bomb", {
 	}
 }, "Throws a gravity bomb to a random place creating a gravity zone.", 'I', "res://Assets/HUD Elements/OptionIcons/GravityBomb.png", true)
 
-var na := Option.new("Crushing Weight", {}, "Gravity zone deals damage twice as fast.", 'II.I', "res://Assets/HUD Elements/OptionIcons/GravityBomb.png")
+var na := Option.new("Crushing Weight", {}, "Gravity zone damage tick CD Reduced by 28%.", 'II.I', "res://Assets/HUD Elements/OptionIcons/GravityBomb.png")
 
 var nb := Option.new("Extended Singularity", {}, "Gravity zone radius increases by 10%.", 'II.II', "res://Assets/HUD Elements/OptionIcons/GravityBomb.png")
 
@@ -226,13 +224,13 @@ var o := Option.new("Fiery Field", {
 	}
 }, "Drop a Bomb that ignites the ground on fire.", 'I', fieryFieldIconPath, true)
 
-var oa := Option.new("Quicker Wildfire", {}, "Reduce drop CD by 0.5 sec.", 'II.I', fieryFieldIconPath)
+var oa := Option.new("Quicker Wildfire", {}, "Reduce drop CD by 0.8 sec.", 'II.I', fieryFieldIconPath)
 
 var ob := Option.new("Brittle Veins", {}, "When dropped over frozen enemies, they explode into 3 ice shards, causing bleed upon hitting enemy.", 'II.II', fieryFieldIconPath)
 
-var oaa := Option.new("Rapid Ignition", {}, "Fire Area radius +20%. Reduce drop CD by 0.1 sec", 'III.I', fieryFieldIconPath)
+var oaa := Option.new("Rapid Ignition", {}, "Fire Area radius +20%. Reduce drop CD by 0.8 sec.", 'III.I', fieryFieldIconPath)
 
-var oaoba := Option.new("Relentless Pulse", {}, "Deals damage twice as often.", 'III.II', fieryFieldIconPath)
+var oaoba := Option.new("Relentless Pulse", {}, "Damage tick CD Reduced by 33%.", 'III.II', fieryFieldIconPath)
 
 var cryoliteIconPath: String = "res://Assets/HUD Elements/OptionIcons/Cryolite.png"
 var p := Option.new("Cryolite", {
@@ -260,7 +258,7 @@ var pbpca := Option.new("Icicle Explosion", {}, "Frozen enemies killed with icic
 var papba := Option.new("Life Steal", {}, 'Take 0.1% amount of damage dealt from an Icicle and add it to your HP.', 'III.II', cryoliteIconPath)
 
 var hastenBeastIconPath: String = "res://Assets/HUD Elements/OptionIcons/HastenTheBeast.png"
-var q := Option.new("Hasten The Beast", {}, "All summon Attack Speed +30%", 'I', hastenBeastIconPath, true)
+var q := Option.new("Hasten The Beast", {}, "All Summon CD Reduced by 28%.", 'I', hastenBeastIconPath, true)
 
 #var qa := Option.new("Conductive Hallows", {}, "All summon attack speed +15%. Summons Have a 33% Chance to Summon a lightning strike on a random enemy.")
 #
@@ -331,7 +329,6 @@ func _ready() -> void:
 #region Laser Orb
 	h.augment_children([ha, hb])
 	hb.augment_child(hba)
-	ha.augment_child(hahbaa)
 	hba.augment_child(hahbaa)
 #endregion
 	

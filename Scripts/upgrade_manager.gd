@@ -5,11 +5,20 @@ extends Node
 ## Upgrade definitions (names, max ranks, prices) live in upgrade_data.gd.
 
 signal rank_changed(upgrade_id: String, rank: int)
+## A weapon earned another permanent Slayer's Tithe bonus.
+signal slayers_tithe_changed(weapon: String)
 
 const UpgradeData = preload("res://Scripts/upgrade_data.gd")
 
 const SAVE_PATH: String = "user://upgrades.cfg"
 const SAVE_SECTION: String = "ranks"
+const SAVE_SECTION_TITHE: String = "slayers_tithe"
+
+## Slayer's Tithe (level-up option): every boss a weapon finishes off while
+## the option is picked adds this share of that weapon's BASE damage, for good.
+## It is added on top, so it doesn't grow with the other damage upgrades.
+const TITHE_BASE_DAMAGE_PER_BOSS: float = 0.005
+const TITHE_WEAPONS: Array[String] = ["rupture", "torcher"]
 
 ## Base number of options offered on level-up, before Extra Choice.
 const BASE_LEVEL_UP_OPTIONS: int = 6
@@ -18,6 +27,7 @@ const REGENERATION_INTERVAL: float = 3.0
 
 var _ranks: Dictionary = {} # upgrade id -> owned rank
 var _by_id: Dictionary = {} # upgrade id -> definition
+var _tithe: Dictionary = {} # weapon -> bosses it has finished off with Slayer's Tithe
 
 
 func _ready() -> void:
@@ -111,6 +121,7 @@ func level_up_option_count() -> int:
 ## Applies every weapon upgrade to a fresh copy of a weapon's base stats.
 ## `weapon` is "rupture" or "torcher".
 func apply_weapon_upgrades(weapon: String, stats: Dictionary) -> Dictionary:
+	var base_damage: float = stats.damage
 	var damage_bonus: float = 0.02 * get_rank("sharpened")
 	var attack_speed_bonus: float = 0.015 * get_rank("rapid_fire")
 	var reload_reduction: float = 0.02 * get_rank("fast_hands")
@@ -129,12 +140,30 @@ func apply_weapon_upgrades(weapon: String, stats: Dictionary) -> Dictionary:
 			knockback_bonus += 0.10 * get_rank("torcher_backdraft")
 
 	stats.damage *= 1.0 + damage_bonus
+	stats.damage += base_damage * slayers_tithe_bonus(weapon)
+	stats[&"weaponId"] = weapon
 	stats.cd /= 1.0 + attack_speed_bonus # faster attacks = shorter cooldown
 	stats.reloadTime *= maxf(1.0 - reload_reduction, 0.1)
 	stats.maxAmmo += extra_ammo
 	stats.knockBackIntensity *= 1.0 + knockback_bonus
 	stats[&"upgradeKnockBackMultiplier"] = 1.0 + knockback_bonus
 	return stats
+
+
+## Share of base damage Slayer's Tithe adds to this weapon (0.005 per boss).
+func slayers_tithe_bonus(weapon: String) -> float:
+	return TITHE_BASE_DAMAGE_PER_BOSS * int(_tithe.get(weapon, 0))
+
+
+## Records one more boss finished off by `weapon` with Slayer's Tithe and
+## returns the damage to add to that weapon right now (in base damage terms).
+func add_slayers_tithe(weapon: String, base_damage: float) -> float:
+	if weapon not in TITHE_WEAPONS:
+		return 0.0
+	_tithe[weapon] = int(_tithe.get(weapon, 0)) + 1
+	_save()
+	slayers_tithe_changed.emit(weapon)
+	return base_damage * TITHE_BASE_DAMAGE_PER_BOSS
 
 
 func boss_damage_multiplier() -> float:
@@ -182,6 +211,7 @@ func boss_bounty_per_boss() -> int:
 func reload_from_disk() -> void:
 	var before: Dictionary = _ranks.duplicate()
 	_ranks.clear()
+	_tithe.clear()
 	_load()
 	for upgrade_id: String in _by_id:
 		if before.get(upgrade_id, 0) != get_rank(upgrade_id):
@@ -192,6 +222,7 @@ func reload_from_disk() -> void:
 func reset_progress() -> void:
 	var owned: Array = _ranks.keys()
 	_ranks.clear()
+	_tithe.clear()
 	_save()
 	for upgrade_id: String in owned:
 		rank_changed.emit(upgrade_id, 0)
@@ -211,12 +242,18 @@ func _load() -> void:
 		var rank: int = int(file.get_value(SAVE_SECTION, upgrade_id, 0))
 		if rank > 0:
 			_ranks[upgrade_id] = clampi(rank, 0, get_max_rank(upgrade_id))
+	for weapon: String in TITHE_WEAPONS:
+		var bosses: int = int(file.get_value(SAVE_SECTION_TITHE, weapon, 0))
+		if bosses > 0:
+			_tithe[weapon] = bosses
 
 
 func _save() -> void:
 	var file := ConfigFile.new()
 	for upgrade_id: String in _ranks:
 		file.set_value(SAVE_SECTION, upgrade_id, _ranks[upgrade_id])
+	for weapon: String in _tithe:
+		file.set_value(SAVE_SECTION_TITHE, weapon, _tithe[weapon])
 	var error: Error = file.save(SAVE_PATH)
 	if error != OK:
 		push_error("Could not save upgrades: %s" % error_string(error))

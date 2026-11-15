@@ -14,6 +14,9 @@ var elapsedTime: float = 0.0
 var damageNumbers: DamageNumbers = null
 ## Keeps enemies from piling onto each other (they don't collide physically).
 var enemyCrowd: EnemyCrowd = null
+## elapsedTime from which the next enemy 4 may leap. One leap at a time across
+## the whole field: each leap pushes this forward by the shared cooldown.
+var enemyLeapReadyAt: float = 0.0
 ## Clock for the enemy body animation in enemy.gdshader. Unlike the shader's
 ## own TIME it stops while the game is paused or the world is frozen. Wraps
 ## every 4 s, a whole number of every enemy animation's cycles.

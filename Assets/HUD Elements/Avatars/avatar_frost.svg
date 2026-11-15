@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <clipPath id="round"><rect width="256" height="256" rx="56" ry="56"/></clipPath>
+  </defs>
+  <g clip-path="url(#round)">
+  <rect width="256" height="256" fill="#070d17"/>
+  <!-- faint moon and stars -->
+  <circle cx="198" cy="58" r="32" fill="#132038"/>
+  <g fill="#cfe3ff">
+    <circle cx="40" cy="46" r="2.5" opacity="0.7"/>
+    <circle cx="96" cy="22" r="1.8" opacity="0.5"/>
+    <circle cx="228" cy="128" r="2" opacity="0.5"/>
+    <circle cx="26" cy="118" r="2" opacity="0.45"/>
+    <circle cx="150" cy="26" r="1.6" opacity="0.5"/>
+  </g>
+  <!-- shoulders with white chest -->
+  <path d="M30 262 C38 214 80 192 128 192 C176 192 218 214 226 262 Z" fill="#4a5870" stroke="#141b26" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M92 262 C98 224 112 204 128 204 C144 204 158 224 164 262 Z" fill="#e6edf5"/>
+  <!-- pointed ears -->
+  <path d="M66 122 L62 32 L120 80 Z" fill="#4a5870" stroke="#141b26" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M190 122 L194 32 L136 80 Z" fill="#4a5870" stroke="#141b26" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M76 102 L73 54 L106 82 Z" fill="#e6edf5"/>
+  <path d="M180 102 L183 54 L150 82 Z" fill="#e6edf5"/>
+  <!-- head: grey cap, white mask, eyebrow spots, then the outline on top -->
+  <path d="M60 136 C60 96 92 76 128 76 C164 76 196 96 196 136 C196 176 166 204 128 204 C90 204 60 176 60 136 Z" fill="#4a5870"/>
+  <path d="M62 146 C70 120 90 112 104 116 C114 120 122 128 128 142 C134 128 142 120 152 116 C166 112 186 120 194 146 C190 180 162 204 128 204 C94 204 66 180 62 146 Z" fill="#e6edf5"/>
+  <ellipse cx="100" cy="104" rx="8" ry="5" fill="#e6edf5"/>
+  <ellipse cx="156" cy="104" rx="8" ry="5" fill="#e6edf5"/>
+  <path d="M60 136 C60 96 92 76 128 76 C164 76 196 96 196 136 C196 176 166 204 128 204 C90 204 60 176 60 136 Z" fill="none" stroke="#141b26" stroke-width="5"/>
+  <!-- ice-blue eyes -->
+  <path d="M84 132 C90 120 112 119 120 131 C113 143 92 145 84 132 Z" fill="#7fd4ff" stroke="#141b26" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M172 132 C166 120 144 119 136 131 C143 143 164 145 172 132 Z" fill="#7fd4ff" stroke="#141b26" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="103" cy="132" r="4.5" fill="#0a1018"/>
+  <circle cx="153" cy="132" r="4.5" fill="#0a1018"/>
+  <circle cx="106" cy="129" r="2" fill="#ffffff"/>
+  <circle cx="156" cy="129" r="2" fill="#ffffff"/>
+  <!-- nose and mouth -->
+  <path d="M116 156 C116 149 140 149 140 156 C140 164 132 168 128 168 C124 168 116 164 116 156 Z" fill="#141b26"/>
+  <circle cx="123" cy="155" r="2" fill="#5d6b80"/>
+  <path d="M128 168 L128 175 M128 175 C122 183 113 181 109 175 M128 175 C134 183 143 181 147 175" fill="none" stroke="#141b26" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>

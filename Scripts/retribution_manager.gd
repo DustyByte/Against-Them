@@ -69,7 +69,8 @@ func trigger() -> void:
 					killCountH += 1
 					if killCountH == 500:
 						killCountH = 0
-						player.stats.increase_max_hp(stats.killMileStoneIncreaseMaxHPBy)
+						# +100 max HP per pick of More Fat For You, like Severe Judgement stacks
+						player.stats.increase_max_hp(stats.killMileStoneIncreaseMaxHPBy * killMilestoneHPIncrease)
 			
 			global.add_damage_text(enemy.global_position, d, 4)
 		

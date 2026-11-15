@@ -13,14 +13,20 @@ const STARTING_WAVE_ENEMY_COUNT: int = 12
 const ENEMY_COUNT_VARIATION: float = 0.05
 const ENEMY_GROWTH_CURVE_SHARPNESS: float = 2.0
 
-# Enemy HP and damage step up every 5 waves. Each step adds the base growth
-# plus a small random offset, so the curve trends linearly but stays jagged.
-# Around wave 100 this is roughly 4.4x HP and 1.56x damage, with run-to-run
-# variation from the jitter.
+# Enemy HP and damage step up every 5 waves. Each step adds the base growth,
+# plus a little more than the step before (the ACCEL part), plus a small random
+# offset. So the curve bends gently upward (quadratic, not exponential) and
+# stays jagged. Roughly, without jitter:
+#   wave   50: 2.9x HP, 1.34x damage
+#   wave  100: 5.6x HP, 1.85x damage
+#   wave  150: 8.8x HP, 2.5x damage
+#   wave  200: 12.7x HP, 3.3x damage
 const ENEMY_STAT_STEP_WAVES: int = 5
 const ENEMY_HP_GROWTH_PER_STEP: float = 0.18
+const ENEMY_HP_GROWTH_ACCEL: float = 0.006
 const ENEMY_HP_GROWTH_JITTER: float = 0.03
 const ENEMY_DAMAGE_GROWTH_PER_STEP: float = 0.03
+const ENEMY_DAMAGE_GROWTH_ACCEL: float = 0.0015
 const ENEMY_DAMAGE_GROWTH_JITTER: float = 0.006
 
 enum DROP_TYPES {
@@ -249,8 +255,11 @@ func update_wave_enemy_stat_multipliers(wave: int) -> void:
 			waveEnemyDamageMultiplier = 1.0
 			continue
 
-		waveEnemyHPMultiplier += ENEMY_HP_GROWTH_PER_STEP + randf_range(-ENEMY_HP_GROWTH_JITTER, ENEMY_HP_GROWTH_JITTER)
-		waveEnemyDamageMultiplier += ENEMY_DAMAGE_GROWTH_PER_STEP + randf_range(-ENEMY_DAMAGE_GROWTH_JITTER, ENEMY_DAMAGE_GROWTH_JITTER)
+		var step := float(currentEnemyStatStep)
+		waveEnemyHPMultiplier += ENEMY_HP_GROWTH_PER_STEP + ENEMY_HP_GROWTH_ACCEL * step \
+				+ randf_range(-ENEMY_HP_GROWTH_JITTER, ENEMY_HP_GROWTH_JITTER)
+		waveEnemyDamageMultiplier += ENEMY_DAMAGE_GROWTH_PER_STEP + ENEMY_DAMAGE_GROWTH_ACCEL * step \
+				+ randf_range(-ENEMY_DAMAGE_GROWTH_JITTER, ENEMY_DAMAGE_GROWTH_JITTER)
 
 
 func begin_current_wave() -> void:

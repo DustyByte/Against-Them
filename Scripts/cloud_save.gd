@@ -42,6 +42,7 @@ func _ready() -> void:
 
 	MetaProgression.echoes_changed.connect(_on_progress_changed.unbind(1))
 	UpgradeManager.rank_changed.connect(_on_progress_changed.unbind(2))
+	UpgradeManager.slayers_tithe_changed.connect(_on_progress_changed.unbind(1))
 	InventoryManager.anchor_shards_changed.connect(_on_progress_changed.unbind(1))
 	InventoryManager.skins_changed.connect(_on_progress_changed)
 	InventoryManager.equipped_skin_changed.connect(_on_progress_changed.unbind(1))

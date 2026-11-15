@@ -189,5 +189,8 @@ func _physics_process(_delta: float) -> void:
 func _on_hit_detection_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		var incomingDamage: float = body.stats.damage
+		if body.get("leaping") == true:   # enemy 4's leap
+			incomingDamage *= body.LEAP_DAMAGE_MULTIPLIER
+			body.end_leap()
 		if get_hit(incomingDamage) <= 0:
 			handle_death()
