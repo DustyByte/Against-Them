@@ -6,7 +6,7 @@ const ENEMY_TYPE: int = 1
 const BOSS_MATERIAL: Material = preload("res://Shaders/Material/enemy_boss.tres")
 
 var asBoss: bool = false
-var followSpeed: float = 150.0
+var followSpeed: float = 150.0 * global.ENEMY_SPEED_MULTIPLIER
 ## Size EnemyCrowd keeps around this enemy (its collision circle). 0 once it
 ## stops taking up room (dying, shrinking into a black hole).
 var crowdRadius: float = 45.0

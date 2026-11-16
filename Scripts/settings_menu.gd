@@ -7,6 +7,7 @@ const KNOB_OFF_X := 4.0
 const KNOB_ON_X := 38.0          # toggle width 68 - knob 26 - 4
 const TOGGLE_TIME := 0.18
 
+@onready var _music_row: PanelContainer = get_node(COLUMN_PATH + "Left/MusicRow")
 @onready var _ui_sfx_row: PanelContainer = get_node(COLUMN_PATH + "Left/UISFXRow")
 @onready var _world_sfx_row: PanelContainer = get_node(COLUMN_PATH + "Left/WorldSFXRow")
 @onready var _haptic_row: PanelContainer = get_node(COLUMN_PATH + "Left/HapticRow")
@@ -31,6 +32,11 @@ func _ready() -> void:
 
 	if AdMobManager.has_ad_choices():
 		_add_ad_choices_row()   # before the toggles are wired, since it copies one
+	_setup_toggle(_music_row, s.music, func(on: bool):
+		s.music = on
+		var home := $"../.."
+		if home.has_method("set_music_enabled"):
+			home.set_music_enabled(on))
 	_setup_toggle(_ui_sfx_row, s.ui_sfx, func(on: bool):
 		global.SFX_TYPES_PERM["ui"] = on
 		s.ui_sfx = on)

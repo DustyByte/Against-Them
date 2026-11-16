@@ -230,6 +230,68 @@ theme_override_fonts/font = SubResource("FontVariation_wide")
 theme_override_font_sizes/font_size = 14
 text = "AUDIO"
 
+[node name="MusicRow" type="PanelContainer" parent="Center/Dialog/VBox/Columns/Left"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_row")
+
+[node name="HBox" type="HBoxContainer" parent="Center/Dialog/VBox/Columns/Left/MusicRow"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="Text" type="VBoxContainer" parent="Center/Dialog/VBox/Columns/Left/MusicRow/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 7
+
+[node name="Name" type="Label" parent="Center/Dialog/VBox/Columns/Left/MusicRow/HBox/Text"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Music"
+
+[node name="Hint" type="Label" parent="Center/Dialog/VBox/Columns/Left/MusicRow/HBox/Text"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.7, 0.78, 1)
+theme_override_font_sizes/font_size = 14
+text = "Home screen and runs"
+
+[node name="Toggle" type="Control" parent="Center/Dialog/VBox/Columns/Left/MusicRow/HBox"]
+custom_minimum_size = Vector2(68, 34)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Track" type="Panel" parent="Center/Dialog/VBox/Columns/Left/MusicRow/HBox/Toggle"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_track")
+
+[node name="Fill" type="Panel" parent="Center/Dialog/VBox/Columns/Left/MusicRow/HBox/Toggle"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fill")
+
+[node name="Knob" type="Panel" parent="Center/Dialog/VBox/Columns/Left/MusicRow/HBox/Toggle"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 30.0
+offset_bottom = 30.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_knob")
+
 [node name="UISFXRow" type="PanelContainer" parent="Center/Dialog/VBox/Columns/Left"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_row")

@@ -29,7 +29,7 @@ const ENEMY_COLLISION_LAYER: int = 4
 static var _leapRay: PhysicsRayQueryParameters2D = null
 
 var asBoss: bool = false
-var followSpeed : float = 100.0
+var followSpeed : float = 100.0 * global.ENEMY_SPEED_MULTIPLIER
 ## Size EnemyCrowd keeps around this enemy (its collision circle). 0 once it
 ## stops taking up room (dying, shrinking into a black hole).
 var crowdRadius: float = 34.0

@@ -16,6 +16,12 @@ const ORBIT_RADII_RATIO: Vector2 = Vector2(0.62, 0.15) # of the planet's diamete
 const ORBIT_TILT: float = -0.2
 const SHIP_ORBIT_PERIOD: float = 26.0
 
+## Quiet looping background music (Assets/Music/umbra_ambient.wav, mixed
+## soft already). Fades in on arrival and out on Descend.
+const AMBIENT_MUSIC: AudioStream = preload("res://Assets/Music/umbra_ambient.wav")
+const AMBIENT_VOLUME_DB: float = -3.0
+const AMBIENT_FADE_IN: float = 3.0
+
 const INTRO_STAGGER: float = 0.06
 const INTRO_SLIDE: float = 24.0
 
@@ -52,6 +58,9 @@ var _time: float = 0.0
 var _is_leaving: bool = false
 ## Ripples and grass splashes when Umbra is tapped. Drawn just above the planet.
 var _umbra_touch: Node2D = null
+var _ambient: AudioStreamPlayer = null
+## Nebulas for the backdrop, drawn once at half resolution (nebula_bake.gdshader).
+var _nebula_view: SubViewport = null
 
 
 func _ready() -> void:
@@ -83,6 +92,7 @@ func _ready() -> void:
 	_connect_button(_profile_btn, _on_profile_pressed)
 	_connect_button(_leaderboard_btn, _on_leaderboard_pressed)
 
+	_start_ambient()
 	_play_intro()
 	_pulse_status_light()
 	_maybe_prompt_account()
@@ -116,6 +126,7 @@ func _update_layout() -> void:
 	planetSprite.position = _planet_rest_position
 	if _umbra_touch:
 		_umbra_touch.radius = diameter * 0.5
+	_bake_nebula(screen)
 
 	var glow_size: float = diameter * 1.65
 	_planet_glow.scale = Vector2.ONE * glow_size / _planet_glow.texture.get_width()
@@ -125,6 +136,67 @@ func _update_layout() -> void:
 		orbit.radii = ORBIT_RADII_RATIO * diameter
 		orbit.tilt = ORBIT_TILT
 		orbit.center = _planet_rest_position
+
+
+func _start_ambient() -> void:
+	_ambient = AudioStreamPlayer.new()
+	_ambient.name = "AmbientMusic"
+	_ambient.stream = AMBIENT_MUSIC
+	_ambient.volume_db = -60.0
+	add_child(_ambient)
+	if SettingsManager.settings.music:
+		_fade_ambient_in()
+
+
+func _fade_ambient_in() -> void:
+	if not _ambient.playing:
+		_ambient.play()
+	_ambient_fade(AMBIENT_VOLUME_DB, AMBIENT_FADE_IN, Tween.EASE_OUT)
+
+
+var _ambient_tween: Tween = null
+
+func _ambient_fade(to_db: float, time: float, easing: Tween.EaseType) -> Tween:
+	if _ambient_tween:
+		_ambient_tween.kill()
+	_ambient_tween = create_tween()
+	_ambient_tween.tween_property(_ambient, "volume_db", to_db, time).set_trans(Tween.TRANS_SINE).set_ease(easing)
+	return _ambient_tween
+
+
+## Music toggle in Settings: fades the music in or out right away.
+func set_music_enabled(on: bool) -> void:
+	if on:
+		_fade_ambient_in()
+	else:
+		_ambient_fade(-60.0, 0.6, Tween.EASE_IN).tween_callback(_ambient.stop)
+
+
+## Draws the nebulas once into a half-resolution image the backdrop reads
+## every frame. Redrawn only if the window size changes.
+func _bake_nebula(screen: Vector2) -> void:
+	var size := Vector2i((screen * 0.5).round())
+	if _nebula_view == null:
+		_nebula_view = SubViewport.new()
+		_nebula_view.name = "NebulaBake"
+		_nebula_view.disable_3d = true
+		_nebula_view.transparent_bg = false
+		var painter := ColorRect.new()
+		var mat := ShaderMaterial.new()
+		mat.shader = preload("res://Shaders/nebula_bake.gdshader")
+		painter.material = mat
+		painter.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_nebula_view.add_child(painter)
+		$Backdrop.add_child(_nebula_view)
+		var space_mat: ShaderMaterial = $Backdrop/Space.material
+		space_mat.set_shader_parameter("nebula", _nebula_view.get_texture())
+		space_mat.set_shader_parameter("has_nebula", true)
+	elif _nebula_view.size == size:
+		return
+	_nebula_view.size = size
+	var painter_mat: ShaderMaterial = _nebula_view.get_child(0).material
+	painter_mat.set_shader_parameter("aspect", screen.x / screen.y)
+	_nebula_view.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
 # --- Buttons -----------------------------------------------------------------
@@ -288,6 +360,8 @@ func _on_descend_pressed() -> void:
 	tween.tween_property(_menu, "modulate:a", 0.0, 0.25)
 	tween.tween_property(_echoes_counter, "modulate:a", 0.0, 0.25)
 	tween.tween_property(_fade, "color:a", 1.0, 0.45).set_delay(0.15)
+	if _ambient.playing:
+		_ambient_fade(-60.0, 0.6, Tween.EASE_IN)
 	await tween.finished
 
 	get_tree().change_scene_to_file("res://Scenes/world.tscn")

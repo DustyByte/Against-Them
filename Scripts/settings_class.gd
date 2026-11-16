@@ -1,6 +1,7 @@
 extends Resource
 class_name GameSettings
 
+@export var music: bool = true
 @export var ui_sfx: bool = true
 @export var game_world_sfx: bool = true
 @export var is_heptic_feedback_enabled: bool = true

@@ -5,7 +5,7 @@ signal got_hit
 const ENEMY_TYPE: int = 6
 
 var asBoss: bool = false
-var followSpeed: float = 200.0
+var followSpeed: float = 200.0 * global.ENEMY_SPEED_MULTIPLIER
 ## Size EnemyCrowd keeps around this enemy (its collision circle). 0 once it
 ## stops taking up room (exploded, shrinking into a black hole).
 var crowdRadius: float = 35.0

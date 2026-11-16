@@ -35,6 +35,8 @@ func set_stats(kills: int, wave: int, elapsed_seconds: float) -> void:
 
 
 func _ready() -> void:
+	if is_instance_valid(global.WORLD):
+		global.WORLD.fade_out_run_music()
 	_play_entrance()
 
 

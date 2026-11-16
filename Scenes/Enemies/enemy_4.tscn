@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://d4i0jr7o4w5hd"]
 
 [ext_resource type="Script" uid="uid://m0w06460xq2h" path="res://Scripts/enemy_4.gd" id="1_joufe"]
-[ext_resource type="Texture2D" path="res://Assets/Enemies/EnemyAtlas.png" id="atlas_enemies"]
+[ext_resource type="Texture2D" uid="uid://dhjxbvb72xvx3" path="res://Assets/Enemies/EnemyAtlas.png" id="atlas_enemies"]
 [ext_resource type="Material" path="res://Shaders/Material/enemy.tres" id="enemy_material"]
 
 [sub_resource type="Curve" id="Curve_joufe"]
@@ -10,8 +10,9 @@ bake_resolution = 20
 _data = [Vector2(0, 0), 0.0, 6.5590196, 0, 0, Vector2(0.39914164, 1), 0.0, 0.0, 0, 0, Vector2(0.7982833, 0), -6.55902, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_h4uju"]
-radius = 34.0
+[sub_resource type="AtlasTexture" id="AtlasTexture_e4_shadow"]
+atlas = ExtResource("atlas_enemies")
+region = Rect2(208, 164, 122, 53)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e4_body"]
 atlas = ExtResource("atlas_enemies")
@@ -21,9 +22,8 @@ region = Rect2(4, 164, 86, 70)
 atlas = ExtResource("atlas_enemies")
 region = Rect2(420, 4, 85, 95)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_e4_shadow"]
-atlas = ExtResource("atlas_enemies")
-region = Rect2(208, 164, 122, 53)
+[sub_resource type="CircleShape2D" id="CircleShape2D_h4uju"]
+radius = 34.0
 
 [node name="Enemy4" type="CharacterBody2D" groups=["attackable", "enemy"]]
 y_sort_enabled = true

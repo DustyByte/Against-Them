@@ -101,6 +101,38 @@ func audio_play(AS: AudioStream, sfxType: StringName, pitch: float = 0.0, vdb: f
 	nextASP = (nextASP+1) % ASPPoolSize
 
 
+## Run music: a calm opening that builds, then plays its last two minutes on
+## repeat (the loop point is set in the file's import settings). Keeps
+## playing through pauses and level-up choices. Follows the Music setting.
+const RUN_MUSIC: AudioStream = preload("res://Assets/Music/descend_music.wav")
+const RUN_MUSIC_VOLUME_DB: float = -4.0
+var runMusic: AudioStreamPlayer = null
+
+
+func _start_run_music() -> void:
+	if not SettingsManager.settings.music:
+		return
+	runMusic = AudioStreamPlayer.new()
+	runMusic.name = "RunMusic"
+	runMusic.stream = RUN_MUSIC
+	runMusic.process_mode = Node.PROCESS_MODE_ALWAYS
+	runMusic.volume_db = -40.0
+	add_child(runMusic)
+	runMusic.play()
+	var fadeIn := create_tween().tween_property(runMusic, "volume_db", RUN_MUSIC_VOLUME_DB, 2.0)
+	fadeIn.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+
+## The run is over (results screen): the music fades away and stops.
+func fade_out_run_music(time: float = 1.5) -> void:
+	if runMusic == null or not runMusic.playing:
+		return
+	var fadeOut := create_tween()
+	fadeOut.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)   # the tree is paused behind the results
+	fadeOut.tween_property(runMusic, "volume_db", -60.0, time).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	fadeOut.tween_callback(runMusic.stop)
+
+
 func _ready() -> void:
 	global.WORLD = self
 	global.TOTAL_ENEMY_KILLS = 0 # per-run count (shown on results, used by Harvest)
@@ -113,6 +145,7 @@ func _ready() -> void:
 	fill_gpu_particle_pool(10)
 	fill_audio_stream_player_2d_pool(16)
 	fill_audio_stream_player_pool(6)
+	_start_run_music()
 
 
 func _process(delta: float) -> void:
