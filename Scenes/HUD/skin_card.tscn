@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://Scripts/skin_card.gd" id="1_card"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_font"]
@@ -43,19 +43,17 @@ Label/colors/font_color = Color(0.78, 0.84, 0.9, 1)
 Label/font_sizes/font_size = 20
 Label/fonts/font = ExtResource("2_font")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cost"]
-bg_color = Color(0.62, 0.88, 0.95, 0.06)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_echoes"]
+bg_color = Color(0.95, 0.88, 0.7, 0.07)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.62, 0.88, 0.95, 0.3)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-content_margin_top = 8.0
-content_margin_bottom = 8.0
+border_color = Color(0.95, 0.88, 0.7, 0.45)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
 bg_color = Color(0.62, 0.88, 0.95, 0.14)
@@ -69,8 +67,38 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tag"]
+bg_color = Color(0.62, 0.88, 0.95, 0.1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.45)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_divider"]
 bg_color = Color(1, 1, 1, 0.07)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_area"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_owned"]
+bg_color = Color(0.62, 0.88, 0.95, 0.05)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.35)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="SkinCard" type="PanelContainer"]
 size_flags_horizontal = 3
@@ -82,7 +110,7 @@ script = ExtResource("1_card")
 [node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 14
 
 [node name="Stage" type="PanelContainer" parent="VBox"]
 custom_minimum_size = Vector2(0, 250)
@@ -113,19 +141,33 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_divider")
 
-[node name="PricePanel" type="PanelContainer" parent="VBox"]
+[node name="PurchaseArea" type="PanelContainer" parent="VBox"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_cost")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_area")
 
-[node name="HBox" type="HBoxContainer" parent="VBox/PricePanel"]
-custom_minimum_size = Vector2(0, 30)
+[node name="Options" type="VBoxContainer" parent="VBox/PurchaseArea"]
 layout_mode = 2
 mouse_filter = 2
-alignment = 1
 theme_override_constants/separation = 10
 
-[node name="Icon" type="TextureRect" parent="VBox/PricePanel/HBox"]
+[node name="EchoesButton" type="Panel" parent="VBox/PurchaseArea/Options"]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_echoes")
+
+[node name="HBox" type="HBoxContainer" parent="VBox/PurchaseArea/Options/EchoesButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="VBox/PurchaseArea/Options/EchoesButton/HBox"]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_vertical = 4
@@ -134,14 +176,14 @@ texture = ExtResource("3_echoe")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Value" type="Label" parent="VBox/PricePanel/HBox"]
+[node name="Value" type="Label" parent="VBox/PurchaseArea/Options/EchoesButton/HBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.88, 0.7, 1)
 theme_override_font_sizes/font_size = 24
 text = "0"
 vertical_alignment = 1
 
-[node name="Unit" type="Label" parent="VBox/PricePanel/HBox"]
+[node name="Unit" type="Label" parent="VBox/PurchaseArea/Options/EchoesButton/HBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.88, 0.7, 0.6)
 theme_override_fonts/font = SubResource("FontVariation_spaced")
@@ -149,21 +191,126 @@ theme_override_font_sizes/font_size = 14
 text = "ECHOES"
 vertical_alignment = 1
 
-[node name="PurchaseButton" type="Panel" parent="VBox"]
-custom_minimum_size = Vector2(0, 60)
+[node name="OrRow" type="HBoxContainer" parent="VBox/PurchaseArea/Options"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="LineLeft" type="Panel" parent="VBox/PurchaseArea/Options/OrRow"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_divider")
+
+[node name="Or" type="Label" parent="VBox/PurchaseArea/Options/OrRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.7, 0.78, 0.7)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 13
+text = "OR"
+
+[node name="LineRight" type="Panel" parent="VBox/PurchaseArea/Options/OrRow"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_divider")
+
+[node name="AdButton" type="Panel" parent="VBox/PurchaseArea/Options"]
+custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="Label" type="Label" parent="VBox/PurchaseButton"]
+[node name="Margin" type="MarginContainer" parent="VBox/PurchaseArea/Options/AdButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_right = 12
+
+[node name="HBox" type="HBoxContainer" parent="VBox/PurchaseArea/Options/AdButton/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="VBox/PurchaseArea/Options/AdButton/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.85, 0.96, 1, 1)
 theme_override_fonts/font = SubResource("FontVariation_spaced")
-theme_override_font_sizes/font_size = 20
-text = "PURCHASE"
+theme_override_font_sizes/font_size = 18
+text = "WATCH ADS"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Tag" type="PanelContainer" parent="VBox/PurchaseArea/Options/AdButton/Margin/HBox"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tag")
+
+[node name="Value" type="Label" parent="VBox/PurchaseArea/Options/AdButton/Margin/HBox/Tag"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.97, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "0 / 20"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Track" type="ColorRect" parent="VBox/PurchaseArea/Options/AdButton"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -6.0
+offset_right = -10.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0.12)
+
+[node name="Fill" type="ColorRect" parent="VBox/PurchaseArea/Options/AdButton/Track"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0.9)
+
+[node name="Owned" type="PanelContainer" parent="VBox/PurchaseArea"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_owned")
+
+[node name="VBox" type="VBoxContainer" parent="VBox/PurchaseArea/Owned"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Label" type="Label" parent="VBox/PurchaseArea/Owned/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 1)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 24
+text = "OWNED"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="VBox/PurchaseArea/Owned/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.7, 0.78, 0.8)
+theme_override_fonts/font = SubResource("FontVariation_spaced")
+theme_override_font_sizes/font_size = 13
+text = "EQUIP IT FROM INVENTORY"
+horizontal_alignment = 1

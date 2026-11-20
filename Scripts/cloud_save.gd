@@ -46,6 +46,7 @@ func _ready() -> void:
 	InventoryManager.anchor_shards_changed.connect(_on_progress_changed.unbind(1))
 	InventoryManager.skins_changed.connect(_on_progress_changed)
 	InventoryManager.equipped_skin_changed.connect(_on_progress_changed.unbind(1))
+	InventoryManager.skin_ads_changed.connect(_on_progress_changed.unbind(2))
 	AchievementManager.achievement_claimed.connect(_on_progress_changed.unbind(1))
 	PlayerProfile.changed.connect(_on_progress_changed)   # e.g. a new account is ready
 	_on_progress_changed()   # anything from last session that didn't make it up

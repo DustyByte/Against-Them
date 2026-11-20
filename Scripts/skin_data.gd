@@ -1,25 +1,30 @@
 extends RefCounted
 ## Echo skins sold in the Shop. Each one is a shader in res://Shaders/Skins/
 ## applied to the avatar's parent material.
+## A skin unlocks either for "price" Echoes or after watching "ads" rewarded
+## ads for it (progress is kept per skin, see InventoryManager).
 
 const SKINS: Array[Dictionary] = [
 	{
 		"id": "ember_warden",
 		"name": "Ember Warden",
 		"shader": "res://Shaders/Skins/skin_ember_warden.gdshader",
-		"price": 2500,
+		"price": 1500,
+		"ads": 20,
 	},
 	{
 		"id": "frostbound",
 		"name": "Frostbound",
 		"shader": "res://Shaders/Skins/skin_frostbound.gdshader",
-		"price": 2500,
+		"price": 1500,
+		"ads": 20,
 	},
 	{
 		"id": "voidwalker",
 		"name": "Voidwalker",
 		"shader": "res://Shaders/Skins/skin_voidwalker.gdshader",
-		"price": 2500,
+		"price": 1500,
+		"ads": 20,
 	},
 ]
 
@@ -29,6 +34,7 @@ const DEFAULT_SKIN: Dictionary = {
 	"name": "Default",
 	"shader": "",
 	"price": 0,
+	"ads": 0,
 }
 
 

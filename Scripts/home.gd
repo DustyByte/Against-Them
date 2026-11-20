@@ -41,7 +41,7 @@ const INTRO_SLIDE: float = 24.0
 @onready var _profile_id: Label = $UI/Menu/ProfileNotch/Text/PlayerId
 @onready var _leaderboard_btn: Panel = $UI/Menu/LeaderboardButton
 # The Echoes counter lives outside the menu so it stays visible on sub screens.
-@onready var _echoes_counter: Control = $UI/EchoesCounter
+@onready var _echoes_counter: PanelContainer = $UI/EchoesCounter
 @onready var _echoes_value: Label = $UI/EchoesCounter/HBox/Value
 @onready var _status_light: ColorRect = $UI/Menu/Footer/StatusLight
 @onready var _version: Label = $UI/Menu/Version
@@ -91,6 +91,7 @@ func _ready() -> void:
 	_connect_button(_quit_btn, get_tree().quit)
 	_connect_button(_profile_btn, _on_profile_pressed)
 	_connect_button(_leaderboard_btn, _on_leaderboard_pressed)
+	_connect_button(_echoes_counter, _on_echoes_counter_pressed)   # the whole notch, not just its +
 
 	_start_ambient()
 	_play_intro()
@@ -201,7 +202,7 @@ func _bake_nebula(screen: Vector2) -> void:
 
 # --- Buttons -----------------------------------------------------------------
 
-func _connect_button(button: Panel, action: Callable) -> void:
+func _connect_button(button: Control, action: Callable) -> void:
 	button.gui_input.connect(func(event: InputEvent):
 		if _is_leaving:
 			return
@@ -226,21 +227,28 @@ func _check_if_touch_then_execute(event: InputEvent, control: Control, functionT
 
 
 ## Brief highlight on the tapped row so every press is acknowledged.
-func _flash(button: Panel) -> void:
+func _flash(button: Control) -> void:
 	var tween := _set_highlight(button, 0.22, 0.06)
-	tween.tween_property(button.get_node("Highlight"), "color:a", 0.0, 0.35).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_highlight_of(button), "color:a", 0.0, 0.35).set_trans(Tween.TRANS_SINE)
 
 
 ## Tweens the row's highlight, replacing any highlight tween already running.
-func _set_highlight(button: Panel, alpha: float, time: float) -> Tween:
+func _set_highlight(button: Control, alpha: float, time: float) -> Tween:
 	if button.has_meta(&"highlight_tween"):
 		var old: Tween = button.get_meta(&"highlight_tween")
 		if old.is_valid():
 			old.kill()
 	var tween := create_tween()
-	tween.tween_property(button.get_node("Highlight"), "color:a", alpha, time)
+	tween.tween_property(_highlight_of(button), "color:a", alpha, time)
 	button.set_meta(&"highlight_tween", tween)
 	return tween
+
+
+## A button's highlight overlay. The Echoes notch is a container, so its
+## highlight sits one level down (HighlightLayer/Highlight) to cover the margins.
+func _highlight_of(button: Control) -> ColorRect:
+	var highlight: ColorRect = button.get_node_or_null(^"Highlight")
+	return highlight if highlight else button.get_node(^"HighlightLayer/Highlight")
 
 
 func play_ui_sfx() -> void:
@@ -257,6 +265,11 @@ func _show_profile() -> void:
 	_profile_avatar.avatar = PlayerProfile.avatar
 	_profile_name.text = PlayerProfile.username
 	_profile_id.text = "ID  " + PlayerProfile.player_id
+
+
+## Watch an ad for Echoes. Also works over sub screens, where the notch stays visible.
+func _on_echoes_counter_pressed() -> void:
+	_show_popup(preload("res://Scenes/HUD/echoes_ad_card.tscn").instantiate())
 
 
 ## The profile card pops up over the home screen (the menu stays behind the dim).

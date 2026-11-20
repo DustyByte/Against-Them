@@ -14,6 +14,8 @@ var elapsedTime: float = 0.0
 var damageNumbers: DamageNumbers = null
 ## Keeps enemies from piling onto each other (they don't collide physically).
 var enemyCrowd: EnemyCrowd = null
+## Every bleed (Recall Dagger) and its drops (on_run_features.bleed_inflict).
+var bleedSystem: BleedSystem = null
 ## elapsedTime from which the next enemy 4 may leap. One leap at a time across
 ## the whole field: each leap pushes this forward by the shared cooldown.
 var enemyLeapReadyAt: float = 0.0
@@ -31,6 +33,9 @@ func _init() -> void:
 	enemyCrowd = EnemyCrowd.new()
 	enemyCrowd.name = "EnemyCrowd"
 	add_child(enemyCrowd)
+	bleedSystem = BleedSystem.new()
+	bleedSystem.name = "BleedSystem"
+	add_child(bleedSystem)
 
 
 func fill_gpu_particle_pool(amount: int) -> void:

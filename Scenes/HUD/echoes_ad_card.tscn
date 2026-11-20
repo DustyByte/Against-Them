@@ -1,0 +1,312 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://Scripts/echoes_ad_card.gd" id="1_card"]
+[ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_font"]
+[ext_resource type="Texture2D" path="res://Assets/HUD Elements/echoe_icon.svg" id="3_icon"]
+
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("2_font")
+spacing_glyph = 4
+
+[sub_resource type="FontVariation" id="FontVariation_wide"]
+base_font = ExtResource("2_font")
+spacing_glyph = 7
+
+[sub_resource type="Theme" id="Theme_card"]
+Label/colors/font_color = Color(0.8, 0.86, 0.92, 1)
+Label/font_sizes/font_size = 18
+Label/fonts/font = SubResource("FontVariation_spaced")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
+bg_color = Color(0.03, 0.04, 0.065, 0.95)
+border_width_left = 1
+border_width_top = 3
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.7)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 44.0
+content_margin_top = 32.0
+content_margin_right = 44.0
+content_margin_bottom = 34.0
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon"]
+bg_color = Color(0.62, 0.88, 0.95, 0.05)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.35)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 18.0
+content_margin_top = 18.0
+content_margin_right = 18.0
+content_margin_bottom = 18.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rule"]
+bg_color = Color(0.62, 0.88, 0.95, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_divider"]
+bg_color = Color(0.62, 0.88, 0.95, 0.14)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pip"]
+bg_color = Color(0.62, 0.88, 0.95, 0.85)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_watch"]
+bg_color = Color(0.62, 0.88, 0.95, 0.16)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close"]
+bg_color = Color(0.62, 0.88, 0.95, 0.04)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.3)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="EchoesAdCard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_card")
+script = ExtResource("1_card")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.01, 0.02, 0.6)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Dialog" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+
+[node name="VBox" type="VBoxContainer" parent="Center/Dialog"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Caption" type="Label" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.75)
+theme_override_font_sizes/font_size = 14
+text = "GATHER ECHOES"
+
+[node name="CaptionGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Offer" type="HBoxContainer" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="IconFrame" type="PanelContainer" parent="Center/Dialog/VBox/Offer"]
+custom_minimum_size = Vector2(112, 112)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_icon")
+
+[node name="Icon" type="TextureRect" parent="Center/Dialog/VBox/Offer/IconFrame"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Info" type="VBoxContainer" parent="Center/Dialog/VBox/Offer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Reward" type="Label" parent="Center/Dialog/VBox/Offer/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.98, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_wide")
+theme_override_font_sizes/font_size = 36
+text = "+10 ECHOES"
+
+[node name="Rule" type="Panel" parent="Center/Dialog/VBox/Offer/Info"]
+custom_minimum_size = Vector2(56, 3)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_rule")
+
+[node name="Hint" type="Label" parent="Center/Dialog/VBox/Offer/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.7, 0.78, 0.95)
+theme_override_font_sizes/font_size = 15
+text = "FOR EACH SHORT AD YOU WATCH"
+
+[node name="OfferGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Divider" type="Panel" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_divider")
+
+[node name="DividerGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="OwnedRow" type="HBoxContainer" parent="Center/Dialog/VBox"]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Center/Dialog/VBox/OwnedRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.6)
+theme_override_font_sizes/font_size = 15
+text = "YOU HAVE"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="Center/Dialog/VBox/OwnedRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.97, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "0"
+vertical_alignment = 1
+
+[node name="RowGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="LimitRow" type="HBoxContainer" parent="Center/Dialog/VBox"]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Center/Dialog/VBox/LimitRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 0.6)
+theme_override_font_sizes/font_size = 15
+text = "LEFT TODAY"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="Center/Dialog/VBox/LimitRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.97, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "7 / 7"
+vertical_alignment = 1
+
+[node name="PipsGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Pips" type="HBoxContainer" parent="Center/Dialog/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Pip" type="Panel" parent="Center/Dialog/VBox/Pips"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pip")
+
+[node name="ResetGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Reset" type="Label" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.7, 0.78, 0.8)
+theme_override_font_sizes/font_size = 13
+text = "RESETS IN 0H 00M"
+horizontal_alignment = 2
+
+[node name="ButtonsGap" type="Control" parent="Center/Dialog/VBox"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Dialog/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="CloseButton" type="Panel" parent="Center/Dialog/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_close")
+
+[node name="Label" type="Label" parent="Center/Dialog/VBox/Buttons/CloseButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.86, 1)
+theme_override_font_sizes/font_size = 20
+text = "CLOSE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WatchButton" type="Panel" parent="Center/Dialog/VBox/Buttons"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.8
+theme_override_styles/panel = SubResource("StyleBoxFlat_watch")
+
+[node name="Label" type="Label" parent="Center/Dialog/VBox/Buttons/WatchButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.96, 0.97, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "WATCH AD"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,7 +1,6 @@
 static var lightningBP: PackedScene = global.FREQUENT_EFFECTS_BLUEPRINTS.LIGHTNING_BLUEPRINT
 static var burnBP: PackedScene = global.FREQUENT_EFFECTS_BLUEPRINTS.BURN_EMISSION
 static var freezeBP: PackedScene = global.FREQUENT_EFFECTS_BLUEPRINTS.FREEZE
-static var bleedBP: PackedScene = global.FREQUENT_EFFECTS_BLUEPRINTS.BLEED
 static var explosionBP: PackedScene = preload("res://Scenes/Effects/explosion_particles.tscn")
 
 
@@ -103,13 +102,9 @@ static func freeze_inflict(on: CharacterBody2D, duration: float = 2.0) -> void:
 	on.add_child(freeze)
 
 
-## Each enemy has at most one Bleed; bleeding it again adds a stack to that one.
+## Adds a bleed stack to `on` (see bleed_system.gd).
 static func bleed_inflict(on: CharacterBody2D, damage: float) -> void:
-	var bleed: Bleed = on.marks.get("bleed")
-	if bleed == null or bleed.is_queued_for_deletion():
-		bleed = bleedBP.instantiate()
-		on.add_child(bleed)
-	bleed.add_stack(damage * UpgradeManager.bleed_damage_multiplier()) # Hemomancy
+	global.WORLD.bleedSystem.inflict(on, damage * UpgradeManager.bleed_damage_multiplier()) # Hemomancy
 
 
 static func overload_explode(target: CharacterBody2D, oeDmg: float, targetGlobalPosition: Vector2, whereToAddChild: Node2D, detector: BodyDetect, source: StringName = &"lightning") -> void:

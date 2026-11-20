@@ -1,5 +1,6 @@
 extends "res://Scripts/tabbed_screen.gd"
-## Shop screen: skins bought with Echoes, and utilities (Anchor Shards from ads).
+## Shop screen: skins (bought with Echoes or unlocked by watching ads), and
+## utilities (Anchor Shards from ads).
 
 const ANCHOR_SHARD_CARD: PackedScene = preload("res://Scenes/HUD/anchor_shard_card.tscn")
 const SKIN_CARD: PackedScene = preload("res://Scenes/HUD/skin_card.tscn")
@@ -29,6 +30,10 @@ func _populate_skins() -> void:
 		card.setup(skin)
 		card.preview_tapped.connect(func(id: String): _open_skin_viewer(SkinData.get_skin(id)))
 		card.purchase_tapped.connect(_open_skin_purchase)
+		card.ad_tapped.connect(func(_id: String):
+			if _overlay == null:
+				_play_ui_sfx()
+				card.watch_ad())
 		_skin_cards.append(card)
 	_fill_last_row(grid)
 

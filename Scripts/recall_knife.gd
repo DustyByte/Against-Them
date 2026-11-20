@@ -1,8 +1,24 @@
 class_name RecallKnife
 extends Area2D
 
-const DISPLACEMENT_TOTAL: float = 350.0
-const RECALL_SPEED: float = 1000.0
+const DISPLACEMENT_TOTAL: float = 500.0
+## Throw: leaves fast and slows to a stop (quadratic ease-out over this time).
+const THROW_TIME: float = 0.5
+## Recall: starts slow and speeds up toward Echo. From the full 500 px away
+## it gets back in about 0.36 s (the old flat 1500 px/s took 0.33 s).
+const RECALL_START_SPEED: float = 300.0
+const RECALL_ACCEL: float = 6000.0       # px/s gained every second
+const RECALL_MAX_SPEED: float = 3000.0
+var recall_speed: float = RECALL_START_SPEED
+## Fading light ribbon through where the dagger was in the last TRAIL_TIME
+## seconds: long when fast, short when slow, gone while it sits in the ground.
+## Time-based, so it is the same length at any frame rate. Only the points are
+## kept here (world positions, oldest first); the manager draws every dagger's
+## trail and glow in two batches (recall_knives_manager.gd).
+const TRAIL_TIME: float = 0.12
+var trail_points: PackedVector2Array = PackedVector2Array()
+var _trail_times: PackedFloat32Array = PackedFloat32Array()
+var _clock: float = 0.0
 @onready var spriteWrapper: Node2D = $spriteWrapper
 @onready var playerStatsActiveModifiers: Dictionary = global.PLAYER.stats.activeModifiers
 @onready var player: Player = global.PLAYER
@@ -51,6 +67,7 @@ func recall() -> void:
 	monitorable = true
 	spriteWrapper.rotation = 0.0
 	spriteWrapper.skew = 0.0
+	recall_speed = RECALL_START_SPEED
 	isTimeToRecall = true
 
 
@@ -69,13 +86,14 @@ func throw(towards: Vector2) -> void:
 	monitorable = true
 	monitoring = true
 	global_position = player.global_position + offset
+	_clear_trail()   # don't connect to where it was last time
 	
 	rotation = towards.angle()
 	
 	var destination: Vector2 = global_position + (towards * DISPLACEMENT_TOTAL)
 	var tween: Tween = get_tree().create_tween()
-	tween.set_ease(Tween.EASE_OUT)
-	tween.tween_method(move_to, global_position, destination, 0.5)
+	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)   # fast out, fading to a stop
+	tween.tween_method(move_to, global_position, destination, THROW_TIME)
 	tween.finished.connect(stick_to_ground)
 
 
@@ -88,16 +106,20 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if visible:
+		_update_trail(delta)
 	if isTimeToRecall:
 		target_pos = player.global_position + offset
 		distanceSq_to_target = global_position.distance_squared_to(target_pos)
-		move_distance = RECALL_SPEED * delta
+		recall_speed = minf(recall_speed + RECALL_ACCEL * delta, RECALL_MAX_SPEED)
+		move_distance = recall_speed * delta
 		
 		if move_distance*move_distance >= distanceSq_to_target:
 			global_position = target_pos
 			isTimeToRecall = false
 			manager.readyAmount += 1
 			visible = false
+			_clear_trail()
 			set_deferred("monitorable", false)
 			set_deferred("monitoring", false)
 			
@@ -105,3 +127,25 @@ func _process(delta: float) -> void:
 			dir = global_position.direction_to(target_pos)
 			global_position += dir * move_distance
 			rotation = PI + dir.angle()
+
+
+# --- Trail --------------------------------------------------------------------
+
+func _update_trail(delta: float) -> void:
+	_clock += delta
+	var count: int = trail_points.size()
+	if count == 0 or trail_points[count - 1].distance_squared_to(global_position) > 1.0:
+		trail_points.append(global_position)
+		_trail_times.append(_clock)
+	# Drop points older than TRAIL_TIME from the tail end.
+	var expired: int = 0
+	while expired < _trail_times.size() and _clock - _trail_times[expired] > TRAIL_TIME:
+		expired += 1
+	if expired:
+		trail_points = trail_points.slice(expired)
+		_trail_times = _trail_times.slice(expired)
+
+
+func _clear_trail() -> void:
+	trail_points.clear()
+	_trail_times.clear()

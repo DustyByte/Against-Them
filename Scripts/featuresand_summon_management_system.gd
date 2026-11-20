@@ -35,6 +35,7 @@ var hasSlayersTithe: bool = false
 const AURA_FARM_MAX_PICKS: int = 3      # aura damage x8 at most
 const LIFE_STEAL_MAX_PICKS: int = 5     # 0.5% of icicle damage at most
 const REGEN_MAX_PICKS: int = 3          # 15 HP every 5 seconds at most
+const RECALL_DAGGER_MAX_PICKS: int = 20  # 20 daggers at most (fan spacing: recall_knives_manager.gd)
 var auraFarmCount: int = 0
 
 # Shortest cooldowns upgrades can bring things down to, in seconds. Without a
@@ -452,7 +453,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 				playerStatsActiveModifiers.recallKnifeStats.amount += 1
 			
 			recallDaggerCount += 1
-			if recallDaggerCount >= 5:
+			if recallDaggerCount >= RECALL_DAGGER_MAX_PICKS:
 				optionChosen.deactivate(true)
 		
 		"Heavy Dagger":

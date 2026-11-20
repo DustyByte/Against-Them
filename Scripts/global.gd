@@ -1,6 +1,6 @@
 extends Node
 
-const GAME_VERSION: String = "2.1.0"
+const GAME_VERSION: String = "2.2.0"
 
 enum DAMAGE_TYPES {
 	PHYSICAL,
@@ -11,7 +11,17 @@ enum DAMAGE_TYPES {
 	PLAYER_HIT,
 	PLAYER_HEAL
 }
-const DAMAGE_TYPE_COLORS: Array[Color] = [Color.CRIMSON, Color.MEDIUM_AQUAMARINE, Color.POWDER_BLUE, Color.LIGHT_CORAL, Color.MEDIUM_ORCHID, Color.RED, Color.GREEN]
+## Damage number colours, by DAMAGE_TYPES. Bright, and kept off the blues and
+## teals of the ground and enemies (damage_numbers.gd adds a dark outline too).
+const DAMAGE_TYPE_COLORS: Array[Color] = [
+	Color(1.0, 0.36, 0.32),    # PHYSICAL: bright red (was crimson, too dark on the ground)
+	Color(1.0, 0.9, 0.35),     # ELECTRO: lightning yellow (was aquamarine, lost on teal enemies)
+	Color(0.8, 0.95, 1.0),     # FROST: icy white-blue
+	Color(1.0, 0.6, 0.2),      # INFERNO: orange
+	Color(0.95, 0.5, 1.0),     # EXOTIC: bright violet
+	Color(1.0, 0.2, 0.25),     # PLAYER_HIT
+	Color(0.45, 1.0, 0.45),    # PLAYER_HEAL
+]
 const EXP_DROP_TYPES: Dictionary = {
 	TYPE_1 = {
 		expAmount = 1,
@@ -67,7 +77,6 @@ const FREQUENT_EFFECTS_BLUEPRINTS: Dictionary = {
 	LIGHTNING_BLUEPRINT = preload("res://Scenes/Effects/lightning.tscn"),
 	BURN_EMISSION = preload("res://Scenes/Effects/burn_emission.tscn"),
 	FREEZE = preload("res://Scenes/Effects/freeze.tscn"),
-	BLEED = preload("res://Scenes/Effects/bleed.tscn")
 }
 var WEAPON_STATS: Dictionary = {
 	RUPTURE = {

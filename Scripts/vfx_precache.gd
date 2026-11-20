@@ -30,7 +30,6 @@ const WARM_SCENES: Array[String] = [
 	"res://Scenes/Allies&Summons/recall_knife.tscn",
 	"res://Scenes/Allies&Summons/star.tscn",
 	"res://Scenes/Allies&Summons/tornado.tscn",
-	"res://Scenes/Effects/bleed.tscn",
 	"res://Scenes/Effects/burn_emission.tscn",
 	"res://Scenes/Effects/explosion_particles.tscn",
 	"res://Scenes/Effects/freeze.tscn",

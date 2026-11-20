@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bq10h1ud80djv"]
+[gd_scene load_steps=36 format=3 uid="uid://bq10h1ud80djv"]
 
 [ext_resource type="Script" uid="uid://bgxp1ve1bjgxc" path="res://Scripts/home.gd" id="1_1ey7h"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_ibywg"]
@@ -103,6 +103,32 @@ content_margin_left = 14.0
 content_margin_top = 8.0
 content_margin_right = 22.0
 content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_echoes_counter"]
+bg_color = Color(0.03, 0.045, 0.07, 0.72)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.22)
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_echoes_plus"]
+bg_color = Color(0.62, 0.88, 0.95, 0.12)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.6)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="LabelSettings" id="LabelSettings_counter_value"]
 font = SubResource("FontVariation_spaced")
@@ -711,8 +737,25 @@ offset_left = -320.0
 offset_right = -100.0
 offset_bottom = 58.0
 grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_echoes_counter")
+
+[node name="HighlightLayer" type="Control" parent="UI/EchoesCounter"]
+layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_counter")
+
+[node name="Highlight" type="ColorRect" parent="UI/EchoesCounter/HighlightLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -14.0
+offset_top = -8.0
+offset_right = 12.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.62, 0.88, 0.95, 0)
 
 [node name="HBox" type="HBoxContainer" parent="UI/EchoesCounter"]
 layout_mode = 2
@@ -740,6 +783,45 @@ size_flags_vertical = 4
 text = "ECHOES"
 label_settings = SubResource("LabelSettings_counter_unit")
 vertical_alignment = 1
+
+[node name="Plus" type="Panel" parent="UI/EchoesCounter/HBox"]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_echoes_plus")
+
+[node name="Horizontal" type="ColorRect" parent="UI/EchoesCounter/HBox/Plus"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -1.0
+offset_right = 8.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.85, 0.96, 1, 1)
+
+[node name="Vertical" type="ColorRect" parent="UI/EchoesCounter/HBox/Plus"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -8.0
+offset_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.85, 0.96, 1, 1)
 
 [node name="Fade" type="ColorRect" parent="UI"]
 anchors_preset = 15

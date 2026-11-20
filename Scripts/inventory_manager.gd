@@ -6,6 +6,7 @@ signal anchor_shards_changed(total: int)
 signal daily_ads_changed(used: int, limit: int)
 signal skins_changed
 signal equipped_skin_changed(skin_id: String)
+signal skin_ads_changed(skin_id: String, watched: int)
 
 const SAVE_PATH: String = "user://inventory.cfg"
 const SAVE_SECTION: String = "inventory"
@@ -19,6 +20,7 @@ var anchor_shards: int = 0
 var _ads_watched_today: int = 0
 var _ads_date: String = ""   # local date ("YYYY-MM-DD") the counter belongs to
 var _owned_skins: Array[String] = []
+var _skin_ads: Dictionary = {}   # skin id -> rewarded ads watched toward unlocking it
 var equipped_skin: String = "default"
 
 
@@ -75,6 +77,28 @@ func get_item_amount(item_id: String) -> int:
 	return 0
 
 
+## Rewarded ads watched so far toward unlocking a skin.
+func skin_ads_watched(skin_id: String) -> int:
+	return int(_skin_ads.get(skin_id, 0))
+
+
+## Call when a rewarded ad watched for a skin pays out. Counts it, and unlocks
+## the skin once `ads_needed` have been watched. Returns true if it unlocked.
+func register_skin_ad(skin_id: String, ads_needed: int) -> bool:
+	if owns_skin(skin_id):
+		return false
+	var watched: int = skin_ads_watched(skin_id) + 1
+	_skin_ads[skin_id] = watched
+	var unlocked: bool = watched >= ads_needed
+	if unlocked:
+		_owned_skins.append(skin_id)
+	_save()
+	skin_ads_changed.emit(skin_id, watched)
+	if unlocked:
+		skins_changed.emit()
+	return unlocked
+
+
 ## Spends Echoes and unlocks the skin. Returns false if already owned or the
 ## player can't afford it.
 func purchase_skin(skin_id: String, price: int) -> bool:
@@ -126,6 +150,7 @@ func reload_from_disk() -> void:
 	_ads_watched_today = 0
 	_ads_date = ""
 	_owned_skins.clear()
+	_skin_ads.clear()
 	equipped_skin = "default"
 	_load()
 	anchor_shards_changed.emit(anchor_shards)
@@ -138,6 +163,7 @@ func reload_from_disk() -> void:
 func reset_progress() -> void:
 	anchor_shards = 0
 	_owned_skins.clear()
+	_skin_ads.clear()
 	equipped_skin = "default"
 	_save()
 	anchor_shards_changed.emit(anchor_shards)
@@ -156,6 +182,10 @@ func _load() -> void:
 		_ads_date = str(save_file.get_value(SAVE_SECTION, "ads_date", ""))
 		for skin_id in save_file.get_value(SAVE_SECTION, "owned_skins", []):
 			_owned_skins.append(str(skin_id))
+		var skin_ads = save_file.get_value(SAVE_SECTION, "skin_ads", {})
+		if skin_ads is Dictionary:
+			for skin_id in skin_ads:
+				_skin_ads[str(skin_id)] = maxi(int(skin_ads[skin_id]), 0)
 		equipped_skin = str(save_file.get_value(SAVE_SECTION, "equipped_skin", "default"))
 		if not owns_skin(equipped_skin):
 			equipped_skin = "default"
@@ -172,6 +202,7 @@ func _save() -> void:
 	save_file.set_value(SAVE_SECTION, "ads_date", _ads_date)
 	save_file.set_value(SAVE_SECTION, "owned_skins", _owned_skins)
 	save_file.set_value(SAVE_SECTION, "equipped_skin", equipped_skin)
+	save_file.set_value(SAVE_SECTION, "skin_ads", _skin_ads)
 	var error: Error = save_file.save(SAVE_PATH)
 	if error != OK:
 		push_error("Could not save inventory: %s" % error_string(error))

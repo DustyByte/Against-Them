@@ -13,7 +13,7 @@ extends Node
 ## real ads on your own phones or ask testers to.
 
 
-const REWARDED_AD_UNIT_ID_ANDROID = "ca-app-pub-2592407474426771/9562460553"
+const REWARDED_AD_UNIT_ID_ANDROID = "ca-app-pub-3940256099942544/5224354917"  # Test ID
 const REWARDED_AD_UNIT_ID_IOS = "ca-app-pub-3940256099942544/1712485313"      # Test ID (no iOS app yet)
 
 # Extra test devices, by the ID AdMob prints in Logcat. Devices registered in
