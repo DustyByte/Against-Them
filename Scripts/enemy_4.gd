@@ -13,9 +13,9 @@ const HOP_TIME: float = 0.8
 ## one leap at a time across the whole field: after any enemy 4 leaps, none
 ## leaps again until the shared cooldown (world.enemyLeapReadyAt) is over.
 const LEAP_MIN_RANGE: float = 110.0
-const LEAP_MAX_RANGE: float = 260.0
-const LEAP_SPEED: float = 1100.0        # px/s, a 260 px leap takes about 0.28 s
-const LEAP_OVERSHOOT: float = 50.0      # carries on past the spot it aimed at
+const LEAP_MAX_RANGE: float = 380.0
+const LEAP_SPEED: float = 1100.0        # px/s, the longest leap (470 px) takes about 0.43 s
+const LEAP_OVERSHOOT: float = 90.0      # carries on past the spot it aimed at
 const LEAP_DAMAGE_MULTIPLIER: float = 2.0
 const LEAP_CD_FIRST_WAVE: float = 7.0   # shared cooldown at wave 1...
 const LEAP_CD_LAST_WAVE: float = 4.0    # ...shrinking to this by LEAP_CD_END_WAVE
