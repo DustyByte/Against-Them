@@ -6,6 +6,8 @@ const ENEMY_TYPE: int = 1
 const BOSS_MATERIAL: Material = preload("res://Shaders/Material/enemy_boss.tres")
 
 var asBoss: bool = false
+## The wave it was made a boss in (its EXP spray grows with it).
+var bossWave: int = 0
 var followSpeed: float = 150.0 * global.ENEMY_SPEED_MULTIPLIER
 ## Size EnemyCrowd keeps around this enemy (its collision circle). 0 once it
 ## stops taking up room (dying, shrinking into a black hole).
@@ -45,6 +47,7 @@ func twitch() -> void:
 
 func set_as_boss() -> void:
 	asBoss = true
+	bossWave = global.WAVE_MANAGER.currentWave
 	stats = EnemyStats.new(global.ENEMY_BOSS_BASE_STATS.Type_1)
 	reverseInertia *= 0.34
 
@@ -80,7 +83,10 @@ func get_hit(incomingDamage: float, emitSignal: bool = true) -> float:
 
 
 func drop_exp() -> void:
-	global.WORLD.expDrops.add(global_position, global.EXP_DROP_TYPES.TYPE_1)
+	if asBoss:
+		global.WORLD.expDrops.spray_boss(global_position, bossWave)
+	else:
+		global.WORLD.expDrops.add(global_position, global.EXP_DROP_TYPES.TYPE_1)
 
 
 func handle_death() -> void:

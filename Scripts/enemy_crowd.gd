@@ -380,6 +380,32 @@ func _out_of_obstacles(e, p: Vector2, radius: float, list: Array, delta: float) 
 	return p
 
 
+## `p` moved out of any boulder it is inside (with `room` px to spare),
+## through the nearest edge; unchanged if it is clear. For placing things.
+func out_of_obstacles(p: Vector2, room: float = 0.0) -> Vector2:
+	var list = _obstacleCells.get(Vector2i(floori(p.x / OBSTACLE_CELL), floori(p.y / OBSTACLE_CELL)))
+	if list == null:
+		return p
+	for o in list:
+		if not o[0].has_point(p):
+			continue
+		var normals: PackedVector2Array = o[1]
+		var offsets: PackedFloat32Array = o[2]
+		var deepest: float = -INF
+		var edge: int = -1
+		for k in normals.size():
+			var d: float = normals[k].dot(p) - offsets[k] - room
+			if d >= 0.0:
+				edge = -1
+				break
+			if d > deepest:
+				deepest = d
+				edge = k
+		if edge >= 0:
+			p -= normals[edge] * deepest
+	return p
+
+
 func add(enemy: Node2D) -> void:
 	_members.append(enemy)
 

@@ -5,7 +5,8 @@ extends MultiMeshInstance2D
 ## MultiMesh: drop slot i is MultiMesh instance i. Before, each drop was its own
 ## Area2D node, so long runs piled up thousands of physics shapes and nodes.
 ##
-## Enemies call add() when they die; the player's ExpManagementSystem calls
+## Enemies call add() when they die (bosses call spray_boss(), which throws a
+## burst of drops out around them); the player's ExpManagementSystem calls
 ## update_pickup() every frame. Drops resting on the ground are indexed in a
 ## grid of CELL-sized cells, so finding the ones in reach only looks at the
 ## few cells around the player.
@@ -27,14 +28,102 @@ var _color: PackedColorArray = []
 var _cells: Dictionary = {}             # Vector2i -> Array of resting slots
 var _flying: PackedInt32Array = []      # slots being pulled towards the player
 
+## A boss's spray: drops leave its spot one after another over SPRAY_TIME and
+## each hops out to a spot inside a circle of SPRAY_RADIUS, landing after
+## HOP_TIME (only then can it be picked up).
+const SPRAY_TIME: float = 0.7
+const SPRAY_RADIUS: float = 170.0
+const HOP_TIME: float = 0.35
+const HOP_HEIGHT: float = 46.0
+## Boss drops: BOSS_DROPS at the first boss wave, BOSS_DROPS_STEP more every
+## 5 waves after. About BOSS_TYPE_2_SHARE of them are type 2; from wave
+## BOSS_TYPE_3_WAVE, BOSS_TYPE_3_SHARE are type 3 (at least one). The rest type 1.
+const BOSS_DROPS: int = 30
+const BOSS_DROPS_STEP: int = 5
+const BOSS_TYPE_2_SHARE: float = 0.2
+const BOSS_TYPE_3_WAVE: int = 20
+const BOSS_TYPE_3_SHARE: float = 0.05
+var _sprays: Array = []     # [origin, targets (PackedVector2Array), types (Array), next, timer]
+var _hops: Array = []       # [slot, from, to, age]
+
 
 func _ready() -> void:
 	_rid = multimesh.get_rid()
 	_grow()
+	set_process(false)   # only while a boss's drops are flying out
 
 
 ## Drops EXP of `type` (one of global.EXP_DROP_TYPES) at `at`.
 func add(at: Vector2, type: Dictionary) -> void:
+	var slot: int = _take_slot(at, type)
+	_rest(slot)
+
+
+## A boss died at `at` in `wave`: sprays its drops out around the spot (see
+## the BOSS_ constants), mostly type 1, some type 2, and type 3 from wave 20.
+func spray_boss(at: Vector2, wave: int) -> void:
+	var count: int = BOSS_DROPS + BOSS_DROPS_STEP * maxi(wave / 5 - 1, 0)
+	var type3: int = maxi(1, roundi(count * BOSS_TYPE_3_SHARE)) if wave >= BOSS_TYPE_3_WAVE else 0
+	var type2: int = roundi(count * BOSS_TYPE_2_SHARE)
+	var types: Array = []
+	for i in count:
+		if i < type3:
+			types.append(global.EXP_DROP_TYPES.TYPE_3)
+		elif i < type3 + type2:
+			types.append(global.EXP_DROP_TYPES.TYPE_2)
+		else:
+			types.append(global.EXP_DROP_TYPES.TYPE_1)
+	types.shuffle()
+	# Where each lands: spread evenly over the circle (sqrt keeps the middle
+	# from crowding), and never inside a boulder.
+	var crowd: EnemyCrowd = global.WORLD.enemyCrowd
+	var targets := PackedVector2Array()
+	targets.resize(count)
+	for i in count:
+		var spot: Vector2 = at + Vector2.from_angle(randf() * TAU) * SPRAY_RADIUS * sqrt(randf())
+		targets[i] = crowd.out_of_obstacles(spot, DROP_RADIUS * 2.0)
+	_sprays.append([at, targets, types, 0, 0.0])
+	set_process(true)
+
+
+func _process(delta: float) -> void:
+	# Let the next drops of each spray go.
+	for i in range(_sprays.size() - 1, -1, -1):
+		var spray: Array = _sprays[i]
+		var targets: PackedVector2Array = spray[1]
+		var interval: float = SPRAY_TIME / targets.size()
+		spray[4] += delta
+		while spray[3] < targets.size() and spray[4] >= spray[3] * interval:
+			var n: int = spray[3]
+			_hops.append([_take_slot(spray[0], spray[2][n]), spray[0], targets[n], 0.0])
+			spray[3] = n + 1
+		if spray[3] >= targets.size():
+			_sprays.remove_at(i)
+	# Move the hopping ones: out along the ground, easing in to land, up and
+	# down in an arc on the way.
+	for i in range(_hops.size() - 1, -1, -1):
+		var hop: Array = _hops[i]
+		hop[3] += delta
+		var t: float = minf(hop[3] / HOP_TIME, 1.0)
+		var slot: int = hop[0]
+		if t >= 1.0:
+			_pos[slot] = hop[2]
+			RenderingServer.multimesh_instance_set_transform_2d(_rid, slot, Transform2D(DROP_ROTATION, hop[2]))
+			_rest(slot)
+			_hops.remove_at(i)
+			continue
+		var along: float = 1.0 - (1.0 - t) * (1.0 - t)
+		var p: Vector2 = hop[1].lerp(hop[2], along)
+		_pos[slot] = p
+		p.y -= HOP_HEIGHT * 4.0 * t * (1.0 - t)
+		RenderingServer.multimesh_instance_set_transform_2d(_rid, slot, Transform2D(DROP_ROTATION, p))
+	if _sprays.is_empty() and _hops.is_empty():
+		set_process(false)
+
+
+## Hands out a slot for a drop of `type`, drawn at `at` (not yet resting, so
+## not yet picked up).
+func _take_slot(at: Vector2, type: Dictionary) -> int:
 	var slot: int
 	if not _free.is_empty():
 		slot = _free[_free.size() - 1]
@@ -50,13 +139,18 @@ func add(at: Vector2, type: Dictionary) -> void:
 	_pos[slot] = at
 	_amount[slot] = type.expAmount
 	_color[slot] = color
-	var key := Vector2i((at / CELL).floor())
+	RenderingServer.multimesh_instance_set_transform_2d(_rid, slot, Transform2D(DROP_ROTATION, at))
+	RenderingServer.multimesh_instance_set_color(_rid, slot, color)
+	return slot
+
+
+## Puts `slot` on the ground at its position, where the player can pick it up.
+func _rest(slot: int) -> void:
+	var key := Vector2i((_pos[slot] / CELL).floor())
 	if _cells.has(key):
 		_cells[key].append(slot)
 	else:
 		_cells[key] = [slot]
-	RenderingServer.multimesh_instance_set_transform_2d(_rid, slot, Transform2D(DROP_ROTATION, at))
-	RenderingServer.multimesh_instance_set_color(_rid, slot, color)
 
 
 ## Starts pulling in every resting drop within `reach` of `target`, moves the

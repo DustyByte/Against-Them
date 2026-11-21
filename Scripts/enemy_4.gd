@@ -30,6 +30,8 @@ const WORLD_OBJECT_LAYER: int = 1        # boulders
 static var _leapRay: PhysicsRayQueryParameters2D = null
 
 var asBoss: bool = false
+## The wave it was made a boss in (its EXP spray grows with it).
+var bossWave: int = 0
 var followSpeed : float = 100.0 * global.ENEMY_SPEED_MULTIPLIER
 ## Size EnemyCrowd keeps around this enemy (its collision circle). 0 once it
 ## stops taking up room (dying, shrinking into a black hole).
@@ -62,6 +64,7 @@ var leapCheckTimer: float = randf() * LEAP_CHECK_INTERVAL
 
 func set_as_boss() -> void:
 	asBoss = true
+	bossWave = global.WAVE_MANAGER.currentWave
 	stats = EnemyStats.new(global.ENEMY_BOSS_BASE_STATS.Type_4)
 	reverseInertia *= 0.34
 
@@ -113,7 +116,10 @@ func handle_death() -> void:
 
 
 func drop_exp() -> void:
-	global.WORLD.expDrops.add(global_position, global.EXP_DROP_TYPES.TYPE_3 if randf() < 0.01 else global.EXP_DROP_TYPES.TYPE_2)
+	if asBoss:
+		global.WORLD.expDrops.spray_boss(global_position, bossWave)
+	else:
+		global.WORLD.expDrops.add(global_position, global.EXP_DROP_TYPES.TYPE_3 if randf() < 0.01 else global.EXP_DROP_TYPES.TYPE_2)
 
 
 ## Shared leap cooldown for the current wave: 7 s at wave 1 down to 4 s.
