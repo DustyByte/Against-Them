@@ -45,7 +45,8 @@ var _live: int = 0
 var _spawn_time: PackedFloat32Array = PackedFloat32Array()
 var _mat: ShaderMaterial
 # Bleeding enemies, and each one's state in its marks["bleed"]:
-# {"stacks": [[damage per tick, ticks done, time of next tick], ...], "emit": seconds}
+# {"stacks": [[damage per tick, ticks done, time of next tick], ...], "emit": seconds,
+#  "next": earliest next tick of any stack (skip the stacks until then)}
 var _enemies: Array = []
 
 
@@ -79,7 +80,7 @@ func _init() -> void:
 func inflict(enemy: Node2D, damage: float) -> void:
 	var state = enemy.marks.get("bleed")
 	if state == null:
-		state = {"stacks": [], "emit": randf() * DROP_INTERVAL}
+		state = {"stacks": [], "emit": randf() * DROP_INTERVAL, "next": INF}
 		enemy.marks["bleed"] = state
 		_enemies.append(enemy)
 	var stacks: Array = state.stacks
@@ -89,6 +90,7 @@ func inflict(enemy: Node2D, damage: float) -> void:
 			due = stack[2]
 			break
 	stacks.append([damage, 0, due])
+	state.next = minf(state.next, due)
 
 
 func _process(delta: float) -> void:
@@ -124,12 +126,16 @@ func _update_enemy(enemy, delta: float) -> bool:
 		_spawn_drop(at, enemy.velocity)
 	state.emit = emit
 
+	if _now < state.next:
+		return true   # no stack is due yet
 	var stacks: Array = state.stacks
 	var damage: float = 0.0
+	var next: float = INF
 	var k: int = 0
 	while k < stacks.size():
 		var stack: Array = stacks[k]
 		if _now < stack[2]:
+			next = minf(next, stack[2])
 			k += 1
 			continue
 		damage += stack[0]
@@ -138,7 +144,9 @@ func _update_enemy(enemy, delta: float) -> bool:
 			stacks.remove_at(k)
 			continue
 		stack[2] += BLEED_FREQUENCY
+		next = minf(next, stack[2])
 		k += 1
+	state.next = next
 	if damage > 0.0:
 		global.add_damage_text(at, damage, global.DAMAGE_TYPES.PHYSICAL)
 		if AchievementManager.hit(enemy, damage, &"bleed") <= 0.0:

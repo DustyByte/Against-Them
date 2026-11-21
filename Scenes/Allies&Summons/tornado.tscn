@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://b47ndk4ysb6pw" path="res://Assets/ParticleWhite.png" id="3_mj4ve"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ppyta"]
-radius = 29.15476
+radius = 63.007935
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mf4mk"]
 resource_local_to_scene = true
@@ -36,7 +36,7 @@ monitorable = false
 script = ExtResource("1_o2g7m")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
+position = Vector2(0, -19)
 shape = SubResource("CircleShape2D_ppyta")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]

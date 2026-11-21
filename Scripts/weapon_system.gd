@@ -16,15 +16,35 @@ var updateInterval: float = 0.1
 var walkOnShootTimerTime: float = 0.0
 var onShootIncreaseTimerAmount: float = 0.2
 var aimingTowards: Vector2 = Vector2.RIGHT
+## True while the player aims by hand with the fire stick (on_run_hud.gd);
+## auto aim at the nearest enemy waits until it is released.
+var manualAim: bool = false
 
 
 func handle_update_timer_timeout() -> void:
-	var nearestAttackable: Node2D = global.PLAYER.get_nearest_attackable_or_null()
-	if nearestAttackable:
-		aimingTowards = global_position.direction_to(nearestAttackable.global_position)
-		player.selectedWeaponAimingTowards = aimingTowards
-		weapon.update_direction(aimingTowards)
+	if not manualAim:
+		var nearestAttackable: Node2D = global.PLAYER.get_nearest_attackable_or_null()
+		if nearestAttackable:
+			_aim(global_position.direction_to(nearestAttackable.global_position))
 	weaponUpdateTimer.start(updateInterval)
+
+
+## Fire stick held: point the weapon (and Echo) the way the knob is pushed.
+func set_manual_aim(direction: Vector2) -> void:
+	manualAim = true
+	_aim(direction)
+
+
+## Fire stick released: back to auto aim, right away.
+func clear_manual_aim() -> void:
+	manualAim = false
+	handle_update_timer_timeout()
+
+
+func _aim(direction: Vector2) -> void:
+	aimingTowards = direction
+	player.selectedWeaponAimingTowards = direction
+	weapon.update_direction(direction)
 
 
 func change_player_speed_to(speed: float) -> void:
@@ -73,6 +93,7 @@ func select_weapon(givenWeapon: Weapon) -> void:
 	weapon = givenWeapon
 	weapon.get_selected()
 	weapon.visible = true
+	weapon.update_direction(aimingTowards)
 	
 	for w in carryingWeapons:
 		if w.get_instance_id() != givenWeapon.get_instance_id():
@@ -84,6 +105,7 @@ func select_weapon_by_index(wi: int) -> void:
 	weapon = carryingWeapons[wi]
 	weapon.get_selected()
 	weapon.visible = true
+	weapon.update_direction(aimingTowards)
 	
 	for x in range(carryingWeapons.size()):
 		if x != wi:

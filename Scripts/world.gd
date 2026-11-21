@@ -16,6 +16,8 @@ var damageNumbers: DamageNumbers = null
 var enemyCrowd: EnemyCrowd = null
 ## Every bleed (Recall Dagger) and its drops (on_run_features.bleed_inflict).
 var bleedSystem: BleedSystem = null
+## Every burn and its flames (on_run_features.burn_inflict).
+var burnSystem: BurnSystem = null
 ## elapsedTime from which the next enemy 4 may leap. One leap at a time across
 ## the whole field: each leap pushes this forward by the shared cooldown.
 var enemyLeapReadyAt: float = 0.0
@@ -36,6 +38,9 @@ func _init() -> void:
 	bleedSystem = BleedSystem.new()
 	bleedSystem.name = "BleedSystem"
 	add_child(bleedSystem)
+	burnSystem = BurnSystem.new()
+	burnSystem.name = "BurnSystem"
+	add_child(burnSystem)
 
 
 func fill_gpu_particle_pool(amount: int) -> void:

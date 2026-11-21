@@ -16,7 +16,7 @@ resource_local_to_scene = true
 radius = 100.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_5ukr8"]
-size = Vector2(5, -5)
+size = Vector2(7, -7)
 
 [sub_resource type="MultiMesh" id="MultiMesh_o06y3"]
 transform_format = 0

@@ -75,7 +75,6 @@ const SHAKE_AMOUNTS: Dictionary = {
 }
 const FREQUENT_EFFECTS_BLUEPRINTS: Dictionary = {
 	LIGHTNING_BLUEPRINT = preload("res://Scenes/Effects/lightning.tscn"),
-	BURN_EMISSION = preload("res://Scenes/Effects/burn_emission.tscn"),
 	FREEZE = preload("res://Scenes/Effects/freeze.tscn"),
 }
 var WEAPON_STATS: Dictionary = {

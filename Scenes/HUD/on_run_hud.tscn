@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dlqeqn5pu8vf8"]
+[gd_scene load_steps=14 format=3 uid="uid://dlqeqn5pu8vf8"]
 
 [ext_resource type="Script" uid="uid://kaosiieesv7u" path="res://Scripts/on_run_hud.gd" id="1_div4g"]
 [ext_resource type="Texture2D" uid="uid://rlmfaevuagj7" path="res://Assets/Shader Textures/FireButton.png" id="2_usva3"]
@@ -20,9 +20,6 @@ shader = ExtResource("8_expshader")
 [sub_resource type="Theme" id="Theme_k5in4"]
 ProgressBar/styles/background = SubResource("StyleBoxFlat_y282y")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_3j417")
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_vjotj"]
-radius = 126.55
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h5qi5"]
 shader = ExtResource("5_k5in4")
@@ -108,20 +105,11 @@ anchor_bottom = 0.666
 [node name="FireVisual" type="ColorRect" parent="Control"]
 material = SubResource("ShaderMaterial_fire")
 layout_mode = 0
-offset_left = -110.0
-offset_top = -110.0
-offset_right = 110.0
-offset_bottom = 110.0
+offset_left = -150.0
+offset_top = -150.0
+offset_right = 150.0
+offset_bottom = 150.0
 mouse_filter = 2
-
-[node name="TouchScreenButton" type="TouchScreenButton" parent="Control"]
-self_modulate = Color(1, 1, 1, 0)
-position = Vector2(-86, -86)
-scale = Vector2(0.675, 0.675)
-texture_normal = ExtResource("2_usva3")
-texture_pressed = ExtResource("3_nrs1e")
-shape = SubResource("CircleShape2D_vjotj")
-action = "X"
 
 [node name="WeaponHanger" type="VBoxContainer" parent="."]
 layout_mode = 0

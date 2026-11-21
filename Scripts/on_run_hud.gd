@@ -5,11 +5,26 @@ signal optionChosen
 @onready var expBar: ProgressBar = $ProgressBar
 @onready var fireButton: TextureButton = $FireButton
 @onready var pauseButtonPanel: Panel =  $PauseButtonMarginContainer/Panel
-@onready var _fireButton: TouchScreenButton = $Control/TouchScreenButton
+@onready var _fireCenter: Control = $Control
 @onready var _fireMat: ShaderMaterial = $Control/FireVisual.material
 var _firePressTween: Tween
 var _firePressed: float = 0.0     # current "pushed in" amount, mirrored to the shader
 var _fireRippleTween: Tween
+
+## Fire stick. A tap shoots once, right away, as a button. Dragging the knob
+## aims by hand (the weapon and Echo point where it is pushed); pulled past the
+## ring it keeps shooting at the weapon's own rate. Letting go returns to auto
+## aim. Its look is fire_button.gdshader.
+const FIRE_TOUCH_RADIUS: float = 86.0   # where a touch picks it up (as the old button)
+const FIRE_RING_RADIUS: float = 82.0    # the ring (the shader's radius); past it = firing
+const FIRE_AIM_DEADZONE: float = 14.0   # drag this far before it aims instead of tapping
+var _fireFinger: int = -1
+var _fireAiming: bool = false
+var _fireShooting: bool = false
+var _fireAimTween: Tween
+var _fireAim: float = 0.0               # current aim look, mirrored to the shader
+var _fireShootTween: Tween
+var _fireShootLook: float = 0.0
 var optionCardBluePrint: PackedScene = preload("res://Scenes/HUD/option_card.tscn")
 var pauseMenu: Control = null
 var activeOptionDisplay: OptionDisplay = null
@@ -47,10 +62,8 @@ func send_selection_signal(option: Option) -> void:
 func _ready() -> void:
 	global.ON_RUN_HUD = self
 	
-	# Fire button look (fire_button.gdshader); the touch area is unchanged.
+	# Fire stick look (fire_button.gdshader); touches are handled in _input.
 	_fireMat.set_shader_parameter("rect_size", $Control/FireVisual.size)
-	_fireButton.pressed.connect(_on_fire_pressed)
-	_fireButton.released.connect(_on_fire_released)
 	
 	var pauseButtonMinSize: Vector2 = Vector2.ONE * get_viewport_rect().size.y * 0.13
 	pauseButtonPanel.custom_minimum_size = pauseButtonMinSize
@@ -67,8 +80,92 @@ func set_fire_accent(color: Color) -> void:
 	_fireMat.set_shader_parameter("accent", color)
 
 
+# --- Fire stick ----------------------------------------------------------------
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			if _fireFinger == -1 and not get_tree().paused 					and event.position.distance_to(_fire_center()) <= FIRE_TOUCH_RADIUS:
+				_fireFinger = event.index
+				_on_fire_pressed()
+				global.PLAYERS_WEAPON_SYSTEM.shoot()   # a tap shoots right away, as before
+		elif event.index == _fireFinger:
+			_end_fire_stick()
+	elif event is InputEventScreenDrag and event.index == _fireFinger:
+		if get_tree().paused:
+			_end_fire_stick()   # a choice screen opened mid-drag
+			return
+		var offset: Vector2 = event.position - _fire_center()
+		var dist: float = offset.length()
+		if not _fireAiming and dist < FIRE_AIM_DEADZONE:
+			return
+		if not _fireAiming:
+			_fireAiming = true
+			_tween_fire_aim(1.0, 0.12)
+		var direction: Vector2 = offset / dist
+		global.PLAYERS_WEAPON_SYSTEM.set_manual_aim(direction)
+		_fireMat.set_shader_parameter("knob_offset", direction * minf(dist, FIRE_RING_RADIUS))
+		_fireMat.set_shader_parameter("bullet_angle", direction.angle() + PI * 0.5)
+		_set_fire_shooting(dist > FIRE_RING_RADIUS)
+
+
+func _process(_delta: float) -> void:
+	# Pulled past the ring: shoot whenever the weapon is ready (cooldown and
+	# reloading are the weapon's own; shoot() reloads an empty magazine).
+	if not _fireShooting or get_tree().paused:
+		return
+	var weaponSystem = global.PLAYERS_WEAPON_SYSTEM
+	var w: Weapon = weaponSystem.weapon
+	if w.cdRemainig or w.isReloading:
+		return
+	_fire_ripple()
+	weaponSystem.shoot()
+
+
+func _fire_center() -> Vector2:
+	return _fireCenter.global_position
+
+
+func _end_fire_stick() -> void:
+	_fireFinger = -1
+	_on_fire_released()
+	_set_fire_shooting(false)
+	if _fireAiming:
+		_fireAiming = false
+		_tween_fire_aim(0.0, 0.18)   # the knob eases back into the button
+		global.PLAYERS_WEAPON_SYSTEM.clear_manual_aim()
+
+
+func _set_fire_shooting(on: bool) -> void:
+	if on == _fireShooting:
+		return
+	_fireShooting = on
+	if _fireShootTween:
+		_fireShootTween.kill()
+	_fireShootTween = create_tween()
+	_fireShootTween.tween_method(func(v: float):
+		_fireShootLook = v
+		_fireMat.set_shader_parameter("firing", v)
+	, _fireShootLook, 1.0 if on else 0.0, 0.08 if on else 0.2)
+
+
+func _tween_fire_aim(target: float, duration: float) -> void:
+	if _fireAimTween:
+		_fireAimTween.kill()
+	_fireAimTween = create_tween()
+	_fireAimTween.tween_method(func(v: float):
+		_fireAim = v
+		_fireMat.set_shader_parameter("aim", v)
+	, _fireAim, target, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+
 func _on_fire_pressed() -> void:
 	_tween_fire_pressed(1.0, 0.06)
+	_fire_ripple()
+
+
+## Flash and ripple: on a press, and on every shot while the stick is firing.
+func _fire_ripple() -> void:
 	if _fireRippleTween:
 		_fireRippleTween.kill()
 	_fireRippleTween = create_tween()

@@ -1,5 +1,4 @@
 static var lightningBP: PackedScene = global.FREQUENT_EFFECTS_BLUEPRINTS.LIGHTNING_BLUEPRINT
-static var burnBP: PackedScene = global.FREQUENT_EFFECTS_BLUEPRINTS.BURN_EMISSION
 static var freezeBP: PackedScene = global.FREQUENT_EFFECTS_BLUEPRINTS.FREEZE
 static var explosionBP: PackedScene = preload("res://Scenes/Effects/explosion_particles.tscn")
 
@@ -76,13 +75,9 @@ static func lightning_strike(target: CharacterBody2D, damage: float, toChainAmou
 
 
 ## `durationMultiplier` lengthens the burn (Torcher's Lingering Flame).
-## Each enemy has at most one Burn; burning it again adds a stack to that one.
+## Adds a burn stack to `on` (see burn_system.gd).
 static func burn_inflict(on: CharacterBody2D, damage: float = 3.0, durationMultiplier: float = 1.0) -> void:
-	var burn: Burn = on.marks.get("burn")
-	if burn == null or burn.is_queued_for_deletion():
-		burn = burnBP.instantiate()
-		on.add_child(burn)
-	burn.add_stack(damage * UpgradeManager.burn_damage_multiplier(), durationMultiplier) # Pyromancy
+	global.WORLD.burnSystem.inflict(on, damage * UpgradeManager.burn_damage_multiplier(), durationMultiplier) # Pyromancy
 	AchievementManager.register_burn_applied()
 
 
