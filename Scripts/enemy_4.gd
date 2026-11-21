@@ -24,6 +24,7 @@ const LEAP_CD_END_WAVE: int = 50
 ## interval, so the line-of-sight checks spread over frames.
 const LEAP_CHECK_INTERVAL: float = 0.25
 const ENEMY_COLLISION_LAYER: int = 4
+const WORLD_OBJECT_LAYER: int = 1        # boulders
 
 ## One ray query shared by every enemy 4 (filled in before each check).
 static var _leapRay: PhysicsRayQueryParameters2D = null
@@ -33,6 +34,11 @@ var followSpeed : float = 100.0 * global.ENEMY_SPEED_MULTIPLIER
 ## Size EnemyCrowd keeps around this enemy (its collision circle). 0 once it
 ## stops taking up room (dying, shrinking into a black hole).
 var crowdRadius: float = 34.0
+## Set by EnemyCrowd when a boulder is in its way: the corner to head for, how
+## much to turn that way (0 = straight at Echo) and which way round it goes.
+var avoidCorner: Vector2 = Vector2.ZERO
+var avoidWeight: float = 0.0
+var avoidSide: int = 0
 @onready var avatarWrapper: Node2D = $Wrapper
 @onready var player: CharacterBody2D = global.PLAYER
 var stats: EnemyStats = EnemyStats.new(global.ENEMY_BASE_STATS.Type_4)
@@ -143,10 +149,10 @@ func _try_leap(delta: float) -> void:
 	if distSq < LEAP_MIN_RANGE * LEAP_MIN_RANGE or distSq > LEAP_MAX_RANGE * LEAP_MAX_RANGE:
 		return
 
-	# Only leap with a clear line: any enemy body on the way blocks it.
+	# Only leap with a clear line: any enemy body or boulder on the way blocks it.
 	if _leapRay == null:
 		_leapRay = PhysicsRayQueryParameters2D.new()
-		_leapRay.collision_mask = ENEMY_COLLISION_LAYER
+		_leapRay.collision_mask = ENEMY_COLLISION_LAYER | WORLD_OBJECT_LAYER
 	var exclude: Array[RID] = [get_rid()]
 	_leapRay.from = global_position
 	_leapRay.to = player.global_position
@@ -179,6 +185,8 @@ func _physics_process(delta: float) -> void:
 			return
 
 	direction = global_position.direction_to(player.global_position)
+	if avoidWeight > 0.0:   # a boulder in the way (EnemyCrowd)
+		direction = direction.lerp(global_position.direction_to(avoidCorner), avoidWeight).normalized()
 	followVelocity = direction * speedCurve.sample_baked(time) * followSpeed
 
 	velocity = followVelocity + knockBackVelocity + externalNonDecayVelocity

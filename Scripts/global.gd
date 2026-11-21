@@ -126,7 +126,7 @@ const MAX_REVIVES_PER_RUN: int = 2
 ## the same). At 2.08, enemy 1 runs about 312 px/s: barely faster than Echo's
 ## 300, so it creeps up on a fleeing player; with a few ranks of Swiftness
 ## (2% each) Echo can outrun it.
-const ENEMY_SPEED_MULTIPLIER: float = 2.06
+const ENEMY_SPEED_MULTIPLIER: float = 1.5
 
 const DAMAGE_TEXT_OFFSET: Vector2 = Vector2(40.0, -40.0)
 func add_damage_text(globalPosEnemy: Vector2, damage: float, damageType: int, isCrit: bool = false) -> void:

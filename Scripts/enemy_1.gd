@@ -10,6 +10,11 @@ var followSpeed: float = 150.0 * global.ENEMY_SPEED_MULTIPLIER
 ## Size EnemyCrowd keeps around this enemy (its collision circle). 0 once it
 ## stops taking up room (dying, shrinking into a black hole).
 var crowdRadius: float = 45.0
+## Set by EnemyCrowd when a boulder is in its way: the corner to head for, how
+## much to turn that way (0 = straight at Echo) and which way round it goes.
+var avoidCorner: Vector2 = Vector2.ZERO
+var avoidWeight: float = 0.0
+var avoidSide: int = 0
 
 @onready var avatarWrapper: Node2D = $Wrapper
 var stats: EnemyStats = EnemyStats.new(global.ENEMY_BASE_STATS.Type_1)
@@ -124,6 +129,8 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var followDirection: Vector2 = global_position.direction_to(global.PLAYER.global_position)
+	if avoidWeight > 0.0:   # a boulder in the way (EnemyCrowd)
+		followDirection = followDirection.lerp(global_position.direction_to(avoidCorner), avoidWeight).normalized()
 	var followVelocity: Vector2 = followDirection * followSpeed
 
 	velocity = followVelocity + knockBackVelocity + externalVelocity + externalNonDecayVelocity

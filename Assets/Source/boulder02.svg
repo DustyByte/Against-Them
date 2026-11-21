@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Second boulder for Against Them (draft): a craggy two-part rock. A taller
+     mass on the left with chipped steps and a cut, flat-topped crown, a notch
+     with a small knob, and a lower shoulder to the right, split from it by a
+     shadowed crease. Two small stones at its left foot. Same look as
+     boulder01: seen from ~50 degrees above, stepped flat colour bands lit from
+     the nebula (upper left), darkest where it turns away and meets the
+     ground. No light rim lines. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 420" width="460" height="420">
+
+  <!-- ===== main boulder, darkest band first ===== -->
+  <!-- 1: silhouette -->
+  <path d="M70 360 L64 330 C60 300 72 272 88 252 L104 214 C112 190 126 172 146 160 L160 128 C170 104 192 86 218 80 L246 70 C262 66 280 70 290 82 L300 98 C306 92 318 92 328 100 C344 112 350 132 348 152 L344 170 C360 168 380 176 394 190 L410 214 C420 232 422 256 414 278 L404 300 C400 330 384 352 356 366 C320 382 250 388 180 384 C130 382 92 376 70 360 Z" fill="#1c3240"/>
+  <!-- 2: all but the side turned away (lower right) -->
+  <path d="M70 356 C62 320 70 280 88 252 L104 214 C112 190 126 172 146 160 L160 128 C170 104 192 86 218 80 L246 70 C262 66 280 70 290 82 L300 98 C306 92 318 92 328 100 C344 112 350 132 348 152 L344 170 C360 168 380 176 394 190 L410 214 C418 228 420 244 418 258 C380 300 320 330 250 342 C180 352 110 356 70 356 Z" fill="#243d4c"/>
+
+  <!-- upper mass -->
+  <path d="M96 300 C92 272 100 250 112 236 L126 206 C134 186 146 172 162 164 L174 134 C184 112 202 96 224 90 L250 82 C264 78 278 82 286 92 L296 108 C304 104 314 104 322 110 C334 120 338 136 336 152 L330 176 C312 196 290 210 266 220 C244 228 226 226 206 236 C176 250 144 262 120 276 C110 282 102 290 96 300 Z" fill="#2c4859"/>
+  <path d="M128 230 L140 204 C148 188 158 178 172 172 L184 144 C194 124 210 110 230 104 L254 96 C266 94 276 98 282 108 L288 120 C278 140 262 154 242 164 C222 174 206 176 188 188 C170 200 150 214 128 230 Z" fill="#355565"/>
+  <!-- cut, flat crown facing the light -->
+  <path d="M186 138 C196 120 212 108 232 102 L256 94 C266 92 274 96 280 104 L272 116 L232 130 L196 146 Z" fill="#406474"/>
+  <!-- the small knob past the notch -->
+  <path d="M302 112 C310 106 320 108 326 116 C330 126 328 136 322 142 L306 128 Z" fill="#355565"/>
+  <!-- chipped steps on the left, flat faces turned to the light -->
+  <path d="M88 252 L104 214 L124 210 L112 236 C102 252 96 270 94 290 C90 280 88 266 88 252 Z" fill="#33505f"/>
+  <path d="M146 160 L160 128 L176 134 L164 166 Z" fill="#3a5d6c"/>
+
+  <!-- shoulder, its own lit top -->
+  <path d="M344 178 C362 176 380 184 392 198 L404 218 C410 232 410 248 404 262 C384 268 364 266 346 258 C350 236 350 206 344 178 Z" fill="#2c4859"/>
+  <path d="M350 184 C364 184 378 190 388 202 L396 216 C380 222 364 222 352 218 C354 206 353 194 350 184 Z" fill="#355565"/>
+  <!-- the shadowed crease between mass and shoulder -->
+  <path d="M344 170 L354 184 C358 222 356 264 340 304 C336 262 340 214 344 170 Z" fill="#17293a"/>
+
+  <!-- darker band where it meets the ground -->
+  <path d="M74 362 C110 378 190 386 262 384 C324 382 372 368 396 336 C390 354 376 362 356 366 C320 382 250 388 180 384 C130 382 92 376 74 362 Z" fill="#132535"/>
+
+  <!-- lichen, following the surface -->
+  <g fill="#1a5559" opacity="0.75">
+    <path d="M200 160 C206 152 222 152 228 160 C232 168 220 173 211 172 C202 171 196 167 200 160 Z"/>
+    <path d="M256 110 C260 106 269 106 271 111 C272 116 265 118 260 117 C255 116 253 114 256 110 Z"/>
+    <path d="M140 254 C144 248 156 248 158 254 C160 260 150 262 145 261 C140 260 138 258 140 254 Z" opacity="0.8"/>
+    <path d="M364 200 C369 195 379 196 381 201 C382 206 374 208 369 207 C364 206 362 204 364 200 Z" opacity="0.6"/>
+  </g>
+
+  <!-- cracks, curving with the surface -->
+  <g fill="none" stroke="#11222f" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M238 104 C230 132 224 160 230 190 C234 216 218 244 200 268 C190 282 186 304 190 330" stroke-width="3.4"/>
+    <path d="M230 190 C214 194 198 192 186 186" stroke-width="1.8"/>
+    <path d="M200 268 C214 274 224 288 226 302" stroke-width="1.6"/>
+    <path d="M344 170 C352 222 352 262 340 304" stroke-width="2.6"/>
+    <path d="M384 210 C388 234 382 256 390 280" stroke-width="2.2"/>
+    <path d="M128 292 C138 312 136 332 146 352" stroke-width="2.4"/>
+    <path d="M300 98 C302 108 304 116 306 128" stroke-width="2"/>
+  </g>
+  <!-- lit lip on the light side of the long crack, so it reads as a groove -->
+  <path d="M232 106 C224 134 218 162 224 190" fill="none" stroke="#5a8796" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+
+
+  <!-- ===== two small stones at its left foot, same banding ===== -->
+  <path d="M22 372 C18 350 32 332 56 328 C80 324 100 336 104 354 C106 372 94 388 70 392 C48 394 26 388 22 372 Z" fill="#1c3240"/>
+  <path d="M24 366 C22 348 36 334 58 330 C80 328 98 338 102 352 C96 366 80 374 60 374 C44 374 30 372 24 366 Z" fill="#2a4555"/>
+  <path d="M34 348 C40 338 52 334 64 334 C78 334 90 340 94 348 C84 356 70 358 58 358 C46 358 38 354 34 348 Z" fill="#3a5d6c"/>
+  <path d="M62 344 C68 352 76 356 86 356" fill="none" stroke="#11222f" stroke-width="2" stroke-linecap="round"/>
+
+  <path d="M112 386 C112 376 120 370 130 370 C140 370 148 376 148 384 C148 392 138 396 128 396 C118 396 112 392 112 386 Z" fill="#1c3240"/>
+  <path d="M116 382 C118 375 124 372 130 372 C138 372 144 376 145 382 C138 386 132 387 128 387 C122 387 118 385 116 382 Z" fill="#2e4b5b"/>
+</svg>

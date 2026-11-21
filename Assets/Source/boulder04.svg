@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Boulder for Against Them (draft), after Rock 4.png: a craggy rock with a
+     polished, glassy vein set into its face, like obsidian, that mirrors the
+     nebula over Umbra (violet, blue, a pink core, a few stars). A taller mass
+     with a cut, flat top and chipped steps down its right side, and a lower
+     shoulder to the left past a shadowed crease. The glass sits in a recess
+     (dark where its rim is turned from the light, lit stone on the far lip)
+     and a crack runs through it and on into the stone. The stone matches
+     boulder01/02: seen from ~50 degrees above, stepped flat colour bands lit
+     from the nebula (upper left). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 380" width="480" height="380">
+  <defs>
+    <!-- the nebula, reflected: bright pink core, violet, then deep indigo -->
+    <radialGradient id="neb" cx="0.42" cy="0.46" r="0.62">
+      <stop offset="0" stop-color="#f6b3f2"/>
+      <stop offset="0.12" stop-color="#d66be0"/>
+      <stop offset="0.34" stop-color="#7a3cc0"/>
+      <stop offset="0.62" stop-color="#2e2a8a"/>
+      <stop offset="1" stop-color="#10163e"/>
+    </radialGradient>
+    <!-- depth: the glass darkens under its upper rim -->
+    <linearGradient id="depth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070a24" stop-opacity="0.6"/>
+      <stop offset="0.38" stop-color="#070a24" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="glass">
+      <path d="M200 214 C198 190 210 170 232 160 L270 148 C296 142 324 146 344 160 L362 176 C374 192 374 214 364 232 L350 250 C330 266 300 272 270 270 L236 264 C214 258 202 238 200 214 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- ===== the stone, darkest band first ===== -->
+  <!-- 1: silhouette -->
+  <path d="M58 316 L54 290 C52 266 62 246 80 234 L110 214 C124 206 140 204 152 208 L162 196 C170 166 188 136 214 114 L236 98 C256 84 282 78 306 82 L330 88 C350 92 368 104 380 120 L392 138 C404 140 414 150 418 164 L430 200 C440 228 442 258 434 284 L428 300 C420 320 396 334 356 340 C290 348 200 348 130 342 C92 338 66 330 58 316 Z" fill="#1c3240"/>
+  <!-- 2: all but the side turned away (lower right) -->
+  <path d="M58 312 C52 290 54 262 70 244 L80 234 L110 214 C124 206 140 204 152 208 L162 196 C170 166 188 136 214 114 L236 98 C256 84 282 78 306 82 L330 88 C350 92 368 104 380 120 L392 138 C404 140 414 150 418 164 L428 196 C400 256 340 300 260 316 C190 328 110 326 58 312 Z" fill="#243d4c"/>
+
+  <!-- main mass -->
+  <path d="M170 270 C166 230 172 190 190 158 L210 128 C226 110 248 98 272 94 L304 92 L328 98 C346 104 360 116 370 132 L378 148 C374 180 356 206 330 224 C300 244 266 250 236 258 C212 264 190 270 170 270 Z" fill="#2c4859"/>
+  <path d="M192 200 C196 176 206 154 222 136 C238 120 258 110 280 106 L304 104 L322 110 C334 116 344 126 350 138 C340 160 322 174 300 184 C276 194 254 194 232 198 C218 200 204 202 192 200 Z" fill="#355565"/>
+  <!-- cut, flat top facing the light -->
+  <path d="M220 140 L242 118 C254 110 270 106 288 104 L318 108 L304 126 L262 136 Z" fill="#406474"/>
+  <!-- chipped steps down its right side -->
+  <path d="M380 120 L392 138 C404 140 414 150 418 164 L404 168 C396 156 388 146 380 140 Z" fill="#33505f"/>
+  <path d="M418 164 L430 200 C436 220 438 240 436 256 L414 262 C416 232 414 196 404 168 Z" fill="#2a4656"/>
+
+  <!-- left shoulder, its own lit top -->
+  <path d="M66 290 C66 270 76 254 92 244 L114 228 C126 220 140 218 152 222 L164 230 C160 252 146 270 124 282 C104 292 84 294 66 290 Z" fill="#2c4859"/>
+  <path d="M80 262 C86 250 96 242 110 236 L122 230 C132 226 142 226 150 230 C142 246 128 256 112 262 C100 266 88 266 80 262 Z" fill="#3a5d6c"/>
+  <!-- the shadowed crease between shoulder and mass -->
+  <path d="M152 208 L164 200 C170 240 166 280 152 314 C146 280 148 240 152 208 Z" fill="#17293a"/>
+
+  <!-- darker band where it meets the ground -->
+  <path d="M62 320 C110 338 200 344 280 344 C350 344 404 330 430 296 C422 318 398 334 356 340 C290 348 200 348 130 342 C94 338 70 332 62 320 Z" fill="#132535"/>
+
+  <!-- lichen on the stone -->
+  <g fill="#1a5559" opacity="0.75">
+    <path d="M232 124 C238 116 254 116 260 124 C264 132 252 137 243 136 C234 135 228 131 232 124 Z"/>
+    <path d="M96 252 C100 246 112 246 114 252 C116 258 106 260 101 259 C96 258 94 256 96 252 Z" opacity="0.8"/>
+    <path d="M384 196 C390 190 402 191 404 197 C405 203 395 205 389 204 C383 203 381 200 384 196 Z" opacity="0.6"/>
+  </g>
+
+  <!-- ===== the glass vein ===== -->
+  <!-- recess it sits in: in shade where it faces away from the light... -->
+  <path d="M190 214 C188 184 202 162 228 150 L268 138 C298 130 330 136 352 152 L372 170 C386 190 386 218 374 238 L358 258 C336 278 302 284 270 282 L232 276 C206 268 192 244 190 214 Z" fill="#132535"/>
+  <!-- ...lit on its far lip, which faces the light -->
+  <path d="M364 232 L350 250 C330 266 300 272 270 270 L236 264 C220 260 210 250 204 238 C210 258 222 272 232 276 L270 282 C302 284 336 278 358 258 L374 238 C384 222 386 204 380 188 C378 204 374 218 364 232 Z" fill="#3a5d6c"/>
+
+  <!-- the glass: the nebula mirrored in it -->
+  <path d="M200 214 C198 190 210 170 232 160 L270 148 C296 142 324 146 344 160 L362 176 C374 192 374 214 364 232 L350 250 C330 266 300 272 270 270 L236 264 C214 258 202 238 200 214 Z" fill="url(#neb)"/>
+  <g clip-path="url(#glass)">
+    <!-- drifting clouds of the nebula -->
+    <path d="M180 246 C230 220 270 236 316 206 C342 190 364 192 390 202 L390 244 C360 238 332 248 304 264 C258 290 216 276 180 290 Z" fill="#3a86e0" opacity="0.38"/>
+    <path d="M196 186 C232 172 260 194 296 180 C322 170 342 158 372 164 L372 180 C344 178 324 192 298 200 C262 212 234 194 196 206 Z" fill="#4fd1c5" opacity="0.2"/>
+    <ellipse cx="262" cy="208" rx="46" ry="28" fill="#ff9be8" opacity="0.22"/>
+    <!-- stars -->
+    <g fill="#ffffff">
+      <circle cx="232" cy="236" r="2.3"/>
+      <circle cx="334" cy="192" r="1.8"/>
+      <circle cx="314" cy="248" r="1.4" opacity="0.8"/>
+      <circle cx="352" cy="222" r="1.2" opacity="0.7"/>
+      <circle cx="270" cy="176" r="1.3" opacity="0.8"/>
+      <circle cx="216" cy="210" r="1.1" opacity="0.6"/>
+      <path d="M296 220 L298.5 216 L301 220 L305 222.5 L301 225 L298.5 229 L296 225 L292 222.5 Z" opacity="0.9"/>
+    </g>
+    <!-- depth under the upper rim -->
+    <path d="M190 140 L380 140 L380 280 L190 280 Z" fill="url(#depth)"/>
+  </g>
+  <!-- gloss: a soft sheen on the glass, turned to the light -->
+  <path d="M222 196 C232 178 254 166 282 162 C266 170 246 180 234 196 C230 202 224 204 222 196 Z" fill="#ffffff" opacity="0.3"/>
+  <circle cx="330" cy="172" r="3.2" fill="#ffffff" opacity="0.35"/>
+
+  <!-- a crack running through the glass (a pale fracture where it crosses)
+       and on into the stone above and below -->
+  <path d="M262 150 L270 176 L262 200 L276 228 L272 250 L284 270" fill="none" stroke="#d8ccff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <g fill="none" stroke="#11222f" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M262 140 C258 124 252 112 256 96" stroke-width="2.4"/>
+    <path d="M284 282 C290 300 288 316 294 336" stroke-width="2.6"/>
+    <path d="M404 168 C412 210 416 240 414 262" stroke-width="2.2"/>
+    <path d="M152 208 C162 246 162 280 152 314" stroke-width="2.4"/>
+    <path d="M120 236 C112 256 114 280 106 304" stroke-width="2"/>
+    <path d="M380 260 C392 276 396 296 392 318" stroke-width="2"/>
+  </g>
+</svg>

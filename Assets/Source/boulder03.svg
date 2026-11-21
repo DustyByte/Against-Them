@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Third boulder for Against Them (draft): a cluster of three rocks. A big
+     angular-topped rock at the back, a rounded one in front of it on the
+     left and a small chipped one at the front right, with a pebble between,
+     each casting a little shade on the rock behind. Same look as
+     boulder01/02: seen from ~50 degrees above, stepped flat colour bands lit
+     from the nebula (upper left), darkest where it turns away and meets the
+     ground. No light rim lines. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 390" width="500" height="390">
+
+  <!-- ===== A: big rock at the back ===== -->
+  <path d="M160 280 C150 230 160 180 186 140 L214 106 C236 82 266 70 298 72 C336 74 372 94 394 126 L410 160 C424 190 426 230 418 262 C410 290 380 304 330 308 C270 312 200 306 160 280 Z" fill="#1c3240"/>
+  <path d="M160 276 C152 228 162 180 188 140 L216 106 C238 82 268 72 298 74 C336 76 370 96 392 128 L404 152 C380 210 330 250 270 266 C220 278 186 280 160 276 Z" fill="#243d4c"/>
+  <path d="M176 236 C176 196 192 158 214 128 L236 104 C254 88 276 82 300 84 C330 86 356 100 374 124 C368 160 342 188 308 204 C280 218 252 216 226 226 C206 234 190 238 176 236 Z" fill="#2c4859"/>
+  <path d="M200 184 C206 158 222 134 242 116 C258 102 278 96 298 96 C322 98 342 108 354 124 C344 146 324 160 300 168 C276 176 258 172 238 178 C224 182 210 186 200 184 Z" fill="#355565"/>
+  <!-- its flat, broken-off top, facing the light -->
+  <path d="M226 140 L248 116 C262 106 280 102 298 104 L322 110 L304 132 L262 142 Z" fill="#406474"/>
+  <!-- chipped face on its right flank -->
+  <path d="M394 128 L410 160 C418 180 420 200 418 216 L398 222 C400 192 400 160 394 128 Z" fill="#2a4656"/>
+  <path d="M394 128 C400 160 400 192 398 222" fill="none" stroke="#11222f" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- shade the front rocks cast on it -->
+  <path d="M226 222 C246 216 266 226 274 248 C280 270 272 292 254 306 L238 308 C250 280 248 246 226 222 Z" fill="#17293a"/>
+  <path d="M356 270 C376 262 398 264 414 274 L410 290 C396 284 376 282 360 288 Z" fill="#17293a"/>
+
+  <!-- A's cracks, lichen -->
+  <g fill="#1a5559" opacity="0.75">
+    <path d="M250 150 C256 142 272 142 278 150 C282 158 270 163 261 162 C252 161 246 157 250 150 Z"/>
+    <path d="M318 120 C322 116 331 116 333 121 C334 126 327 128 322 127 C317 126 315 124 318 120 Z"/>
+    <path d="M206 210 C210 204 222 204 224 210 C226 216 216 218 211 217 C206 216 204 214 206 210 Z" opacity="0.8"/>
+  </g>
+  <g fill="none" stroke="#11222f" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M300 76 C292 104 286 132 292 162 C298 190 288 214 272 236" stroke-width="3.2"/>
+    <path d="M292 162 C312 160 330 166 344 176" stroke-width="1.6"/>
+    <path d="M370 150 C376 176 372 200 380 226" stroke-width="2"/>
+  </g>
+  <path d="M294 78 C286 106 280 134 286 162" fill="none" stroke="#5a8796" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+
+
+  <!-- ===== B: rounded rock in front, left ===== -->
+  <path d="M60 318 C52 288 62 254 88 230 C112 208 146 196 180 198 C214 200 240 218 250 246 C258 270 254 300 238 318 C220 336 180 344 140 344 C100 344 70 336 60 318 Z" fill="#1c3240"/>
+  <path d="M62 314 C54 286 64 254 90 230 C114 208 146 198 180 200 C212 202 236 218 246 242 C230 272 200 292 160 300 C120 306 84 310 62 314 Z" fill="#243d4c"/>
+  <path d="M76 278 C80 254 96 234 118 222 C140 210 164 206 186 210 C206 214 222 226 230 242 C212 260 186 270 158 274 C130 278 100 280 76 278 Z" fill="#2c4859"/>
+  <path d="M100 244 C112 230 130 220 150 216 C170 212 190 214 204 222 C192 236 174 244 154 248 C134 252 114 250 100 244 Z" fill="#3a5d6c"/>
+  <path d="M64 322 C90 336 130 342 170 340 C206 338 232 330 246 314 C240 326 232 332 220 336 C196 344 160 346 130 344 C96 342 72 334 64 322 Z" fill="#132535"/>
+  <path d="M124 238 C128 232 140 232 142 238 C144 244 134 246 129 245 C124 244 122 242 124 238 Z" fill="#1a5559" opacity="0.7"/>
+  <path d="M170 202 C164 226 166 252 156 278 C150 292 152 310 148 330" fill="none" stroke="#11222f" stroke-width="2.6" stroke-linecap="round"/>
+
+
+  <!-- ===== C: small chipped rock at the front right ===== -->
+  <path d="M330 334 L336 300 C340 280 352 264 370 256 L404 244 C426 238 448 246 460 264 L468 290 C472 312 464 332 444 342 C420 352 384 354 356 350 C340 348 332 342 330 334 Z" fill="#1c3240"/>
+  <path d="M332 330 L338 300 C342 280 354 266 372 258 L404 246 C424 240 444 248 456 264 L462 280 C444 300 414 314 380 320 C362 324 346 328 332 330 Z" fill="#2a4555"/>
+  <path d="M344 292 C348 278 358 268 374 262 L404 252 C420 248 436 252 446 262 C436 276 418 286 396 290 L360 296 C352 296 346 294 344 292 Z" fill="#3a5d6c"/>
+  <path d="M334 338 C356 348 396 350 430 346 C448 342 460 334 466 318 C462 332 456 338 444 342 C420 352 384 354 356 350 C344 348 336 344 334 338 Z" fill="#132535"/>
+  <path d="M404 252 C402 266 400 278 398 290" fill="none" stroke="#11222f" stroke-width="2" stroke-linecap="round"/>
+  <path d="M420 300 C426 314 424 326 430 338" fill="none" stroke="#11222f" stroke-width="1.8" stroke-linecap="round"/>
+
+
+  <!-- ===== pebble between B and C ===== -->
+  <path d="M262 338 C262 330 268 326 276 326 C284 326 290 330 290 336 C290 342 284 346 276 346 C268 346 262 342 262 338 Z" fill="#1c3240"/>
+  <path d="M265 334 C267 329 271 328 276 328 C282 328 286 330 287 334 C282 337 278 337 276 337 C271 337 267 336 265 334 Z" fill="#2e4b5b"/>
+</svg>

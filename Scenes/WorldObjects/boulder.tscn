@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxetp5n2ob3i5"]
+
+[ext_resource type="Script" uid="uid://birv8ejyymkum" path="res://Scripts/boulder.gd" id="1_boulder"]
+[ext_resource type="Texture2D" uid="uid://c8f1ucrj8nvvb" path="res://Assets/World Objects/Boulder01.png" id="2_tex"]
+
+[node name="Boulder" type="StaticBody2D" groups=["world_object"]]
+collision_mask = 0
+script = ExtResource("1_boulder")
+metadata/avgColor = Color(0.3, 0.45, 0.52, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+centered = false
+offset = Vector2(-200, -179.4)
+
+[node name="Blades" type="MultiMeshInstance2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-240, 0, -200, -49, -177, -72, -125, -109, -68, -138, -11, -153, 47, -152, 98, -143, 167, -112, 213, -60, 253, 14, 247, 49, 190, 72, -97, 66, -170, 52, -229, 32)
