@@ -62,6 +62,9 @@ func _add_card(achievement: Dictionary) -> void:
 
 func _make_category_header(category: String) -> Control:
 	var header := Label.new()
+	# Category names stay English in every language (a style choice for the
+	# Japanese version); only the achievements under them are translated.
+	header.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	header.text = category.to_upper()
 	header.add_theme_font_override("font", HEADER_FONT)
 	header.add_theme_font_size_override("font_size", 26)

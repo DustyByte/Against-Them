@@ -19,7 +19,7 @@ var _press_positions: Dictionary = {}
 
 func setup(skin: Dictionary) -> void:
 	skin_id = skin["id"]
-	_name_label.text = String(skin["name"]).to_upper()
+	_name_label.text = tr(String(skin["name"])).to_upper()
 
 	var preview := SkinPreview.new()
 	var path: String = skin.get("shader", "")

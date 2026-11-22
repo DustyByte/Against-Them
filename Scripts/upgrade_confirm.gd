@@ -28,18 +28,18 @@ func _ready() -> void:
 
 
 func setup(title: String, next_rank: int, max_rank: int, cost: int, echoes_owned: int) -> void:
-	setup_with_message(title, "Upgrade to rank %d / %d?" % [next_rank, max_rank], cost, echoes_owned)
+	setup_with_message(title, tr("Upgrade to rank %d / %d?") % [next_rank, max_rank], cost, echoes_owned)
 
 
 ## Same dialog with any message (used by the Shop for skin purchases).
 func setup_with_message(title: String, message: String, cost: int, echoes_owned: int) -> void:
-	_title.text = title.to_upper()
+	_title.text = tr(title).to_upper()
 	_message.text = message
 	_cost_value.text = str(cost)
 
 	_can_confirm = echoes_owned >= cost
 	_shortfall.visible = not _can_confirm
-	_shortfall.text = "You need %d more Echoes." % (cost - echoes_owned)
+	_shortfall.text = tr("You need %d more Echoes.") % (cost - echoes_owned)
 	_confirm.modulate.a = 1.0 if _can_confirm else 0.35
 
 

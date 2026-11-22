@@ -26,6 +26,11 @@ var _overlay: Control = null  # an open viewer or dialog; blocks tabs and Home
 func _tab_names() -> Array[String]:
 	return []
 
+## False keeps the tab names in English in every language (a style choice
+## for the Japanese version, per screen).
+func _translate_tab_names() -> bool:
+	return true
+
 func _accent() -> Color:
 	return Color(0.62, 0.88, 0.95)
 
@@ -108,7 +113,11 @@ func _make_tab(index: int, tab_name: String) -> Panel:
 	font.spacing_glyph = 3
 	var label := Label.new()
 	label.name = "Label"
-	label.text = tab_name.to_upper()
+	if _translate_tab_names():
+		label.text = tr(tab_name).to_upper()
+	else:
+		label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+		label.text = tab_name.to_upper()
 	label.add_theme_font_override("font", font)
 	label.add_theme_font_size_override("font_size", 24)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

@@ -44,11 +44,8 @@ func _build_cards() -> void:
 			var card := UPGRADE_CARD_SCENE.instantiate()
 			grid.add_child(card)
 			card.setup(
-				upgrade_id,
-				upgrade["title"],
-				upgrade["description"],
+				upgrade,
 				UpgradeManager.get_rank(upgrade_id),
-				upgrade["max_rank"],
 				UpgradeManager.get_next_cost(upgrade_id),
 				_load_icon(upgrade_id)
 			)
@@ -92,7 +89,7 @@ func _on_card_tapped(upgrade_id: String) -> void:
 	_confirm_dialog.setup(
 		upgrade["title"],
 		UpgradeManager.get_rank(upgrade_id) + 1,
-		upgrade["max_rank"],
+		UpgradeData.max_rank(upgrade),
 		UpgradeManager.get_next_cost(upgrade_id),
 		MetaProgression.echoes
 	)
@@ -105,7 +102,6 @@ func _on_card_tapped(upgrade_id: String) -> void:
 		if UpgradeManager.purchase(upgrade_id):
 			_cards[upgrade_id].set_rank(
 				UpgradeManager.get_rank(upgrade_id),
-				upgrade["max_rank"],
 				UpgradeManager.get_next_cost(upgrade_id)
 			)
 			_refresh_affordability()
@@ -132,6 +128,9 @@ func _make_category_header(category: String) -> Control:
 	font.spacing_glyph = 4
 
 	var header := Label.new()
+	# Section names stay English in every language (a style choice for the
+	# Japanese version); the upgrades under them are translated.
+	header.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	header.text = category.to_upper()
 	header.add_theme_font_override("font", font)
 	header.add_theme_font_size_override("font_size", 22)

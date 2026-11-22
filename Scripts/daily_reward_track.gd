@@ -87,7 +87,7 @@ func _draw() -> void:
 				var count: String = "x%d" % shards
 				draw_string(font, at + Vector2(BADGE_SIZE * 0.5 + 2.0, 5.0), count, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color(SHARD_COLOR, badge_alpha))
 
-		var day: String = "DAY %d" % (i + 1)
+		var day: String = tr("DAY %d") % (i + 1)
 		var day_alpha: float = 1.0 if is_today else 0.55
 		var dw: float = font.get_string_size(day, HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x
 		draw_string(font, Vector2(c.x - dw * 0.5, cy + HEX_RADIUS * BIG_SCALE + 24.0), day, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color(accent, day_alpha))

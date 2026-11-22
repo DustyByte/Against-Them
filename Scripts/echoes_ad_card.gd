@@ -35,7 +35,7 @@ var _message_tween: Tween
 
 func _ready() -> void:
 	_on_tap = $"../.."._check_if_touch_then_execute
-	_reward.text = "+%d ECHOES" % MetaProgression.AD_ECHOES_REWARD
+	_reward.text = tr("+%d ECHOES") % MetaProgression.AD_ECHOES_REWARD
 	_build_pips()
 
 	_close_btn.gui_input.connect(_on_tap.bind(_close_btn, _close))
@@ -75,7 +75,7 @@ func _refresh() -> void:
 		_pips.get_child(i).modulate.a = 1.0 if i < left else USED_PIP_ALPHA
 
 	var seconds: int = MetaProgression.seconds_until_echo_ad_reset()
-	_reset.text = "RESETS IN %dH %02dM" % [seconds / 3600, (seconds / 60) % 60]
+	_reset.text = tr("RESETS IN %dH %02dM") % [seconds / 3600, (seconds / 60) % 60]
 	_update_button()
 
 

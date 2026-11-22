@@ -14,6 +14,9 @@ const VIOLET := Color(0.78, 0.64, 0.98)
 func _tab_names() -> Array[String]:
 	return ["Items", "Skins"]
 
+func _translate_tab_names() -> bool:
+	return false   # ITEMS and SKINS stay English in every language
+
 func _accent() -> Color:
 	return VIOLET
 

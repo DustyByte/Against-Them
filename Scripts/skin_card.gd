@@ -39,7 +39,7 @@ func setup(skin: Dictionary) -> void:
 	skin_id = skin["id"]
 	_price = skin["price"]
 	_ads_needed = skin["ads"]
-	_name_label.text = String(skin["name"]).to_upper()
+	_name_label.text = tr(String(skin["name"])).to_upper()
 	_price_value.text = str(_price)
 
 	var preview := SkinPreview.new()

@@ -150,7 +150,7 @@ func _ready() -> void:
 ## Bonuses from upgrades bought with Echoes on the Upgrades screen.
 func _apply_permanent_upgrades() -> void:
 	# Swiftness
-	var speedMultiplier: float = UpgradeManager.move_speed_multiplier()
+	var speedMultiplier: float = (RUN_SPEED + UpgradeManager.move_speed_bonus()) / RUN_SPEED # Swiftness
 	RUN_SPEED *= speedMultiplier
 	WALK_SPEED *= speedMultiplier
 	speed = RUN_SPEED

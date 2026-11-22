@@ -49,7 +49,7 @@ func _fill_stats() -> void:
 ## After MAX_REVIVES_PER_RUN revives the button greys out.
 func _update_revive_button() -> void:
 	var left: int = maxi(global.MAX_REVIVES_PER_RUN - global.RUN_REVIVES, 0)
-	_revives_left.text = "REVIVES LEFT  %d / %d" % [left, global.MAX_REVIVES_PER_RUN]
+	_revives_left.text = tr("REVIVES LEFT  %d / %d") % [left, global.MAX_REVIVES_PER_RUN]
 	if left == 0:
 		_revive_icon.visible = false
 		revive_label.text = "NO REVIVES"
@@ -58,7 +58,7 @@ func _update_revive_button() -> void:
 	elif InventoryManager.anchor_shards > 0:
 		_revive_icon.visible = true
 		revive_label.text = "REVIVE"
-		_revive_sub.text = "Use a shard (%d owned)" % InventoryManager.anchor_shards
+		_revive_sub.text = tr("Use a shard (%d owned)") % InventoryManager.anchor_shards
 	else:
 		_revive_icon.visible = false
 		revive_label.text = "REVIVE"

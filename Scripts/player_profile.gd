@@ -119,7 +119,7 @@ func mark_account_prompt_shown() -> void:
 ## Returns "" if the username is fine, otherwise what's wrong with it.
 static func check_username(value: String) -> String:
 	if value.length() < USERNAME_MIN or value.length() > USERNAME_MAX:
-		return "Use %d to %d characters." % [USERNAME_MIN, USERNAME_MAX]
+		return TranslationServer.translate("Use %d to %d characters.") % [USERNAME_MIN, USERNAME_MAX]
 	var rule := RegEx.create_from_string("^[A-Za-z][A-Za-z0-9_]*$")
 	if rule.search(value) == null:
 		return "Letters, numbers and _ only, starting with a letter."
@@ -128,9 +128,9 @@ static func check_username(value: String) -> String:
 
 static func check_password(password: String) -> String:
 	if password.length() < PASSWORD_MIN:
-		return "Use at least %d characters." % PASSWORD_MIN
+		return TranslationServer.translate("Use at least %d characters.") % PASSWORD_MIN
 	if password.length() > PASSWORD_MAX:
-		return "Use at most %d characters." % PASSWORD_MAX
+		return TranslationServer.translate("Use at most %d characters.") % PASSWORD_MAX
 	return ""
 
 

@@ -13,7 +13,7 @@ var item_id: String = ""
 func setup(item: Dictionary) -> void:
 	item_id = item["id"]
 	_icon.texture = load(item["icon"])
-	_name_label.text = String(item["name"]).to_upper()
+	_name_label.text = tr(String(item["name"])).to_upper()
 	_desc.text = item["description"]
 	refresh()
 

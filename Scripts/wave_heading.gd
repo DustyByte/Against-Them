@@ -9,7 +9,7 @@ const GROUP: StringName = &"wave_heading"
 
 
 func setup(waveNo: int) -> void:
-	$Label.text = "Wave " + str(waveNo)
+	$Label.text = tr("Wave %d") % waveNo
 
 
 func animate_exit() -> void:

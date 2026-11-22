@@ -161,9 +161,9 @@ func _refresh_language_list() -> void:
 func _show_account() -> void:
 	_account_avatar.avatar = PlayerProfile.avatar
 	_account_name.text = PlayerProfile.username
-	var status := "" if PlayerProfile.claimed else "   ·   GUEST"
+	var status := "" if PlayerProfile.claimed else "   ·   " + tr("GUEST")
 	if PlayerProfile.signed_out:
-		status = "   ·   SIGNED OUT"
+		status = "   ·   " + tr("SIGNED OUT")
 	_account_hint.text = "ID  " + PlayerProfile.player_id + status
 
 

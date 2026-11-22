@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://c1xhxpw02wppr"
-path="res://.godot/imported/MPLUS1-VariableFont_wght.ttf-7bca96041be360eee2353b9150e95f24.fontdata"
+uid="uid://cokciu4po1436"
+path="res://.godot/imported/MPLUS1-Japanese.ttf-7fe3216be3725929b2304cd96a9ee18a.fontdata"
 
 [deps]
 
-source_file="res://Resources/MPLUS1-VariableFont_wght.ttf"
-dest_files=["res://.godot/imported/MPLUS1-VariableFont_wght.ttf-7bca96041be360eee2353b9150e95f24.fontdata"]
+source_file="res://Resources/MPLUS1-Japanese.ttf"
+dest_files=["res://.godot/imported/MPLUS1-Japanese.ttf-7fe3216be3725929b2304cd96a9ee18a.fontdata"]
 
 [params]
 

@@ -66,7 +66,7 @@ func _ready() -> void:
 
 func _show_identity() -> void:
 	_username.text = PlayerProfile.username
-	_player_id.text = "PLAYER ID  ·  " + PlayerProfile.player_id
+	_player_id.text = tr("PLAYER ID") + "  ·  " + PlayerProfile.player_id
 	_avatar.avatar = PlayerProfile.avatar
 	_claim_btn.visible = not PlayerProfile.claimed
 	_claim_gap.visible = _claim_btn.visible
@@ -79,7 +79,7 @@ func _show_identity() -> void:
 func _show_other() -> void:
 	_caption.text = "PLAYER PROFILE"
 	_username.text = str(other.get("name", ""))
-	_player_id.text = "PLAYER ID  ·  " + str(other.get("id", ""))
+	_player_id.text = tr("PLAYER ID") + "  ·  " + str(other.get("id", ""))
 	_avatar.avatar = int(other.get("avatar", 0))
 	_edit_btn.visible = false
 	_claim_btn.visible = false

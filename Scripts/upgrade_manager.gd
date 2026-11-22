@@ -43,7 +43,17 @@ func get_rank(upgrade_id: String) -> int:
 
 
 func get_max_rank(upgrade_id: String) -> int:
-	return _by_id[upgrade_id]["max_rank"]
+	return UpgradeData.max_rank(_by_id[upgrade_id])
+
+
+## What the owned ranks of an upgrade add up to, in its description's units
+## (percent for "%" upgrades).
+func total(upgrade_id: String) -> float:
+	return UpgradeData.total_at(_by_id[upgrade_id], get_rank(upgrade_id))
+
+
+func _share(upgrade_id: String) -> float:
+	return total(upgrade_id) / 100.0
 
 
 func is_maxed(upgrade_id: String) -> bool:
@@ -81,63 +91,64 @@ func purchase(upgrade_id: String) -> bool:
 ## Survival
 
 func max_hp_bonus() -> float:
-	return 5.0 * get_rank("vitality")
+	return total("vitality")
 
 
 func damage_taken_multiplier() -> float:
-	return 1.0 - 0.01 * get_rank("resilience")
+	return 1.0 - _share("resilience")
 
 
 ## HP restored every REGENERATION_INTERVAL seconds.
 func regeneration_per_tick() -> float:
-	return 0.1 * get_rank("regeneration")
+	return total("regeneration")
 
 
 func healing_multiplier() -> float:
-	return 1.0 + 0.05 * get_rank("recovery")
+	return 1.0 + _share("recovery")
 
 
 ## Utility
 
-func move_speed_multiplier() -> float:
-	return 1.0 + 0.02 * get_rank("swiftness")
+## Flat run speed added by Swiftness (the player scales walking to match).
+func move_speed_bonus() -> float:
+	return total("swiftness")
 
 
 func pickup_radius_multiplier() -> float:
-	return 1.0 + 0.05 * get_rank("magnetism")
+	return 1.0 + _share("magnetism")
 
 
 func exp_multiplier() -> float:
-	return 1.0 + 0.03 * get_rank("fortune")
+	return 1.0 + _share("fortune")
 
 
 func level_up_option_count() -> int:
-	return BASE_LEVEL_UP_OPTIONS + get_rank("extra_choice")
+	return BASE_LEVEL_UP_OPTIONS + roundi(total("extra_choice"))
 
 
 ## Weapons. Bonuses from the general Weapons upgrades and the weapon's own
-## upgrades are added together (e.g. Sharpened 2 + Caliber 3 = +10% damage).
+## upgrades are added together (e.g. Sharpened 2 + Caliber 2 = +19% damage).
 
 ## Applies every weapon upgrade to a fresh copy of a weapon's base stats.
 ## `weapon` is "rupture" or "torcher".
 func apply_weapon_upgrades(weapon: String, stats: Dictionary) -> Dictionary:
 	var base_damage: float = stats.damage
-	var damage_bonus: float = 0.02 * get_rank("sharpened")
-	var attack_speed_bonus: float = 0.015 * get_rank("rapid_fire")
-	var reload_reduction: float = 0.02 * get_rank("fast_hands")
-	var extra_ammo: int = get_rank("ammo_belt")
-	var knockback_bonus: float = 0.05 * get_rank("impact")
+	var damage_bonus: float = _share("sharpened")
+	var attack_speed_bonus: float = _share("rapid_fire")
+	var reload_reduction: float = _share("fast_hands")
+	var extra_ammo: int = roundi(total("ammo_belt"))
+	var knockback_bonus: float = _share("impact")
 
 	match weapon:
 		"rupture":
-			damage_bonus += 0.02 * get_rank("rupture_caliber")
-			extra_ammo += get_rank("rupture_extended_mag")
-			attack_speed_bonus += 0.02 * get_rank("rupture_quickdraw")
-			reload_reduction += 0.03 * get_rank("rupture_fast_reload")
+			damage_bonus += _share("rupture_caliber")
+			extra_ammo += roundi(total("rupture_extended_mag"))
+			attack_speed_bonus += _share("rupture_quickdraw")
+			reload_reduction += _share("rupture_fast_reload")
 		"torcher":
-			damage_bonus += 0.03 * get_rank("torcher_fuel")
-			extra_ammo += get_rank("torcher_ammo_tank")
-			knockback_bonus += 0.10 * get_rank("torcher_backdraft")
+			damage_bonus += _share("torcher_fuel")
+			extra_ammo += roundi(total("torcher_ammo_tank"))
+			knockback_bonus += _share("torcher_backdraft")
 
 	stats.damage *= 1.0 + damage_bonus
 	stats.damage += base_damage * slayers_tithe_bonus(weapon)
@@ -167,44 +178,44 @@ func add_slayers_tithe(weapon: String, base_damage: float) -> float:
 
 
 func boss_damage_multiplier() -> float:
-	return 1.0 + 0.02 * get_rank("boss_bane")
+	return 1.0 + _share("boss_bane")
 
 
 ## Torcher's own burns: Ignition stacks with Pyromancy (applied in burn_inflict).
 func torcher_burn_damage_multiplier() -> float:
-	return 1.0 + 0.03 * get_rank("torcher_ignition")
+	return 1.0 + _share("torcher_ignition")
 
 
 func torcher_burn_duration_multiplier() -> float:
-	return 1.0 + 0.05 * get_rank("torcher_lingering_flame")
+	return 1.0 + _share("torcher_lingering_flame")
 
 
 ## Elemental & status (every source)
 
 func burn_damage_multiplier() -> float:
-	return 1.0 + 0.03 * get_rank("pyromancy")
+	return 1.0 + _share("pyromancy")
 
 
 func freeze_duration_multiplier() -> float:
-	return 1.0 + 0.03 * get_rank("cryomancy")
+	return 1.0 + _share("cryomancy")
 
 
 func bleed_damage_multiplier() -> float:
-	return 1.0 + 0.03 * get_rank("hemomancy")
+	return 1.0 + _share("hemomancy")
 
 
 func lightning_damage_multiplier() -> float:
-	return 1.0 + 0.03 * get_rank("electromancy")
+	return 1.0 + _share("electromancy")
 
 
 ## Economy
 
 func harvest_echoes(kills: int) -> int:
-	return (maxi(kills, 0) / HARVEST_KILLS_PER_ECHO) * get_rank("harvest")
+	return (maxi(kills, 0) / HARVEST_KILLS_PER_ECHO) * roundi(total("harvest"))
 
 
 func boss_bounty_per_boss() -> int:
-	return get_rank("boss_bounty")
+	return roundi(total("boss_bounty"))
 
 
 ## Re-reads the save file (after a cloud save replaced it).

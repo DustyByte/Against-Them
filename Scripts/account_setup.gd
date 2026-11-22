@@ -72,7 +72,7 @@ func _setup_login() -> void:
 	if PlayerProfile.signed_out:
 		_hint.text = "This account was signed in on another device. Sign in again to keep playing on this one; its saved progress replaces the progress here."
 	elif PlayerProfile.is_registered() and not PlayerProfile.claimed:
-		_hint.text += " This account has no username yet, so you won't be able to come back to it."
+		_hint.text = tr(_hint.text) + tr(" This account has no username yet, so you won't be able to come back to it.")
 	_username.placeholder_text = "Your username"
 	_username.max_length = 32
 	_password.placeholder_text = "Your password"
@@ -84,9 +84,9 @@ func _setup_delete() -> void:
 	_caption.text = "ACCOUNT"
 	_caption.add_theme_color_override("font_color", Color(DANGER, 0.85))
 	_title.text = "DELETE ACCOUNT"
-	_hint.text = "This permanently deletes %s (ID %s) and erases all progress on this device: Echoes, upgrades, skins and achievements. It can't be undone." \
+	_hint.text = tr("This permanently deletes %s (ID %s) and erases all progress on this device: Echoes, upgrades, skins and achievements. It can't be undone.") \
 		% [PlayerProfile.username, PlayerProfile.player_id]
-	_username_label.text = 'TYPE "%s" TO CONFIRM' % DELETE_WORD
+	_username_label.text = tr('TYPE "%s" TO CONFIRM') % DELETE_WORD
 	_username_label.add_theme_color_override("font_color", Color(DANGER, 0.85))
 	_username.placeholder_text = DELETE_WORD
 	_username.max_length = 12
@@ -153,7 +153,7 @@ func _submit_claim() -> void:
 		return
 	_set_busy(false)
 	if result.ok:
-		_show_done("WELCOME, " + PlayerProfile.username.to_upper(), "Your username is locked in. Remember your password.")
+		_show_done(tr("WELCOME, %s") % PlayerProfile.username.to_upper(), "Your username is locked in. Remember your password.")
 		return
 	match result.field:
 		"username": _show_error(_username_error, result.error)
@@ -178,17 +178,17 @@ func _submit_login() -> void:
 		_status.text = result.error
 		return
 	if not result.restored:
-		_show_done("WELCOME BACK, " + PlayerProfile.username.to_upper(), "You're signed in. This device's progress is now saved to your account.")
+		_show_done(tr("WELCOME BACK, %s") % PlayerProfile.username.to_upper(), "You're signed in. This device's progress is now saved to your account.")
 		return
 	# The account's progress replaced this device's: reload the home screen with it.
-	_show_done("WELCOME BACK, " + PlayerProfile.username.to_upper(), "Your saved progress is loaded.", false)
+	_show_done(tr("WELCOME BACK, %s") % PlayerProfile.username.to_upper(), "Your saved progress is loaded.", false)
 	await get_tree().create_timer(1.6).timeout
 	get_tree().reload_current_scene()
 
 
 func _submit_delete() -> void:
 	if not _delete_word_typed():
-		_show_error(_username_error, 'Type "%s" to confirm.' % DELETE_WORD)
+		_show_error(_username_error, tr('Type "%s" to confirm.') % DELETE_WORD)
 		return
 
 	_set_busy(true)

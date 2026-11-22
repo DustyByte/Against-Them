@@ -1,0 +1,575 @@
+keys,en,ja
+" This account has no username yet, so you won't be able to come back to it."," This account has no username yet, so you won't be able to come back to it.", このアカウントにはまだユーザー名がないため、二度と戻ることはできません。
++%d ANCHOR SHARD,+%d ANCHOR SHARD,+%d ANCHOR SHARD
++%d ANCHOR SHARDS,+%d ANCHOR SHARDS,+%d ANCHOR SHARD
++%d ECHOES,+%d ECHOES,+%d ECHOES
++%s Echoes from each boss,+%s Echoes from each boss,ボス1体につきEchoes+%s
++%s Echoes per 200 kills,+%s Echoes per 200 kills,200撃破につきEchoes+%s
++%s HP every 3 seconds,+%s HP every 3 seconds,3秒ごとにHP+%s
++%s Rupture max ammo,+%s Rupture max ammo,Ruptureの最大弾数+%s
++%s Torcher max ammo,+%s Torcher max ammo,Torcherの最大弾数+%s
++%s max HP,+%s max HP,最大HP+%s
++%s max ammo for every weapon,+%s max ammo for every weapon,全武器の最大弾数+%s
++%s movement speed,+%s movement speed,移動速度+%s
++%s%% EXP gain,+%s%% EXP gain,獲得EXP+%s%%
++%s%% Rupture attack speed,+%s%% Rupture attack speed,Ruptureの攻撃速度+%s%%
++%s%% Rupture damage,+%s%% Rupture damage,Ruptureのダメージ+%s%%
++%s%% Torcher burn damage,+%s%% Torcher burn damage,Torcherの燃焼ダメージ+%s%%
++%s%% Torcher damage,+%s%% Torcher damage,Torcherのダメージ+%s%%
++%s%% Torcher knockback,+%s%% Torcher knockback,Torcherのノックバック+%s%%
++%s%% bleed damage,+%s%% bleed damage,出血ダメージ+%s%%
++%s%% burn damage,+%s%% burn damage,燃焼ダメージ+%s%%
++%s%% burn duration,+%s%% burn duration,燃焼時間+%s%%
++%s%% damage to bosses,+%s%% damage to bosses,ボスへのダメージ+%s%%
++%s%% freeze duration,+%s%% freeze duration,凍結時間+%s%%
++%s%% healing received,+%s%% healing received,受ける回復量+%s%%
++%s%% knockback,+%s%% knockback,ノックバック+%s%%
++%s%% lightning damage,+%s%% lightning damage,雷ダメージ+%s%%
++%s%% pickup radius,+%s%% pickup radius,取得範囲+%s%%
++%s%% weapon attack speed,+%s%% weapon attack speed,武器の攻撃速度+%s%%
++%s%% weapon damage,+%s%% weapon damage,武器ダメージ+%s%%
++1 ANCHOR SHARD,+1 ANCHOR SHARD,+1 ANCHOR SHARD
++1 option on every level-up,+1 option on every level-up,レベルアップ時の選択肢+1
++10 ECHOES,+10 ECHOES,+10 ECHOES
++20 ECHOES,+20 ECHOES,+20 ECHOES
++20% weapon damage & + 30% knockback.,+20% weapon damage & + 30% knockback.,武器ダメージ+20%、ノックバック+30%。
+-%s%% Rupture reload time,-%s%% Rupture reload time,Ruptureのリロード時間-%s%%
+-%s%% incoming damage,-%s%% incoming damage,受けるダメージ-%s%%
+-%s%% reload time,-%s%% reload time,リロード時間-%s%%
+1 AD,1 AD,広告1本
+"3-16 letters, numbers or _","3-16 letters, numbers or _",英数字または _ で3〜16文字
+A new version of Against Them is on the Play Store.,A new version of Against Them is on the Play Store.,Play ストアに Against Them の新しいバージョンがあります。
+ACCOUNT,ACCOUNT,ACCOUNT
+ACCOUNT PROFILE,ACCOUNT PROFILE,ACCOUNT PROFILE
+ACHIEVEMENT UNLOCKED!,ACHIEVEMENT UNLOCKED!,実績解除！
+ACHIEVEMENTS,ACHIEVEMENTS,実績
+ACTIVE,ACTIVE,使用中
+ADS,ADS,広告
+AGAINST THEM,AGAINST THEM,AGAINST THEM
+AMMO,AMMO,弾薬
+ANCHOR SHARD,ANCHOR SHARD,ANCHOR SHARD
+AUDIO,AUDIO,AUDIO
+Accumulate,Accumulate,Accumulate
+Achievement,Achievement,実績
+Achievements,Achievements,実績
+Ad Privacy Choices,Ad Privacy Choices,広告のプライバシー設定
+Adrenaline,Adrenaline,Adrenaline
+Aggresive Snail,Aggresive Snail,Aggresive Snail
+All Summon CD Reduced by 28%.,All Summon CD Reduced by 28%.,すべての召喚のクールダウンが28%短縮される。
+All Summon damage +30%,All Summon damage +30%,すべての召喚のダメージ+30%
+All Summon gains attack speed equivalent to your attack speed,All Summon gains attack speed equivalent to your attack speed,すべての召喚が、あなたの攻撃速度と同じだけ攻撃速度を得る
+All Summons Attack Speed +10%. summons have 35% chance to Call down a fire field bomb.,All Summons Attack Speed +10%. summons have 35% chance to Call down a fire field bomb.,すべての召喚の攻撃速度+10%。召喚は35%の確率でFiery Fieldの爆弾を呼ぶ。
+All summon attack speed +15%. Summons Have a 33% Chance to Summon a lightning strike on a random enemy.,All summon attack speed +15%. Summons Have a 33% Chance to Summon a lightning strike on a random enemy.,すべての召喚の攻撃速度+15%。召喚は33%の確率でランダムな敵に落雷を呼ぶ。
+"Ammo +1. If the chance to gain damage in Rhythm fails to trigger, then add the chance to next kill. Resets upon weapon damage gain from Rhythm.","Ammo +1. If the chance to gain damage in Rhythm fails to trigger, then add the chance to next kill. Resets upon weapon damage gain from Rhythm.",弾薬+1。Rhythmのダメージ獲得が発動しなかった場合、その確率を次の撃破に加算する。Rhythmで武器ダメージを得るとリセットされる。
+Ammo Belt,Ammo Belt,Ammo Belt
+Ammo Tank,Ammo Tank,Ammo Tank
+Anchor Shard,Anchor Shard,Anchor Shard
+Anomaly,Anomaly,Anomaly
+"Apply burn 1,000 times","Apply burn 1,000 times","燃焼を1,000回付与する"
+"Apply burn 10,000 times","Apply burn 10,000 times","燃焼を10,000回付与する"
+Apply burn 100 times,Apply burn 100 times,燃焼を100回付与する
+At least 8 characters,At least 8 characters,8文字以上
+Aura,Aura,Aura
+Aura Damage doubled.,Aura Damage doubled.,Auraのダメージが2倍になる。
+Aura Farm,Aura Farm,Aura Farm
+Aura damage tick CD Reduced by 24%.,Aura damage tick CD Reduced by 24%.,Auraのダメージ間隔が24%短縮される。
+Aura range +25%,Aura range +25%,Auraの範囲+25%
+BAIL OUT,BAIL OUT,脱出
+BODY DESTROYED,BODY DESTROYED,機体大破
+BOSSES SLAIN,BOSSES SLAIN,撃破したボス
+Backdraft,Backdraft,Backdraft
+Black holes Event horizon enlargens by 10%,Black holes Event horizon enlargens by 10%,ブラックホールの事象の地平面が10%拡大する
+Boss Bane,Boss Bane,Boss Bane
+Boss Bounty,Boss Bounty,Boss Bounty
+Bosses,Bosses,ボス
+Brittle Veins,Brittle Veins,Brittle Veins
+Broader Field,Broader Field,Broader Field
+Build & Upgrades,Build & Upgrades,ビルドと強化
+CANCEL,CANCEL,キャンセル
+CHOOSE PORTRAIT,CHOOSE PORTRAIT,アイコンを選ぶ
+CLAIM,CLAIM,受け取る
+CLAIM USERNAME,CLAIM USERNAME,ユーザー名を登録
+CLAIM YOUR NAME,CLAIM YOUR NAME,名前を登録
+CLAIMED,CLAIMED,受け取り済み
+CLOSE,CLOSE,閉じる
+COMBAT RECORD,COMBAT RECORD,戦績
+COME BACK TOMORROW,COME BACK TOMORROW,また明日
+CONFIRM,CONFIRM,確認
+Caliber,Caliber,Caliber
+Chain Reaction,Chain Reaction,Chain Reaction
+Chained Lightning strikes now retains +5% damage.,Chained Lightning strikes now retains +5% damage.,連鎖した雷がダメージを+5%多く保つようになる。
+Challenges,Challenges,チャレンジ
+Change what ads may use about you,Change what ads may use about you,広告に使用される情報を変更
+Cold Wind,Cold Wind,Cold Wind
+Colder,Colder,Colder
+Collect your Echoes and return to orbit,Collect your Echoes and return to orbit,Echoesを回収して軌道に戻る
+Complete 10 waves with exactly 1 HP,Complete 10 waves with exactly 1 HP,HPちょうど1で10ウェーブをクリアする
+Complete 10 waves without taking damage in one run,Complete 10 waves without taking damage in one run,1回のランでダメージを受けずに10ウェーブをクリアする
+Complete 100 runs,Complete 100 runs,ランを100回完了する
+Complete 100 waves in one run,Complete 100 waves in one run,1回のランで100ウェーブをクリアする
+Complete 25 runs,Complete 25 runs,ランを25回完了する
+Complete 25 waves without taking damage in one run,Complete 25 waves without taking damage in one run,1回のランでダメージを受けずに25ウェーブをクリアする
+Complete 250 runs,Complete 250 runs,ランを250回完了する
+Complete 50 waves in one run,Complete 50 waves in one run,1回のランで50ウェーブをクリアする
+Complete 500 runs,Complete 500 runs,ランを500回完了する
+Complete a wave with exactly 1 HP,Complete a wave with exactly 1 HP,HPちょうど1でウェーブをクリアする
+Complete a wave without taking damage,Complete a wave without taking damage,ダメージを受けずにウェーブをクリアする
+Complete wave 1,Complete wave 1,ウェーブ1をクリアする
+Complete waves 1-10 without taking damage,Complete waves 1-10 without taking damage,ウェーブ1〜10をダメージを受けずにクリアする
+Complete waves 1-20 without taking damage,Complete waves 1-20 without taking damage,ウェーブ1〜20をダメージを受けずにクリアする
+Complete your first run,Complete your first run,初めてのランを完了する
+Conductive Hallows,Conductive Hallows,Conductive Hallows
+Couldn't connect. Check your internet and try again.,Couldn't connect. Check your internet and try again.,接続できませんでした。インターネット接続を確認して、もう一度お試しください。
+Crushing Weight,Crushing Weight,Crushing Weight
+Cryo Increase,Cryo Increase,Cryo Increase
+Cryolite,Cryolite,Cryolite
+Cryolite II,Cryolite II,Cryolite II
+Cryomancy,Cryomancy,Cryomancy
+DAY %d,DAY %d,%d日目
+DAY %d OF %d,DAY %d OF %d,%d日目 / %d日
+DAY 1 OF 7,DAY 1 OF 7,1日目 / 7日
+DELETE,DELETE,削除
+DELETE ACCOUNT,DELETE ACCOUNT,アカウント削除
+DESCEND,DESCEND,降下
+DESCENT LOG,DESCENT LOG,DESCENT LOG
+DESCENT ON HOLD,DESCENT ON HOLD,DESCENT ON HOLD
+DESCENTS,DESCENTS,降下回数
+DONE FOR TODAY,DONE FOR TODAY,本日は終了
+Dagger CD Reduced by 28%.,Dagger CD Reduced by 28%.,ダガーのクールダウンが28%短縮される。
+Dagger gets a KnockBack effect.,Dagger gets a KnockBack effect.,ダガーにノックバック効果が付く。
+Damage tick CD Reduced by 33%.,Damage tick CD Reduced by 33%.,ダメージ間隔が33%短縮される。
+"Deal 1,000 damage with a single hit","Deal 1,000 damage with a single hit","1撃で1,000ダメージを与える"
+"Deal 10,000 damage with a single hit","Deal 10,000 damage with a single hit","1撃で10,000ダメージを与える"
+Default,Default,Default
+Description,Description,説明
+Drop a Bomb that ignites the ground on fire.,Drop a Bomb that ignites the ground on fire.,地面を燃え上がらせる爆弾を落とす。
+ECHO  ·  IN ORBIT  ·  AWAITING DESCENT,ECHO  ·  IN ORBIT  ·  AWAITING DESCENT,ECHO  ·  軌道上  ·  降下待機中
+ECHOES,ECHOES,ECHOES
+ECHOES EARNED,ECHOES EARNED,獲得ECHOES
+END RUN,END RUN,ランを終了
+ENEMIES SLAIN,ENEMIES SLAIN,撃破した敵
+EQUIP,EQUIP,装備する
+EQUIP IT FROM INVENTORY,EQUIP IT FROM INVENTORY,所持品から装備できます
+EQUIPPED,EQUIPPED,装備中
+"Earn 1,000 Echoes total","Earn 1,000 Echoes total","Echoesを累計1,000獲得する"
+"Earn 10,000 Echoes total","Earn 10,000 Echoes total","Echoesを累計10,000獲得する"
+Earn 100 Echoes total,Earn 100 Echoes total,Echoesを累計100獲得する
+"Earn 50,000 Echoes total","Earn 50,000 Echoes total","Echoesを累計50,000獲得する"
+Echoes,Echoes,Echoes
+Echoes & Meta Progression,Echoes & Meta Progression,Echoesと永続成長
+Economy,Economy,経済
+Electromancy,Electromancy,Electromancy
+Elemental & Status,Elemental & Status,属性と状態異常
+Eliminate,Eliminate,Eliminate
+Ember Warden,Ember Warden,Ember Warden
+End the run,End the run,ランを終了する
+Enemy Kills,Enemy Kills,撃破
+English,English,English
+Enrage The Beast,Enrage The Beast,Enrage The Beast
+Enter your password.,Enter your password.,パスワードを入力してください。
+Enter your username.,Enter your username.,ユーザー名を入力してください。
+Every 250 enemies killed by Aura increases weapon damage by 1,Every 250 enemies killed by Aura increases weapon damage by 1,Auraで敵を250体倒すごとに武器ダメージが1上昇する
+Extended Mag,Extended Mag,Extended Mag
+Extended Singularity,Extended Singularity,Extended Singularity
+Extra Choice,Extra Choice,Extra Choice
+FEEDBACK,FEEDBACK,FEEDBACK
+FOR EACH SHORT AD YOU WATCH,FOR EACH SHORT AD YOU WATCH,短い広告を1本見るごとに
+Fast Hands,Fast Hands,Fast Hands
+Fast Reload,Fast Reload,Fast Reload
+Faster,Faster,Faster
+Faster Orbit,Faster Orbit,Faster Orbit
+Feed the Monster,Feed the Monster,Feed the Monster
+Fiery Field,Fiery Field,Fiery Field
+Fire Area radius +20%. Reduce drop CD by 0.8 sec.,Fire Area radius +20%. Reduce drop CD by 0.8 sec.,炎の範囲の半径+20%。投下のクールダウンを0.8秒短縮する。
+Focus,Focus,Focus
+"For every 100 HP you currently have, inccrease Icicle damage by 5.","For every 100 HP you currently have, inccrease Icicle damage by 5.",現在のHP100ごとに、氷柱のダメージが5上昇する。
+"For every 100 HP you currently have, increase Retribution Damage by 10.","For every 100 HP you currently have, increase Retribution Damage by 10.",現在のHP100ごとに、Retributionのダメージが10上昇する。
+For every enemy killed there is a 1% chance to get +1% Weapon damage.,For every enemy killed there is a 1% chance to get +1% Weapon damage.,敵を倒すたびに1%の確率で武器ダメージ+1%を得る。
+Force,Force,Force
+Fortune,Fortune,Fortune
+"Freeze 1,000 enemies","Freeze 1,000 enemies","敵を1,000体凍結させる"
+Freeze 10 enemies at once,Freeze 10 enemies at once,敵を同時に10体凍結させる
+"Freeze 10,000 enemies","Freeze 10,000 enemies","敵を10,000体凍結させる"
+Freeze 100 enemies,Freeze 100 enemies,敵を100体凍結させる
+Freeze 25 enemies at once,Freeze 25 enemies at once,敵を同時に25体凍結させる
+Freezes enemies on its path.,Freezes enemies on its path.,通り道の敵を凍結させる。
+Frostbound,Frostbound,Frostbound
+"Frozen enemies killed with icicle, explodes into more icicles.","Frozen enemies killed with icicle, explodes into more icicles.",氷柱で倒した凍結中の敵が、さらに氷柱となって弾ける。
+Fuel,Fuel,Fuel
+Fully max out one upgrade branch,Fully max out one upgrade branch,強化ツリーを1つ最大まで上げる
+GATHER ECHOES,GATHER ECHOES,GATHER ECHOES
+GUEST,GUEST,ゲスト
+Gain a stack for each enemy hit during the outward throw. Each stack increases the dagger's return damage by 2. Stacks reset on next throw.,Gain a stack for each enemy hit during the outward throw. Each stack increases the dagger's return damage by 2. Stacks reset on next throw.,投げた往路で敵に当たるたびにスタックを得る。スタック1つにつき帰りのダメージが2上昇する。スタックは次の投擲でリセットされる。
+Gain an aura that deals 10 Exotic damage to all nearby enemies.,Gain an aura that deals 10 Exotic damage to all nearby enemies.,近くのすべての敵に10のExoticダメージを与えるAuraを得る。
+Get +50 max Hp for every 600 enemies killed using flying daggers.,Get +50 max Hp for every 600 enemies killed using flying daggers.,飛ぶダガーで敵を600体倒すごとに最大HP+50。
+Glowing Hallows,Glowing Hallows,Glowing Hallows
+Gravity Bomb,Gravity Bomb,Gravity Bomb
+Gravity zone damage tick CD Reduced by 28%.,Gravity zone damage tick CD Reduced by 28%.,重力場のダメージ間隔が28%短縮される。
+Gravity zone radius increases by 10%.,Gravity zone radius increases by 10%.,重力場の半径が10%拡大する。
+Gravity zone remains active for 1 second longer.,Gravity zone remains active for 1 second longer.,重力場が1秒長く持続する。
+Gravity zone resonates. Any damage dealt to an enemy within the zone is also applied to all other enemies inside the zone.,Gravity zone resonates. Any damage dealt to an enemy within the zone is also applied to all other enemies inside the zone.,重力場が共鳴する。場の中の敵に与えたダメージが、場の中の他のすべての敵にも与えられる。
+Greed,Greed,Greed
+Guest,Guest,ゲスト
+HIDE,HIDE,隠す
+HIGHEST WAVE,HIGHEST WAVE,最高ウェーブ
+HOME,HOME,ホーム
+Haptic Feedback,Haptic Feedback,振動
+Harvest,Harvest,Harvest
+Hasten The Beast,Hasten The Beast,Hasten The Beast
+Have 10 summons active at once,Have 10 summons active at once,召喚を同時に10体出す
+Have 20 summons active at once,Have 20 summons active at once,召喚を同時に20体出す
+Have 3 summons active at once,Have 3 summons active at once,召喚を同時に3体出す
+Have 5 summons active at once,Have 5 summons active at once,召喚を同時に5体出す
+Heavy Dagger,Heavy Dagger,Heavy Dagger
+Heavy Impact,Heavy Impact,Heavy Impact
+Hemomancy,Hemomancy,Hemomancy
+Hexa Adapt,Hexa Adapt,Hexa Adapt
+Hexa Snail,Hexa Snail,Hexa Snail
+Hexa snails lightnings gains all the effects of your lightning.,Hexa snails lightnings gains all the effects of your lightning.,Hexa Snailの雷が、あなたの雷の効果をすべて得る。
+Hexa-snail lightning damage is increased by 50%,Hexa-snail lightning damage is increased by 50%,Hexa SnailのElectroダメージが50%上昇する
+Hit 10 enemies with one lightning chain,Hit 10 enemies with one lightning chain,1回の連鎖雷で敵10体に命中させる
+Hit 5 enemies with one lightning chain,Hit 5 enemies with one lightning chain,1回の連鎖雷で敵5体に命中させる
+"Hold 1,000 Echoes at once","Hold 1,000 Echoes at once","Echoesを1,000同時に所持する"
+"Hold 5,000 Echoes at once","Hold 5,000 Echoes at once","Echoesを5,000同時に所持する"
+Holy Might,Holy Might,Holy Might
+Home,Home,ホーム
+Home screen and runs,Home screen and runs,ホーム画面とラン中
+INCOMING TRANSMISSION,INCOMING TRANSMISSION,通信受信中
+INSTALLED,INSTALLED,インストール済み
+INVENTORY,INVENTORY,所持品
+ITEM,ITEM,アイテム
+Icicle Explosion,Icicle Explosion,Icicle Explosion
+"If the enemy dies from overload, it explodes dealing 1% of the overload damage to nearby enemies.","If the enemy dies from overload, it explodes dealing 1% of the overload damage to nearby enemies.",Overloadで倒れた敵は爆発し、そのダメージの1%を近くの敵に与える。
+Ignition,Ignition,Ignition
+Impact,Impact,Impact
+Increase Beam Thickness and damage,Increase Beam Thickness and damage,ビームの太さとダメージが上昇する
+Increase freeze duration,Increase freeze duration,凍結時間が延びる
+Interface Sounds,Interface Sounds,操作音
+Inventory,Inventory,所持品
+Items,Items,アイテム
+Japanese,Japanese,Japanese
+KILLS,KILLS,撃破数
+Kill 1 enemy,Kill 1 enemy,敵を1体倒す
+"Kill 1,000 enemies","Kill 1,000 enemies","敵を1,000体倒す"
+"Kill 1,000 enemies in one run","Kill 1,000 enemies in one run","1回のランで敵を1,000体倒す"
+"Kill 1,000 enemies with Cryolite","Kill 1,000 enemies with Cryolite","Cryoliteで敵を1,000体倒す"
+"Kill 1,000 enemies with Fiery Field","Kill 1,000 enemies with Fiery Field","Fiery Fieldで敵を1,000体倒す"
+"Kill 1,000 enemies with Gravity Bomb","Kill 1,000 enemies with Gravity Bomb","Gravity Bombで敵を1,000体倒す"
+"Kill 1,000 enemies with Laser Orb","Kill 1,000 enemies with Laser Orb","Laser Orbで敵を1,000体倒す"
+"Kill 1,000 enemies with Lightning Strike or Hexa Snail","Kill 1,000 enemies with Lightning Strike or Hexa Snail","Lightning StrikeまたはHexa Snailで敵を1,000体倒す"
+"Kill 1,000 enemies with Miniature Star","Kill 1,000 enemies with Miniature Star","Miniature Starで敵を1,000体倒す"
+"Kill 1,000 enemies with Recall Dagger","Kill 1,000 enemies with Recall Dagger","Recall Daggerで敵を1,000体倒す"
+"Kill 1,000 enemies with Rupture","Kill 1,000 enemies with Rupture","Ruptureで敵を1,000体倒す"
+"Kill 1,000 enemies with Silver Storm","Kill 1,000 enemies with Silver Storm","Silver Stormで敵を1,000体倒す"
+"Kill 1,000 enemies with Torcher","Kill 1,000 enemies with Torcher","Torcherで敵を1,000体倒す"
+"Kill 1,000 enemies with bleed","Kill 1,000 enemies with bleed","出血で敵を1,000体倒す"
+"Kill 1,000,000 enemies","Kill 1,000,000 enemies","敵を1,000,000体倒す"
+Kill 10 bosses,Kill 10 bosses,ボスを10体倒す
+Kill 10 bosses in one run,Kill 10 bosses in one run,1回のランでボスを10体倒す
+Kill 10 bosses with summons,Kill 10 bosses with summons,召喚でボスを10体倒す
+Kill 10 bosses within 10 seconds of them spawning,Kill 10 bosses within 10 seconds of them spawning,出現から10秒以内にボスを10体倒す
+Kill 10 bosses without taking damage,Kill 10 bosses without taking damage,ダメージを受けずにボスを10体倒す
+Kill 10 enemies with one explosion,Kill 10 enemies with one explosion,1回の爆発で敵を10体倒す
+Kill 10 enemies within 1 second,Kill 10 enemies within 1 second,1秒以内に敵を10体倒す
+"Kill 10,000 enemies","Kill 10,000 enemies","敵を10,000体倒す"
+"Kill 10,000 enemies in one run","Kill 10,000 enemies in one run","1回のランで敵を10,000体倒す"
+"Kill 10,000 enemies with Cryolite","Kill 10,000 enemies with Cryolite","Cryoliteで敵を10,000体倒す"
+"Kill 10,000 enemies with Fiery Field","Kill 10,000 enemies with Fiery Field","Fiery Fieldで敵を10,000体倒す"
+"Kill 10,000 enemies with Gravity Bomb","Kill 10,000 enemies with Gravity Bomb","Gravity Bombで敵を10,000体倒す"
+"Kill 10,000 enemies with Laser Orb","Kill 10,000 enemies with Laser Orb","Laser Orbで敵を10,000体倒す"
+"Kill 10,000 enemies with Lightning Strike or Hexa Snail","Kill 10,000 enemies with Lightning Strike or Hexa Snail","Lightning StrikeまたはHexa Snailで敵を10,000体倒す"
+"Kill 10,000 enemies with Miniature Star","Kill 10,000 enemies with Miniature Star","Miniature Starで敵を10,000体倒す"
+"Kill 10,000 enemies with Recall Dagger","Kill 10,000 enemies with Recall Dagger","Recall Daggerで敵を10,000体倒す"
+"Kill 10,000 enemies with Rupture","Kill 10,000 enemies with Rupture","Ruptureで敵を10,000体倒す"
+"Kill 10,000 enemies with Silver Storm","Kill 10,000 enemies with Silver Storm","Silver Stormで敵を10,000体倒す"
+"Kill 10,000 enemies with Torcher","Kill 10,000 enemies with Torcher","Torcherで敵を10,000体倒す"
+"Kill 10,000 enemies with bleed","Kill 10,000 enemies with bleed","出血で敵を10,000体倒す"
+Kill 100 bosses,Kill 100 bosses,ボスを100体倒す
+Kill 100 enemies,Kill 100 enemies,敵を100体倒す
+Kill 100 enemies in one run,Kill 100 enemies in one run,1回のランで敵を100体倒す
+Kill 100 enemies with Cryolite,Kill 100 enemies with Cryolite,Cryoliteで敵を100体倒す
+Kill 100 enemies with Fiery Field,Kill 100 enemies with Fiery Field,Fiery Fieldで敵を100体倒す
+Kill 100 enemies with Gravity Bomb,Kill 100 enemies with Gravity Bomb,Gravity Bombで敵を100体倒す
+Kill 100 enemies with Laser Orb,Kill 100 enemies with Laser Orb,Laser Orbで敵を100体倒す
+Kill 100 enemies with Lightning Strike or Hexa Snail,Kill 100 enemies with Lightning Strike or Hexa Snail,Lightning StrikeまたはHexa Snailで敵を100体倒す
+Kill 100 enemies with Miniature Star,Kill 100 enemies with Miniature Star,Miniature Starで敵を100体倒す
+Kill 100 enemies with Recall Dagger,Kill 100 enemies with Recall Dagger,Recall Daggerで敵を100体倒す
+Kill 100 enemies with Rupture,Kill 100 enemies with Rupture,Ruptureで敵を100体倒す
+Kill 100 enemies with Silver Storm,Kill 100 enemies with Silver Storm,Silver Stormで敵を100体倒す
+Kill 100 enemies with Torcher,Kill 100 enemies with Torcher,Torcherで敵を100体倒す
+Kill 100 enemies with bleed,Kill 100 enemies with bleed,出血で敵を100体倒す
+Kill 100 enemies with both weapons in one run,Kill 100 enemies with both weapons in one run,1回のランで両方の武器でそれぞれ敵を100体倒す
+"Kill 100,000 enemies","Kill 100,000 enemies","敵を100,000体倒す"
+"Kill 100,000 enemies with Rupture","Kill 100,000 enemies with Rupture","Ruptureで敵を100,000体倒す"
+"Kill 100,000 enemies with Torcher","Kill 100,000 enemies with Torcher","Torcherで敵を100,000体倒す"
+"Kill 2,500 enemies with Aura","Kill 2,500 enemies with Aura","Auraで敵を2,500体倒す"
+"Kill 2,500 frozen enemies","Kill 2,500 frozen enemies","凍結した敵を2,500体倒す"
+Kill 20 bosses in one run,Kill 20 bosses in one run,1回のランでボスを20体倒す
+Kill 200 enemies with the black hole in one run,Kill 200 enemies with the black hole in one run,1回のランでブラックホールで敵を200体倒す
+Kill 25 bosses,Kill 25 bosses,ボスを25体倒す
+Kill 25 bosses with the same weapon,Kill 25 bosses with the same weapon,同じ武器でボスを25体倒す
+Kill 25 enemies with one explosion,Kill 25 enemies with one explosion,1回の爆発で敵を25体倒す
+Kill 25 enemies within 1 second,Kill 25 enemies within 1 second,1秒以内に敵を25体倒す
+Kill 25 frozen enemies,Kill 25 frozen enemies,凍結した敵を25体倒す
+"Kill 25,000 enemies with Aura","Kill 25,000 enemies with Aura","Auraで敵を25,000体倒す"
+Kill 250 enemies with Aura,Kill 250 enemies with Aura,Auraで敵を250体倒す
+Kill 250 frozen enemies,Kill 250 frozen enemies,凍結した敵を250体倒す
+Kill 3 bosses in one run,Kill 3 bosses in one run,1回のランでボスを3体倒す
+"Kill 5,000 enemies in one run","Kill 5,000 enemies in one run","1回のランで敵を5,000体倒す"
+"Kill 5,000 enemies with Retribution","Kill 5,000 enemies with Retribution","Retributionで敵を5,000体倒す"
+Kill 50 bosses,Kill 50 bosses,ボスを50体倒す
+Kill 50 bosses with the same weapon,Kill 50 bosses with the same weapon,同じ武器でボスを50体倒す
+Kill 50 enemies with Retribution,Kill 50 enemies with Retribution,Retributionで敵を50体倒す
+Kill 50 enemies with the black hole in one run,Kill 50 enemies with the black hole in one run,1回のランでブラックホールで敵を50体倒す
+Kill 50 enemies within 1 second,Kill 50 enemies within 1 second,1秒以内に敵を50体倒す
+Kill 500 bosses,Kill 500 bosses,ボスを500体倒す
+Kill 500 enemies in one run,Kill 500 enemies in one run,1回のランで敵を500体倒す
+Kill 500 enemies with Retribution,Kill 500 enemies with Retribution,Retributionで敵を500体倒す
+Kill 500 enemies with both weapons in one run,Kill 500 enemies with both weapons in one run,1回のランで両方の武器でそれぞれ敵を500体倒す
+Kill a boss with a summon,Kill a boss with a summon,召喚でボスを倒す
+Kill a boss within 10 seconds of it spawning,Kill a boss within 10 seconds of it spawning,出現から10秒以内にボスを倒す
+Kill a boss without taking damage,Kill a boss without taking damage,ダメージを受けずにボスを倒す
+Kill your first boss,Kill your first boss,初めてボスを倒す
+Killing 100 enemies Regains 20 HP.,Killing 100 enemies Regains 20 HP.,敵を100体倒すとHPを20回復する。
+Killing 500 enemies with Retribution Increases your Max HP by 100.,Killing 500 enemies with Retribution Increases your Max HP by 100.,Retributionで敵を500体倒すと、最大HPが100増加する。
+Killing 500 enemies with Retribution increases Retribution Damage by 40%,Killing 500 enemies with Retribution increases Retribution Damage by 40%,Retributionで敵を500体倒すと、Retributionのダメージが40%上昇する
+Killing a boss increases weapon damage by +5% & increases chances of Rhythm,Killing a boss increases weapon damage by +5% & increases chances of Rhythm,ボスを倒すと武器ダメージが+5%上昇し、Rhythmの確率も上がる
+"Killing a boss permanently adds 0.5% of the weapon's base damage, for all future descends. Only the weapon that dealt the last blow gains it.","Killing a boss permanently adds 0.5% of the weapon's base damage, for all future descends. Only the weapon that dealt the last blow gains it.",ボスを倒すと、その武器の基礎ダメージの0.5%が今後のすべての降下で永続的に加算される。とどめを刺した武器だけが得る。
+LANGUAGE,LANGUAGE,LANGUAGE
+LATER,LATER,あとで
+LATEST,LATEST,最新
+LEADERBOARDS,LEADERBOARDS,RANKING
+LEFT TODAY,LEFT TODAY,本日の残り
+LIFETIME,LIFETIME,累計
+LOADING...,LOADING...,読み込み中...
+LONGEST SURVIVAL,LONGEST SURVIVAL,最長生存時間
+Laser Orb,Laser Orb,Laser Orb
+Lasting Anomaly,Lasting Anomaly,Lasting Anomaly
+"Letters, numbers and _ only, starting with a letter.","Letters, numbers and _ only, starting with a letter.",英字で始まり、英数字と _ のみ使用できます。
+Life,Life,Life
+Life Steal,Life Steal,Life Steal
+Lightning Storm,Lightning Storm,Lightning Storm
+Lightning Strike,Lightning Strike,Lightning Strike
+Lightning falls on enemies on the Storms path.,Lightning falls on enemies on the Storms path.,嵐の通り道にいる敵に雷が落ちる。
+Limit reached this run,Limit reached this run,このランの上限に達しました
+Lingering Flame,Lingering Flame,Lingering Flame
+Locks on and Keeps beaming an enemy until it dies. No effect on Boss.,Locks on and Keeps beaming an enemy until it dies. No effect on Boss.,敵をロックオンし、倒すまで照射し続ける。ボスには効果なし。
+MAXED,MAXED,最大
+MISSED DAYS NEVER RESET YOUR TRACK,MISSED DAYS NEVER RESET YOUR TRACK,休んだ日があっても進行はリセットされません
+MOST KILLS IN A RUN,MOST KILLS IN A RUN,1ランの最多撃破
+Magnetism,Magnetism,Magnetism
+Max HP +50,Max HP +50,最大HP+50
+Menu taps and buttons,Menu taps and buttons,メニューのタップとボタン
+Miniature Star,Miniature Star,Miniature Star
+Momentum Pickups,Momentum Pickups,Momentum Pickups
+Monster Hunter,Monster Hunter,Monster Hunter
+More Fat For You,More Fat For You,More Fat For You
+More Fusion,More Fusion,More Fusion
+More Power Rabit!,More Power Rabit!,More Power Rabit!
+More languages are on their way.,More languages are on their way.,他の言語も準備中です。
+Music,Music,音楽
+NEXT TRANSMISSION IN %dH %02dM,NEXT TRANSMISSION IN %dH %02dM,次の通信まで %d時間%02d分
+NO REVIVES,NO REVIVES,復活不可
+No ad available. Check your connection and try again.,No ad available. Check your connection and try again.,広告を表示できません。接続を確認してもう一度お試しください。
+No items yet. Get them in the Shop.,No items yet. Get them in the Shop.,アイテムはまだありません。ショップで入手しよう。
+OR,OR,または
+OWNED,OWNED,所持
+Obtain your first summon,Obtain your first summon,初めての召喚を手に入れる
+Our servers are having trouble right now. Please try again a little later.,Our servers are having trouble right now. Please try again a little later.,現在サーバーに問題が発生しています。しばらくしてからもう一度お試しください。
+Overflowing Might,Overflowing Might,Overflowing Might
+Overload,Overload,Overload
+Overload Explosion,Overload Explosion,Overload Explosion
+PASSWORD,PASSWORD,パスワード
+PAUSED,PAUSED,PAUSED
+PLAYER ID,PLAYER ID,プレイヤーID
+PLAYER PROFILE,PLAYER PROFILE,プレイヤープロフィール
+PLEASE WAIT...,PLEASE WAIT...,お待ちください...
+PREPARING EFFECTS,PREPARING EFFECTS,エフェクトを準備中
+PRICE,PRICE,価格
+Pick Faster 6 times in one run,Pick Faster 6 times in one run,1回のランで「Faster」を6回選ぶ
+Pick Greed 5 times in one run,Pick Greed 5 times in one run,1回のランで「Greed」を5回選ぶ
+Pick a unique username and a password to make this account yours.,Pick a unique username and a password to make this account yours.,ユーザー名とパスワードを決めて、このアカウントを自分のものにしましょう。
+Picking up an exp has 0.5% chance to increases attack speed.,Picking up an exp has 0.5% chance to increases attack speed.,EXPを拾うと0.5%の確率で攻撃速度が上昇する。
+Picking up an exp has 5% chance to refill 1 ammo of the selected Weapon.,Picking up an exp has 5% chance to refill 1 ammo of the selected Weapon.,EXPを拾うと5%の確率で選択中の武器の弾を1発補充する。
+Pickup Range +50%,Pickup Range +50%,取得範囲+50%
+Please check your internet and try again a few seconds later,Please check your internet and try again a few seconds later,インターネット接続を確認し、数秒後にもう一度お試しください
+Pyromancy,Pyromancy,Pyromancy
+QUIT,QUIT,終了
+Quick Draw,Quick Draw,Quick Draw
+Quickdraw,Quickdraw,Quickdraw
+Quicker Strikes,Quicker Strikes,Quicker Strikes
+Quicker Stroms,Quicker Stroms,Quicker Stroms
+Quicker Wildfire,Quicker Wildfire,Quicker Wildfire
+RANK,RANK,ランク
+RECEIVE,RECEIVE,受け取る
+RECEIVED,RECEIVED,受け取り済み
+RELOAD,RELOAD,リロード
+RESETS IN %dH %02dM,RESETS IN %dH %02dM,リセットまで %d時間%02d分
+RESETS IN 0H 00M,RESETS IN 0H 00M,リセットまで 0時間00分
+RESUME,RESUME,再開
+RETURN TO ORBIT,RETURN TO ORBIT,軌道に戻る
+REVIVE,REVIVE,復活
+REVIVES LEFT  %d / %d,REVIVES LEFT  %d / %d,残り復活回数  %d / %d
+REVIVES LEFT  2 / 2,REVIVES LEFT  2 / 2,残り復活回数  2 / 2
+REWARD,REWARD,報酬
+ROGUE PLANET  ·  UMBRA,ROGUE PLANET  ·  UMBRA,放浪惑星  ·  UMBRA
+RUN,RUN,ラン
+RUN COMPLETE,RUN COMPLETE,ラン完了
+Raise to rank 1 / 10?,Raise to rank 1 / 10?,ランク 1 / 10 に強化しますか？
+Rapid Fire,Rapid Fire,Rapid Fire
+Rapid Ignition,Rapid Ignition,Rapid Ignition
+Rapid Manifestation,Rapid Manifestation,Rapid Manifestation
+Reach level 25 in one run,Reach level 25 in one run,1回のランでレベル25に到達する
+Reach level 35 in one run,Reach level 35 in one run,1回のランでレベル35に到達する
+Reach level 40 in one run,Reach level 40 in one run,1回のランでレベル40に到達する
+Reach level 45 in one run,Reach level 45 in one run,1回のランでレベル45に到達する
+Reach wave 100,Reach wave 100,ウェーブ100に到達する
+Reach wave 100 without using a revive,Reach wave 100 without using a revive,復活を使わずにウェーブ100に到達する
+Reach wave 150,Reach wave 150,ウェーブ150に到達する
+Reach wave 150 without using a revive,Reach wave 150 without using a revive,復活を使わずにウェーブ150に到達する
+Reach wave 20 without picking any summon,Reach wave 20 without picking any summon,召喚を選ばずにウェーブ20に到達する
+Reach wave 25,Reach wave 25,ウェーブ25に到達する
+Reach wave 25 without picking Life or Regen,Reach wave 25 without picking Life or Regen,LifeもRegenも選ばずにウェーブ25に到達する
+Reach wave 30 with only one weapon,Reach wave 30 with only one weapon,武器1つだけでウェーブ30に到達する
+Reach wave 40 without picking any summon,Reach wave 40 without picking any summon,召喚を選ばずにウェーブ40に到達する
+Reach wave 5,Reach wave 5,ウェーブ5に到達する
+Reach wave 50,Reach wave 50,ウェーブ50に到達する
+Reach wave 50 without picking Life or Regen,Reach wave 50 without picking Life or Regen,LifeもRegenも選ばずにウェーブ50に到達する
+Reach wave 60 with only one weapon,Reach wave 60 with only one weapon,武器1つだけでウェーブ60に到達する
+Reach wave 75,Reach wave 75,ウェーブ75に到達する
+Reaper’s Rebate,Reaper’s Rebate,Reaper’s Rebate
+Recall Dagger,Recall Dagger,Recall Dagger
+Recovery,Recovery,Recovery
+Recycle,Recycle,Recycle
+Redraw  (Watch Ad),Redraw  (Watch Ad),引き直す（広告を見る）
+Reduce Laser CD by 28%.,Reduce Laser CD by 28%.,レーザーのクールダウンを28%短縮する。
+Reduce SilverStorm CD by 24%.,Reduce SilverStorm CD by 24%.,Silver Stormのクールダウンを24%短縮する。
+Reduce drop CD by 0.8 sec.,Reduce drop CD by 0.8 sec.,投下のクールダウンを0.8秒短縮する。
+Regain 5 HP per 5 seconds,Regain 5 HP per 5 seconds,5秒ごとにHPを5回復する
+Regen,Regen,Regen
+Regeneration,Regeneration,Regeneration
+Relentless Pulse,Relentless Pulse,Relentless Pulse
+Resilience,Resilience,Resilience
+Resonance,Resonance,Resonance
+Retribution,Retribution,Retribution
+Revives Echo once after falling in a run.,Revives Echo once after falling in a run.,ラン中に倒れたEchoを一度だけ復活させる。
+Rhythm,Rhythm,Rhythm
+Rhythm Accumulate,Rhythm Accumulate,Rhythm Accumulate
+Rhythm Increase,Rhythm Increase,Rhythm Increase
+Rupture,Rupture,Rupture
+SETTINGS,SETTINGS,設定
+SHIP SYSTEMS,SHIP SYSTEMS,SHIP SYSTEMS
+SHOP,SHOP,ショップ
+SHOW,SHOW,表示
+SIGN IN,SIGN IN,サインイン
+SIGNAL LOST,SIGNAL LOST,信号途絶
+SIGNED OUT,SIGNED OUT,サインアウト中
+SKIN,SKIN,スキン
+SKIN NAME,SKIN NAME,スキン名
+STAT,STAT,項目
+SWITCH ACCOUNT,SWITCH ACCOUNT,アカウント切り替え
+Select,Select,選択
+Severe Judgement,Severe Judgement,Severe Judgement
+Sharpened,Sharpened,Sharpened
+Shop,Shop,ショップ
+Sign in with the username and password of a claimed account. Its saved progress replaces the progress on this device.,Sign in with the username and password of a claimed account. Its saved progress replaces the progress on this device.,登録済みアカウントのユーザー名とパスワードでサインインしてください。そのアカウントの保存データが、この端末の進行状況を置き換えます。
+Silver Storm,Silver Storm,Silver Storm
+Skins,Skins,スキン
+Slayer's Tithe,Slayer's Tithe,Slayer's Tithe
+Soul Harveste,Soul Harveste,Soul Harveste
+Spread bleed to 10 enemies with one icicle explosion,Spread bleed to 10 enemies with one icicle explosion,1回の氷柱爆発で出血を敵10体に広げる
+Spread bleed to 20 enemies with one icicle explosion,Spread bleed to 20 enemies with one icicle explosion,1回の氷柱爆発で出血を敵20体に広げる
+Star collapses into a black hole.,Star collapses into a black hole.,スターが崩壊してブラックホールになる。
+Star increases in size by 25%.,Star increases in size by 25%.,スターの大きさが25%増加する。
+Star orbit time Reduced by 25%.,Star orbit time Reduced by 25%.,スターの周回時間が25%短縮される。
+Status Effects,Status Effects,状態異常
+Striking a burning enemy with lightning takes critical damage.,Striking a burning enemy with lightning takes critical damage.,燃焼中の敵に雷が当たるとクリティカルダメージを与える。
+Summon & shoot out an ice storm every 3 seconds. Deals 15 Frost Damage to enemies on its path.,Summon & shoot out an ice storm every 3 seconds. Deals 15 Frost Damage to enemies on its path.,3秒ごとに氷の嵐を召喚して放つ。通り道の敵に15のFrostダメージを与える。
+Summon Adrenaline,Summon Adrenaline,Summon Adrenaline
+Summon a Crystal that shoots out icicles towards enemy dealing 10 Frost damage & Freezing them.,Summon a Crystal that shoots out icicles towards enemy dealing 10 Frost damage & Freezing them.,敵に氷柱を放つクリスタルを召喚し、10のFrostダメージを与えて凍結させる。
+"Summon a large dagger that shoots outwards and flies back to you, dealing 10 Damage to enemies on its path. Inflicts bleed.","Summon a large dagger that shoots outwards and flies back to you, dealing 10 Damage to enemies on its path. Inflicts bleed.",外へ飛び出して手元に戻る大きなダガーを召喚し、通り道の敵に10ダメージを与える。出血を付与する。
+Summon a lightning strike on a nearby enemy every 3rd weapon's shot. Lightning deals 20 Electro Damage.,Summon a lightning strike on a nearby enemy every 3rd weapon's shot. Lightning deals 20 Electro Damage.,武器を3発撃つごとに近くの敵に落雷を召喚する。落雷は20のElectroダメージを与える。
+Summon a mini star that orbits around you and deals 15 Inferno Daamge. Inflicts burn.,Summon a mini star that orbits around you and deals 15 Inferno Daamge. Inflicts burn.,周囲を回るMiniature Starを召喚し、15のInfernoダメージを与える。燃焼を付与する。
+Summon a snail friend that strikes a random enemy with lightning every 3 seconds dealing 20 Electro Damage.,Summon a snail friend that strikes a random enemy with lightning every 3 seconds dealing 20 Electro Damage.,3秒ごとにランダムな敵へ雷を落とすカタツムリの仲間を召喚する。20のElectroダメージを与える。
+Summon a temporal space distortion near every enemy nearby dealing 20 Exotic Damage.,Summon a temporal space distortion near every enemy nearby dealing 20 Exotic Damage.,近くの敵すべての周囲に時空の歪みを召喚し、20のExoticダメージを与える。
+Summon an Orb that shoots a weak laser beam towards nearest enemy. Inflicts short burn.,Summon an Orb that shoots a weak laser beam towards nearest enemy. Inflicts short burn.,最も近い敵に弱いレーザーを撃つオーブを召喚する。短い燃焼を付与する。
+Summons,Summons,召喚
+Survival,Survival,生存
+Survive 1 hour,Survive 1 hour,1時間生き延びる
+Survive 10 minutes,Survive 10 minutes,10分間生き延びる
+Survive 10 seconds at 1 HP,Survive 10 seconds at 1 HP,HP1で10秒間生き延びる
+Survive 2 hours,Survive 2 hours,2時間生き延びる
+Survive 30 minutes,Survive 30 minutes,30分間生き延びる
+Survive 30 seconds at 1 HP,Survive 30 seconds at 1 HP,HP1で30秒間生き延びる
+Swiftness,Swiftness,Swiftness
+Sync,Sync,Sync
+TAP TO VIEW,TAP TO VIEW,タップで表示
+TIME,TIME,時間
+TOP 100,TOP 100,TOP 100
+TRANSMISSION FROM EARTH,TRANSMISSION FROM EARTH,地球からの通信
+"TYPE ""%s"" TO CONFIRM","TYPE ""%s"" TO CONFIRM",確認のため「%s」と入力
+Take 0.1% amount of damage dealt from an Icicle and add it to your HP.,Take 0.1% amount of damage dealt from an Icicle and add it to your HP.,氷柱で与えたダメージの0.1%をHPとして吸収する。
+Taking Damage now increases attack speed of Summons as well for 5 seconds.,Taking Damage now increases attack speed of Summons as well for 5 seconds.,ダメージを受けると、5秒間召喚の攻撃速度も上昇するようになる。
+Taking damage increases movement speed & attack speed by 60% for 5 seconds.,Taking damage increases movement speed & attack speed by 60% for 5 seconds.,ダメージを受けると5秒間、移動速度と攻撃速度が60%上昇する。
+Thiccer Beam,Thiccer Beam,Thiccer Beam
+This account was signed in on another device. Sign in again from Settings.,This account was signed in on another device. Sign in again from Settings.,このアカウントは別の端末でサインインされました。設定から再度サインインしてください。
+This account was signed in on another device. Sign in again to keep playing on this one; its saved progress replaces the progress here.,This account was signed in on another device. Sign in again to keep playing on this one; its saved progress replaces the progress here.,このアカウントは別の端末でサインインされました。この端末で続けるには再度サインインしてください。保存データがこの端末の進行状況を置き換えます。
+"This permanently deletes %s (ID %s) and erases all progress on this device: Echoes, upgrades, skins and achievements. It can't be undone.","This permanently deletes %s (ID %s) and erases all progress on this device: Echoes, upgrades, skins and achievements. It can't be undone.",%s（ID %s）を完全に削除し、この端末のEchoes、強化、スキン、実績などすべての進行状況を消去します。元に戻すことはできません。
+"This version is no longer supported.
+Update from the Play Store to keep playing.","This version is no longer supported.
+Update from the Play Store to keep playing.","このバージョンはサポートが終了しました。
+Play ストアからアップデートしてプレイを続けてください。"
+Throw one additional Icicle.,Throw one additional Icicle.,氷柱を1本多く放つ。
+Throws a gravity bomb to a random place creating a gravity zone.,Throws a gravity bomb to a random place creating a gravity zone.,ランダムな場所にGravity Bombを投げ、重力場を作る。
+Torcher,Torcher,Torcher
+"Type ""%s"" to confirm.","Type ""%s"" to confirm.",確認のため「%s」と入力してください。
+UNPACKING RESOURCES,UNPACKING RESOURCES,リソースを展開中
+UPDATE,UPDATE,アップデート
+UPDATE AVAILABLE,UPDATE AVAILABLE,アップデートがあります
+UPDATE REQUIRED,UPDATE REQUIRED,アップデートが必要です
+UPGRADE,UPGRADE,強化
+UPGRADES,UPGRADES,強化
+USERNAME,USERNAME,ユーザー名
+Unlock this skin for Echo?,Unlock this skin for Echo?,Echoのこのスキンを解放しますか？
+Unlocks,Unlocks,解放
+Upgrade to rank %d / %d?,Upgrade to rank %d / %d?,ランク %d / %d に強化しますか？
+Upgrades,Upgrades,強化
+Use %d to %d characters.,Use %d to %d characters.,%d〜%d文字で入力してください。
+Use a shard (%d owned),Use a shard (%d owned),シャードを使う（所持 %d）
+Use at least %d characters.,Use at least %d characters.,%d文字以上で入力してください。
+Use at most %d characters.,Use at most %d characters.,%d文字以内で入力してください。
+Utilities,Utilities,ユーティリティ
+Utility,Utility,ユーティリティ
+Vibrate on hits and key moments,Vibrate on hits and key moments,被弾や重要な場面で振動
+Vitality,Vitality,Vitality
+Voidwalker,Voidwalker,Voidwalker
+WATCH AD,WATCH AD,広告を見る
+WATCH ADS,WATCH ADS,広告を見る
+WATCH TO GET,WATCH TO GET,見て入手
+WAVES CLEARED,WAVES CLEARED,クリアしたウェーブ
+"WELCOME BACK, %s","WELCOME BACK, %s",おかえりなさい、%s
+"WELCOME, %s","WELCOME, %s",ようこそ、%s
+Wanderer,Wanderer,放浪者
+Watch an ad,Watch an ad,広告を見る
+Wave %d,Wave %d,Wave %d
+Wave 999,Wave 999,Wave 999
+Wave Milestones,Wave Milestones,ウェーブ到達
+Weapon CD Reduced by 32%.,Weapon CD Reduced by 32%.,武器のクールダウンが32%短縮される。
+Weapon Damage +10%,Weapon Damage +10%,武器ダメージ+10%
+Weapons,Weapons,武器
+"Weapons, enemies and pickups","Weapons, enemies and pickups",武器、敵、アイテム取得
+"When dropped over frozen enemies, they explode into 3 ice shards, causing bleed upon hitting enemy.","When dropped over frozen enemies, they explode into 3 ice shards, causing bleed upon hitting enemy.",凍結した敵の上に落とすと、敵は3つの氷片となって弾け、当たった敵に出血を与える。
+"While Focus is locked on, the beam grows 20% thicker and stronger every second, up to 3x.","While Focus is locked on, the beam grows 20% thicker and stronger every second, up to 3x.",Focusでロックオン中、ビームは毎秒20%太く強くなる（最大3倍）。
+World Sounds,World Sounds,ゲーム内の音
+YOU HAVE,YOU HAVE,所持数
+You need %d more Echoes.,You need %d more Echoes.,Echoesがあと%d必要です。
+You need 0 more Echoes.,You need 0 more Echoes.,Echoesがあと0必要です。
+You're signed in. This device's progress is now saved to your account.,You're signed in. This device's progress is now saved to your account.,サインインしました。この端末の進行状況はアカウントに保存されます。
+Your Lighting chains to 1 additional enemy dealing half of the damage.,Your Lighting chains to 1 additional enemy dealing half of the damage.,雷がさらに1体の敵に連鎖し、半分のダメージを与える。
+Your first descent is done. Pick a unique username and a password to make this account yours.,Your first descent is done. Pick a unique username and a password to make this account yours.,初めての降下が終わりました。ユーザー名とパスワードを決めて、このアカウントを自分のものにしましょう。
+Your password,Your password,パスワード
+Your saved progress is loaded.,Your saved progress is loaded.,保存データを読み込みました。
+Your username,Your username,ユーザー名
+Your username is locked in. Remember your password.,Your username is locked in. Remember your password.,ユーザー名を登録しました。パスワードを忘れないでください。
+ANIM_IDLE,IDLE,待機
+ANIM_RUN,RUN,走る

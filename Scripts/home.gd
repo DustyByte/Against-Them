@@ -537,8 +537,12 @@ func _on_leaderboard_pressed() -> void:
 	_open_sub_screen(preload("res://Scenes/HUD/leaderboard.tscn").instantiate(), false)
 
 
+## Settings is a card over the home screen (its own backdrop dims the home
+## screen and blocks taps on it), not a full screen like the Shop.
 func _on_settings_pressed() -> void:
-	_open_sub_screen(preload("res://Scenes/HUD/settings.tscn").instantiate(), false)
+	var settings: Control = preload("res://Scenes/HUD/settings.tscn").instantiate()
+	settings.returnPressed.connect(settings.queue_free)
+	_show_popup(settings)
 
 
 func _on_shop_pressed() -> void:

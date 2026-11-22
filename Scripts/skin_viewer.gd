@@ -41,7 +41,7 @@ func setup(skin: Dictionary) -> void:
 	column.add_theme_constant_override("separation", 20)
 	panel.add_child(column)
 
-	column.add_child(_label(String(skin["name"]).to_upper(), 34, Color(0.93, 0.96, 1), 4))
+	column.add_child(_label(tr(String(skin["name"])).to_upper(), 34, Color(0.93, 0.96, 1), 4))
 
 	_preview_slot = PanelContainer.new()
 	_preview_slot.custom_minimum_size = PREVIEW_SIZE
@@ -54,7 +54,7 @@ func setup(skin: Dictionary) -> void:
 	modes.add_theme_constant_override("separation", 14)
 	column.add_child(modes)
 	for anim in ["idle", "run"]:
-		var b := _button(anim.to_upper(), Vector2(150, 50))
+		var b := _button(tr("ANIM_" + anim.to_upper()), Vector2(150, 50))   # own keys: "RUN" here is running
 		b.gui_input.connect(func(event: InputEvent):
 			if Tap.is_tap(b, event):
 				_show_animation(anim))

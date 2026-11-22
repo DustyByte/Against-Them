@@ -45,12 +45,12 @@ func _ready() -> void:
 func _refresh() -> void:
 	var waiting: bool = MetaProgression.can_claim_daily_reward()
 	var day: int = MetaProgression.daily_reward_day()
-	_reward.text = "+%d ECHOES" % MetaProgression.DAILY_REWARDS[day]
+	_reward.text = tr("+%d ECHOES") % MetaProgression.DAILY_REWARDS[day]
 	var shards: int = MetaProgression.DAILY_SHARDS[day]
 	_shards.visible = shards > 0
 	_shards_gap.visible = shards > 0
-	_shards.text = "+%d ANCHOR SHARD%s" % [shards, "S" if shards > 1 else ""]
-	_hint.text = "DAY %d OF %d" % [day + 1, MetaProgression.DAILY_REWARDS.size()]
+	_shards.text = tr("+%d ANCHOR SHARDS" if shards > 1 else "+%d ANCHOR SHARD") % shards
+	_hint.text = tr("DAY %d OF %d") % [day + 1, MetaProgression.DAILY_REWARDS.size()]
 	_track.today = day
 	_track.waiting = waiting
 	_track.queue_redraw()
@@ -60,7 +60,7 @@ func _refresh() -> void:
 		_claim_btn.modulate.a = 1.0
 	else:
 		var seconds: int = MetaProgression.seconds_until_echo_ad_reset()   # local midnight
-		_status.text = "NEXT TRANSMISSION IN %dH %02dM" % [seconds / 3600, (seconds / 60) % 60]
+		_status.text = tr("NEXT TRANSMISSION IN %dH %02dM") % [seconds / 3600, (seconds / 60) % 60]
 		_claim_label.text = "RECEIVED"
 		_claim_btn.modulate.a = 0.4
 

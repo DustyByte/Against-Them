@@ -14,6 +14,9 @@ var _skin_cards: Array = []
 func _tab_names() -> Array[String]:
 	return ["Skins", "Utilities"]   # the first opens with the shop
 
+func _translate_tab_names() -> bool:
+	return false   # SKINS and UTILITIES stay English in every language
+
 
 func _populate() -> void:
 	_populate_skins()

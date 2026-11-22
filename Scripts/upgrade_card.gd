@@ -1,10 +1,12 @@
 extends PanelContainer
 
-## One upgrade in the Upgrades grid: icon, name, description, rank, a
+## One upgrade in the Upgrades grid: icon, name, what it gives, rank, a
 ## segmented bar with one block per rank (lit blocks = ranks already bought)
 ## and the Echoes cost of the next rank. Tapping the card emits `tapped`.
 
 signal tapped(upgrade_id: String)
+
+const UpgradeData = preload("res://Scripts/upgrade_data.gd")
 
 const BLOCK_LIT_COLOR: Color = Color(0.62, 0.88, 0.95, 1)
 const BLOCK_UNLIT_COLOR: Color = Color(0.62, 0.88, 0.95, 0.1)
@@ -30,6 +32,7 @@ const NAME_MIN_FONT_SIZE: int = 17
 const NAME_LETTER_SPACING: int = 3
 
 var upgrade_id: String = ""
+var _upgrade: Dictionary = {}
 var _name_base_font: Font
 var _name_fonts: Dictionary = {} # letter spacing -> FontVariation
 var _touch_start: Vector2
@@ -101,23 +104,26 @@ func _get_name_font(spacing: int) -> FontVariation:
 	return _name_fonts[spacing]
 
 
-## Call after the card is in the tree. `cost` is the price of the next rank.
-## Pass `icon` = null to keep the placeholder.
-func setup(id: String, title: String, description: String, rank: int, max_rank: int, cost: int, icon: Texture2D = null) -> void:
-	upgrade_id = id
-	_name_label.text = title.to_upper()
-	_desc_label.text = description
+## Call after the card is in the tree. `upgrade` is its entry in
+## upgrade_data.gd; `cost` is the price of the next rank. Pass `icon` = null
+## to keep the placeholder.
+func setup(upgrade: Dictionary, rank: int, cost: int, icon: Texture2D = null) -> void:
+	_upgrade = upgrade
+	upgrade_id = upgrade["id"]
+	_name_label.text = tr(upgrade["title"]).to_upper()
 	_fit_name()
 
 	_placeholder.visible = icon == null
 	_icon.visible = icon != null
 	_icon.texture = icon
 
-	set_rank(rank, max_rank, cost)
+	set_rank(rank, cost)
 
 
-func set_rank(rank: int, max_rank: int, cost: int) -> void:
+func set_rank(rank: int, cost: int) -> void:
+	var max_rank: int = UpgradeData.max_rank(_upgrade)
 	rank = clampi(rank, 0, max_rank)
+	_desc_label.text = UpgradeData.describe(_upgrade, rank)
 	_rank_value.text = "%d / %d" % [rank, max_rank]
 
 	# At max rank there is nothing left to buy, so the cost becomes "MAXED".

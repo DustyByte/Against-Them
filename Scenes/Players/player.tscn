@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bi7qhq164iar7" path="res://Scenes/HUD/progress_bar_custom.tscn" id="4_gfkdj"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="4_xxqkx"]
 [ext_resource type="Script" uid="uid://cdecv7i3coobq" path="res://Scripts/exp_pick_up_system.gd" id="5_fkybt"]
-[ext_resource type="Texture2D" path="res://Assets/Shader Textures/ExplosionLight64.png" id="5_gfkdj"]
+[ext_resource type="Texture2D" uid="uid://bndvwcnxd68m3" path="res://Assets/Shader Textures/ExplosionLight64.png" id="5_gfkdj"]
 [ext_resource type="Script" uid="uid://w0ofbwgn0f7i" path="res://Scripts/on_run_camera.gd" id="6_x3wgy"]
 [ext_resource type="Script" uid="uid://jyihhchc5gmt" path="res://Scripts/muzzle_flash.gd" id="6_xxqkx"]
 [ext_resource type="Script" uid="uid://rik4mkjyngdk" path="res://Scripts/featuresand_summon_management_system.gd" id="7_3smsa"]
@@ -28,14 +28,14 @@ Label/font_sizes/font_size = 14
 Label/fonts/font = ExtResource("4_xxqkx")
 Panel/styles/panel = SubResource("StyleBoxFlat_j8xm3")
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_flash"]
+blend_mode = 1
+
 [sub_resource type="Curve" id="Curve_j8xm3"]
 _limits = [0.0, 6.0, 0.0, 0.32839504]
 bake_resolution = 20
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.037299193, 6), -1.425696, -1.425696, 0, 0, Vector2(0.32839504, 0), -67.10795, 0.0, 0, 0]
 point_count = 3
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_flash"]
-blend_mode = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fkybt"]
 radius = 1000.0
