@@ -2,6 +2,7 @@ extends Node
 
 signal echoes_changed(total: int)
 signal echo_ads_changed(left: int, limit: int)
+signal daily_reward_changed
 
 const SAVE_PATH: String = "user://meta_progression.cfg"
 const SAVE_SECTION: String = "meta_progression"
@@ -20,9 +21,20 @@ const ECHOES_PER_BOSS: int = 5
 const AD_ECHOES_REWARD: int = 10
 const DAILY_ECHO_AD_LIMIT: int = 7
 
+## Daily transmission from Earth (Echo's ship on the Home screen holds it): one
+## reward a day on a 7-day track. Missing a day doesn't reset the track, it
+## just waits; after day 7 it starts over. A day starts at local midnight, and
+## a clock turned back can't claim again (the last claim date must be passed).
+const DAILY_REWARDS: Array[int] = [20, 25, 30, 40, 50, 60, 150]
+## Anchor Shards (revives) given on top, per track day.
+const DAILY_SHARDS: Array[int] = [0, 1, 0, 1, 0, 1, 2]
+
 var echoes: int = 0
 var _echo_ads_today: int = 0
 var _echo_ads_date: String = ""   # local date ("YYYY-MM-DD") the counter belongs to
+var _daily_claims: int = 0         # daily rewards claimed in all; the track day is this % 7
+var _daily_last_claim: String = "" # local date of the last claim
+var _daily_last_shown: String = "" # local date the card last opened by itself
 
 
 func _ready() -> void:
@@ -37,10 +49,16 @@ func load_progress() -> void:
 		echoes = maxi(int(save_file.get_value(SAVE_SECTION, "echoes", 0)), 0)
 		_echo_ads_today = maxi(int(save_file.get_value(SAVE_SECTION, "echo_ads_today", 0)), 0)
 		_echo_ads_date = str(save_file.get_value(SAVE_SECTION, "echo_ads_date", ""))
+		_daily_claims = maxi(int(save_file.get_value(SAVE_SECTION, "daily_claims", 0)), 0)
+		_daily_last_claim = str(save_file.get_value(SAVE_SECTION, "daily_last_claim", ""))
+		_daily_last_shown = str(save_file.get_value(SAVE_SECTION, "daily_last_shown", ""))
 	else:
 		echoes = 0
 		_echo_ads_today = 0
 		_echo_ads_date = ""
+		_daily_claims = 0
+		_daily_last_claim = ""
+		_daily_last_shown = ""
 		if error != ERR_FILE_NOT_FOUND:
 			push_warning("Could not load meta progression save: %s" % error_string(error))
 
@@ -51,6 +69,9 @@ func save_progress() -> void:
 	save_file.set_value(SAVE_SECTION, "echoes", echoes)
 	save_file.set_value(SAVE_SECTION, "echo_ads_today", _echo_ads_today)
 	save_file.set_value(SAVE_SECTION, "echo_ads_date", _echo_ads_date)
+	save_file.set_value(SAVE_SECTION, "daily_claims", _daily_claims)
+	save_file.set_value(SAVE_SECTION, "daily_last_claim", _daily_last_claim)
+	save_file.set_value(SAVE_SECTION, "daily_last_shown", _daily_last_shown)
 
 	var error: Error = save_file.save(SAVE_PATH)
 	if error != OK:
@@ -72,10 +93,12 @@ func reload_from_disk() -> void:
 	load_progress()
 	echoes_changed.emit(echoes)
 	echo_ads_changed.emit(echo_ads_left_today(), DAILY_ECHO_AD_LIMIT)
+	daily_reward_changed.emit()
 
 
 ## Back to zero Echoes (used when the account is deleted). The daily ad
-## counter is kept, so deleting an account doesn't reset the ad limit.
+## counter and the daily reward track are kept, so deleting an account
+## doesn't reset them.
 func reset_progress() -> void:
 	echoes = 0
 	save_progress()
@@ -142,3 +165,46 @@ func _roll_echo_ad_day() -> void:
 		_echo_ads_today = 0
 		save_progress()
 		echo_ads_changed.emit(DAILY_ECHO_AD_LIMIT, DAILY_ECHO_AD_LIMIT)
+
+
+# --- Daily transmission -------------------------------------------------------
+
+## True if today's reward is waiting (none claimed yet today).
+func can_claim_daily_reward() -> bool:
+	return Time.get_date_string_from_system() > _daily_last_claim   # "YYYY-MM-DD" sorts by date
+
+
+## The track day (0-6) to show as today's: the one waiting to be claimed, or
+## the one already claimed today.
+func daily_reward_day() -> int:
+	if can_claim_daily_reward():
+		return _daily_claims % DAILY_REWARDS.size()
+	return (_daily_claims - 1 + DAILY_REWARDS.size()) % DAILY_REWARDS.size()
+
+
+## Claims today's reward: grants its Echoes (and Anchor Shards, on the days
+## that have them) and moves the track on. Returns the Echoes granted (0 if
+## today's was already claimed).
+func claim_daily_reward() -> int:
+	if not can_claim_daily_reward():
+		return 0
+	var day: int = _daily_claims % DAILY_REWARDS.size()
+	var amount: int = DAILY_REWARDS[day]
+	_daily_claims += 1
+	_daily_last_claim = Time.get_date_string_from_system()
+	add_echoes(amount)   # saves the track too
+	if DAILY_SHARDS[day] > 0:
+		InventoryManager.add_anchor_shards(DAILY_SHARDS[day])
+	daily_reward_changed.emit()
+	return amount
+
+
+## True once a day, the first time the Home screen asks while today's reward
+## is waiting: the card opens by itself then. Marks it as shown.
+func should_show_daily_reward() -> bool:
+	var today: String = Time.get_date_string_from_system()
+	if not can_claim_daily_reward() or _daily_last_shown == today:
+		return false
+	_daily_last_shown = today
+	save_progress()
+	return true

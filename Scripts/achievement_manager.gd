@@ -536,6 +536,16 @@ func is_claimed(achievement_id: String) -> bool:
 	return _claimed_ids.has(achievement_id)
 
 
+## True if any achievement is completed but its reward not yet claimed (the
+## Home screen shows a dot on Achievements then).
+func has_unclaimed() -> bool:
+	for achievement: Dictionary in AchievementData.ACHIEVEMENTS:
+		var id: String = achievement["id"]
+		if not _claimed_ids.has(id) and is_completed(id):
+			return true
+	return false
+
+
 ## Pays out the reward. Returns the Echoes granted, or 0 if it can't be claimed.
 func claim(achievement_id: String) -> int:
 	if is_claimed(achievement_id) or not is_completed(achievement_id):

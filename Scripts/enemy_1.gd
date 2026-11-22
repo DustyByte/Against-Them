@@ -48,8 +48,7 @@ func twitch() -> void:
 func set_as_boss() -> void:
 	asBoss = true
 	bossWave = global.WAVE_MANAGER.currentWave
-	stats = EnemyStats.new(global.ENEMY_BOSS_BASE_STATS.Type_1)
-	reverseInertia *= 0.34
+	stats = EnemyStats.new(global.ENEMY_BOSS_BASE_STATS.Type_1)   # same knockback as any enemy
 
 
 func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0) -> void:

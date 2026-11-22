@@ -91,7 +91,11 @@ func _input(event: InputEvent) -> void:
 			JSFingerIndex = -1
 			release_knob()
 	
-	elif JSFingerIndex != -1 and event is InputEventScreenDrag:
+	elif event is InputEventScreenDrag:
+		# Only the finger that grabbed the stick moves it: another finger (the
+		# fire stick's, say) dragging elsewhere must not steer Echo.
+		if JSFingerIndex == -1 or event.index != JSFingerIndex:
+			return
 		var JSToDragPointDirection := joyStickPosition.direction_to(event.position)
 		var dragPointToJSCenterDistance := joyStickPosition.distance_to(event.position)
 		

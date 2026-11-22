@@ -1,7 +1,9 @@
 extends Node2D
 
 ## Home screen: Echo's view from orbit. A breathing planet with Echo's ship
-## circling it, and a minimal menu on the left.
+## circling it, and a minimal menu on the left. The ship also holds the daily
+## transmission from Earth: it glows while one is waiting, opens the card when
+## tapped on the near side of Umbra, and the card opens by itself once a day.
 
 const DISCORD_LINK: String = "https://discord.gg/5BBKuufMV"
 
@@ -15,6 +17,9 @@ const BREATHE_PERIOD: float = 6.0
 const ORBIT_RADII_RATIO: Vector2 = Vector2(0.62, 0.15) # of the planet's diameter
 const ORBIT_TILT: float = -0.2
 const SHIP_ORBIT_PERIOD: float = 26.0
+const SHIP_TAP_SIZE: float = 96.0
+## The daily card opens by itself this long after the Home screen appears.
+const DAILY_CARD_DELAY: float = 1.0
 
 ## Quiet looping background music (Assets/Music/umbra_ambient.wav, mixed
 ## soft already). Fades in on arrival and out on Descend.
@@ -23,6 +28,15 @@ const AMBIENT_VOLUME_DB: float = -3.0
 const AMBIENT_FADE_IN: float = 3.0
 
 const INTRO_STAGGER: float = 0.06
+
+## Claimed Echoes: an Echoes icon pops up where the amount was shown, speeds
+## into the counter, and the counter counts up when it lands (collect_echoes).
+const ECHO_ICON: Texture2D = preload("res://Assets/HUD Elements/echoe_icon.svg")
+const FLY_ICON_SIZE: float = 60.0
+const FLY_POP_TIME: float = 0.22
+const FLY_HOLD_TIME: float = 0.12
+const FLY_TIME: float = 0.65
+const FLY_ARC: float = 70.0
 const INTRO_SLIDE: float = 24.0
 
 @onready var _menu: Control = $UI/Menu
@@ -61,6 +75,20 @@ var _umbra_touch: Node2D = null
 var _ambient: AudioStreamPlayer = null
 ## Nebulas for the backdrop, drawn once at half resolution (nebula_bake.gdshader).
 var _nebula_view: SubViewport = null
+## Invisible tap target that follows the ship (while it is in front of Umbra).
+var _ship_btn: Control = null
+var _ship_ready: bool = false
+var _ship_pop: float = 0.0
+var _ship_check: float = 0.0   # seconds until the waiting state is checked again (midnight)
+var _planet_radius: float = 0.0   # on screen, for whether Umbra hides the ship
+var _account_prompt_pending: bool = false
+## The counter shows Echoes owned minus those still flying in.
+var _echoes_shown: int = 0
+var _echoes_in_flight: int = 0
+var _count_tween: Tween = null
+var _fly_layer: CanvasLayer = null   # above the whole UI, for the flying icons
+## Red dot beside Achievements while a completed one waits to be claimed.
+var _achievements_dot: NotifyDot = null
 
 
 func _ready() -> void:
@@ -75,7 +103,8 @@ func _ready() -> void:
 	global.SFX_TYPES_PERM["ui"] = SettingsManager.settings.ui_sfx
 	global.SFX_TYPES_PERM["game_world"] = SettingsManager.settings.game_world_sfx
 
-	_echoes_value.text = str(MetaProgression.echoes)
+	add_to_group(&"home_screen")   # claim screens find collect_echoes() through it
+	_set_echoes_shown(MetaProgression.echoes)
 	MetaProgression.echoes_changed.connect(_on_echoes_changed)
 	_version.text = "v" + global.GAME_VERSION
 	_show_profile()
@@ -93,10 +122,27 @@ func _ready() -> void:
 	_connect_button(_leaderboard_btn, _on_leaderboard_pressed)
 	_connect_button(_echoes_counter, _on_echoes_counter_pressed)   # the whole notch, not just its +
 
+	_ship_btn = Control.new()
+	_ship_btn.name = "ShipTap"
+	_ship_btn.size = Vector2(SHIP_TAP_SIZE, SHIP_TAP_SIZE)
+	_ship_btn.gui_input.connect(_on_ship_input)
+	$UI.add_child(_ship_btn)
+	$UI.move_child(_ship_btn, 0)   # under the menu, which lets touches through
+	MetaProgression.daily_reward_changed.connect(_refresh_ship)
+	_refresh_ship()
+
+	_achievements_dot = NotifyDot.new()
+	_achievements_dot.name = "NotifyDot"
+	_achievements_btn.get_node("Margin/HBox/Label").add_child(_achievements_dot)
+	AchievementManager.achievement_completed.connect(_refresh_achievements_dot.unbind(1))
+	AchievementManager.achievement_claimed.connect(_refresh_achievements_dot.unbind(1))
+	_refresh_achievements_dot.call_deferred()   # after the label has its size
+
 	_start_ambient()
 	_play_intro()
 	_pulse_status_light()
 	_maybe_prompt_account()
+	_maybe_show_daily_reward()
 
 
 func _process(delta: float) -> void:
@@ -108,11 +154,21 @@ func _process(delta: float) -> void:
 	_planet_glow.position = planetSprite.position
 
 	# Echo's ship circling the planet.
-	var ship_angle: float = TAU * _time / SHIP_ORBIT_PERIOD
+	var ship_angle: float = _ship_angle()
+	_ship_check -= delta
+	if _ship_check <= 0.0:
+		_refresh_ship()   # a new day may have begun
 	for orbit in [_orbit_back, _orbit_front]:
 		orbit.center = planetSprite.position
 		orbit.ship_angle = ship_angle
+		orbit.ship_ready = _ship_ready
+		orbit.ship_time = _time
+		orbit.ship_pop = _ship_pop
 		orbit.queue_redraw()
+	# Tappable whenever it can be seen: not while Umbra's disc hides it.
+	var ship_at: Vector2 = _orbit_front.point_at(ship_angle)
+	_ship_btn.position = ship_at - _ship_btn.size * 0.5
+	_ship_btn.visible = _menu.visible and not _ship_hidden(ship_angle, ship_at)
 
 
 func _update_layout() -> void:
@@ -127,6 +183,7 @@ func _update_layout() -> void:
 	planetSprite.position = _planet_rest_position
 	if _umbra_touch:
 		_umbra_touch.radius = diameter * 0.5
+	_planet_radius = diameter * 0.5
 	_bake_nebula(screen)
 
 	var glow_size: float = diameter * 1.65
@@ -257,14 +314,167 @@ func play_ui_sfx() -> void:
 		UIPressAS.play()
 
 
-func _on_echoes_changed(total: int) -> void:
-	_echoes_value.text = str(total)
+## Shows the dot while an achievement waits to be claimed, just past the
+## end of the word ACHIEVEMENTS.
+func _refresh_achievements_dot() -> void:
+	var label: Label = _achievements_dot.get_parent()
+	# The label's own text width (it uses LabelSettings, not the theme font).
+	var text_width: float = label.get_minimum_size().x
+	_achievements_dot.position = Vector2(text_width + 4.0, (label.size.y - _achievements_dot.size.y) * 0.5)
+	_achievements_dot.visible = AchievementManager.has_unclaimed()
+
+
+func _on_echoes_changed(_total: int) -> void:
+	_sync_echoes(false)   # spending shows at once; claims hold theirs back while they fly
+
+
+# --- Claimed Echoes flying into the counter -----------------------------------
+
+## Call when `amount` Echoes are claimed from something shown at `from` (a
+## point on screen), before or right after MetaProgression adds them. The
+## counter keeps them back until the icon lands, then counts up.
+func collect_echoes(from: Vector2, amount: int) -> void:
+	hold_echoes(amount)
+	fly_echoes(from, amount)
+
+
+## Keeps `amount` just-added Echoes off the counter until fly_echoes() sends
+## them in (e.g. an ad paid out while still covering the screen).
+func hold_echoes(amount: int) -> void:
+	if amount <= 0:
+		return
+	_echoes_in_flight += amount
+	_sync_echoes(false)
+
+
+## Sends `amount` held Echoes into the counter as an icon from `from`, after
+## `delay` seconds.
+func fly_echoes(from: Vector2, amount: int, delay: float = 0.0) -> void:
+	if amount <= 0:
+		return
+	# On its own layer above the whole UI, so no list or card can cover it, and
+	# starting on screen even if what it came from is scrolled half out of view.
+	if _fly_layer == null:
+		_fly_layer = CanvasLayer.new()
+		_fly_layer.name = "FlyingEchoes"
+		_fly_layer.layer = $UI.layer + 1
+		add_child(_fly_layer)
+	var screen := Rect2(Vector2.ZERO, get_viewport_rect().size).grow(-FLY_ICON_SIZE * 0.6)
+	from = from.clamp(screen.position, screen.end)
+
+	var flier := preload("res://Scripts/flying_echo.gd").new()
+	flier.texture = ECHO_ICON
+	flier.icon_size = FLY_ICON_SIZE
+	flier.move_to(from, 0.0)
+	_fly_layer.add_child(flier)
+
+	var target_icon: Control = _echoes_counter.get_node(^"HBox/Icon")
+	var tween := create_tween()
+	if delay > 0.0:
+		tween.tween_interval(delay)
+	# Lift the counter above any open card's backdrop so the landing is seen.
+	tween.tween_callback(func(): $UI.move_child(_echoes_counter, _fade.get_index()))
+	# Pops into being...
+	tween.tween_method(func(s: float): flier.move_to(from, s), 0.0, 1.25, FLY_POP_TIME * 0.6).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_method(func(s: float): flier.move_to(from, s), 1.25, 1.0, FLY_POP_TIME * 0.4)
+	tween.tween_interval(FLY_HOLD_TIME)
+	tween.tween_callback(func(): flier.trailing = true)
+	# ...then speeds up into the counter along a slight arc, shrinking to its icon.
+	tween.tween_method(func(t: float):
+		var to: Vector2 = target_icon.get_global_rect().get_center()
+		var along: float = t * t   # steady acceleration: no big jumps at the end
+		var path: Vector2 = from.lerp(to, along)
+		var side: Vector2 = (to - from).orthogonal().normalized()
+		path += side * FLY_ARC * sin(PI * along)
+		flier.move_to(path, lerpf(1.0, target_icon.size.y / FLY_ICON_SIZE, along))
+	, 0.0, 1.0, FLY_TIME)
+	tween.tween_callback(func():
+		flier.queue_free()
+		_echoes_in_flight = maxi(_echoes_in_flight - amount, 0)
+		_sync_echoes(true)
+		_flash(_echoes_counter)
+		_echoes_value.pivot_offset = _echoes_value.size * 0.5
+		var bump := create_tween()
+		bump.tween_property(_echoes_value, "scale", Vector2.ONE * 1.3, 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		bump.tween_property(_echoes_value, "scale", Vector2.ONE, 0.3)
+	)
+
+
+## Brings the counter to Echoes owned minus those still flying: counting up
+## if `animate` and it grows, otherwise at once.
+func _sync_echoes(animate: bool) -> void:
+	var target: int = MetaProgression.echoes - _echoes_in_flight
+	if _count_tween:
+		_count_tween.kill()
+		_count_tween = null
+	if not animate or target <= _echoes_shown:
+		_set_echoes_shown(target)
+		return
+	var time: float = clampf(0.4 + 0.004 * (target - _echoes_shown), 0.4, 1.1)
+	_count_tween = create_tween()
+	_count_tween.tween_method(func(v: float): _set_echoes_shown(roundi(v)), float(_echoes_shown), float(target), time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+
+func _set_echoes_shown(value: int) -> void:
+	_echoes_shown = value
+	_echoes_value.text = str(value)
 
 
 func _show_profile() -> void:
 	_profile_avatar.avatar = PlayerProfile.avatar
 	_profile_name.text = PlayerProfile.username
 	_profile_id.text = "ID  " + PlayerProfile.player_id
+
+
+# --- Daily transmission (Echo's ship) -----------------------------------------
+
+func _ship_angle() -> float:
+	return TAU * _time / SHIP_ORBIT_PERIOD
+
+
+## True while Umbra hides the ship: on the far half of its orbit and inside
+## the planet's disc as seen on screen.
+func _ship_hidden(angle: float, at: Vector2) -> bool:
+	if _orbit_front.is_near_side(angle):
+		return false
+	return at.distance_squared_to(planetSprite.position) < _planet_radius * _planet_radius
+
+
+## Where Echo's ship is on screen now (the daily card flies into it).
+func ship_position() -> Vector2:
+	return _orbit_front.point_at(_ship_angle())
+
+
+## The daily card has flown back in: a little flash so the eye lands on it.
+func ship_received() -> void:
+	create_tween().tween_property(self, "_ship_pop", 1.0, 0.4).from(0.0)
+
+
+func _refresh_ship() -> void:
+	_ship_ready = MetaProgression.can_claim_daily_reward()
+	_ship_check = 1.0
+
+
+func _on_ship_input(event: InputEvent) -> void:
+	if _is_leaving:
+		return
+	if Tap.is_tap(_ship_btn, event):
+		play_ui_sfx()
+		open_daily_reward()
+
+
+func open_daily_reward() -> void:
+	_show_popup(preload("res://Scenes/HUD/daily_reward_card.tscn").instantiate())
+
+
+## Once a day, while today's reward is waiting, the card opens by itself a
+## moment after the Home screen appears (not over the account prompt).
+func _maybe_show_daily_reward() -> void:
+	await get_tree().create_timer(DAILY_CARD_DELAY).timeout
+	if _is_leaving or _account_prompt_pending:
+		return
+	if MetaProgression.should_show_daily_reward():
+		open_daily_reward()
 
 
 ## Watch an ad for Echoes. Also works over sub screens, where the notch stays visible.
@@ -312,6 +522,7 @@ func _maybe_prompt_account() -> void:
 	if not PlayerProfile.should_prompt_account():
 		return
 	PlayerProfile.mark_account_prompt_shown()
+	_account_prompt_pending = true   # the daily card waits for another visit
 	await get_tree().create_timer(0.9).timeout   # let the home screen settle in first
 	if not _is_leaving:
 		open_account_setup()
@@ -354,6 +565,7 @@ func _open_sub_screen(screen: Control, show_echoes: bool = true) -> void:
 		_menu.visible = true
 		_echoes_counter.visible = true
 		screen.queue_free()
+		_refresh_achievements_dot()   # claims made on the sub screen
 	)
 	$UI.add_child(screen)
 	# Draw the sub screen beneath the Echoes counter (and the fade) so the counter stays on top.

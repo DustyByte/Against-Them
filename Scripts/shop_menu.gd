@@ -12,7 +12,7 @@ var _skin_cards: Array = []
 
 ## Add a name here to get a new tab and page.
 func _tab_names() -> Array[String]:
-	return ["Utilities", "Skins"]
+	return ["Skins", "Utilities"]   # the first opens with the shop
 
 
 func _populate() -> void:

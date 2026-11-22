@@ -79,8 +79,12 @@ func _make_category_header(category: String) -> Control:
 func _on_claim_requested(achievement_id: String, card: Node) -> void:
 	# AchievementManager checks it is completed and unclaimed, saves the claim,
 	# and adds the reward to the player's Echoes.
-	if AchievementManager.claim(achievement_id) > 0:
+	var reward: int = AchievementManager.claim(achievement_id)
+	if reward > 0:
 		_play_ui_sfx()
+		var home: Node = get_tree().get_first_node_in_group(&"home_screen")
+		if home:
+			home.collect_echoes(card.reward_center(), reward)
 		card.set_claimed(true)
 
 

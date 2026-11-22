@@ -70,6 +70,11 @@ func is_completed() -> bool:
 	return _current >= _target
 
 
+## Where the reward amount is drawn (claimed Echoes fly from here).
+func reward_center() -> Vector2:
+	return _reward_amount.get_global_rect().get_center()
+
+
 func set_claimed(claimed: bool) -> void:
 	_claimed = claimed
 	_refresh_state()

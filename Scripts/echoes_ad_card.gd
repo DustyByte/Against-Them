@@ -6,6 +6,9 @@ extends Control
 
 ## If the ad closes before the reward arrives, keep listening this long.
 const REWARD_GRACE: float = 2.0
+## After an ad closes, wait this long before the Echoes fly (the game screen
+## takes a moment to come back on phones).
+const AD_RETURN_DELAY: float = 0.4
 const USED_PIP_ALPHA: float = 0.16
 const ERROR_COLOR := Color(1.0, 0.55, 0.56)
 const REWARD_COLOR := Color(0.62, 0.88, 0.95)
@@ -25,6 +28,8 @@ const LABEL_COLOR := Color(0.96, 0.97, 1, 1)   # the watch button's normal text
 var _on_tap: Callable   # home.gd's tap handler: plays the menu sound, then runs the action
 var _awaiting_ad := false   # an ad this card asked for is open or paying out
 var _closing := false
+var _ad_showing := false     # a real ad covers the screen right now
+var _held_echoes := 0        # paid out during the ad; they fly in once it closes
 var _message_tween: Tween
 
 
@@ -104,6 +109,7 @@ func _try_watch_ad() -> void:
 		await get_tree().create_timer(0.6).timeout
 		_on_rewarded_earned("editor", MetaProgression.AD_ECHOES_REWARD)
 		return
+	_ad_showing = true
 	AdMobManager.show_rewarded_ad()
 
 
@@ -112,12 +118,23 @@ func _on_rewarded_earned(_reward_type: String, _amount: int) -> void:
 		return   # someone else's ad (e.g. the shop's Anchor Shard card)
 	_awaiting_ad = false
 	if MetaProgression.register_echo_ad_reward():
+		var home: Node = get_tree().get_first_node_in_group(&"home_screen")
+		if home:
+			if _ad_showing:
+				# The ad still covers the screen: keep them off the counter and
+				# fly them in once the player is back (_on_rewarded_ad_dismissed).
+				home.hold_echoes(MetaProgression.AD_ECHOES_REWARD)
+				_held_echoes += MetaProgression.AD_ECHOES_REWARD
+			else:
+				home.collect_echoes(_reward.get_global_rect().get_center(), MetaProgression.AD_ECHOES_REWARD)
 		_pulse(_owned_value)
 		_flash_message("+%d ECHOES" % MetaProgression.AD_ECHOES_REWARD, REWARD_COLOR)
 	_refresh()
 
 
 func _on_rewarded_ad_dismissed() -> void:
+	_ad_showing = false
+	_release_held_echoes(AD_RETURN_DELAY)
 	if not _awaiting_ad:
 		return
 	# The reward can arrive just after the ad closes; wait briefly for it.
@@ -127,7 +144,23 @@ func _on_rewarded_ad_dismissed() -> void:
 		_update_button()
 
 
+## Flies the Echoes paid out during the ad into the counter, a moment after
+## the game is back on screen. (Also when the card goes away, so none stay held.)
+func _release_held_echoes(delay: float) -> void:
+	if _held_echoes <= 0:
+		return
+	var home: Node = get_tree().get_first_node_in_group(&"home_screen")
+	if home:
+		home.fly_echoes(_reward.get_global_rect().get_center(), _held_echoes, delay)
+	_held_echoes = 0
+
+
+func _exit_tree() -> void:
+	_release_held_echoes(0.0)
+
+
 func _on_rewarded_ad_failed_to_show(_error: String) -> void:
+	_ad_showing = false
 	if not _awaiting_ad:
 		return
 	_awaiting_ad = false
