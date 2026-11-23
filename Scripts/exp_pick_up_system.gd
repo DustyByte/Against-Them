@@ -6,10 +6,17 @@ signal levelUp
 const ATTRACTING_SPEED: float = 600.0
 ## EXP needed to finish level 1. Each later level needs LEVEL_EXP_GROWTH
 ## times more than the one before (exponential), so a big drop (the red, 100
-## EXP) is worth a level or more when first seen and soon only part of one:
-## level 13 needs 65, level 16 128, level 20 312, level 25 953.
+## EXP) is worth a level or more when first seen and soon only part of one.
+## From GROWTH_EASE_FROM_LEVEL on, the growth eases off towards
+## LATE_EXP_GROWTH (the gap shrinks by GROWTH_EASE each level), so late levels
+## keep getting harder without running away:
+## level 13 needs 65, level 16 128, level 20 312, level 25 690, level 30 1105,
+## level 40 1957.
 const LEVEL_1_EXP_REQUIREMENT: float = 4.5
 const LEVEL_EXP_GROWTH: float = 1.25
+const GROWTH_EASE_FROM_LEVEL: int = 20
+const LATE_EXP_GROWTH: float = 1.04
+const GROWTH_EASE: float = 0.85
 
 @onready var player: CharacterBody2D = $".."
 @onready var expBar: ProgressBar = global.ON_RUN_HUD.expBar
@@ -29,7 +36,12 @@ var hasRecycle: int = 0
 
 ## EXP needed to go from `level` to the next one.
 static func exp_requirement(level: int) -> float:
-	return LEVEL_1_EXP_REQUIREMENT * pow(LEVEL_EXP_GROWTH, level - 1)
+	var early: int = mini(level, GROWTH_EASE_FROM_LEVEL) - 1
+	var requirement: float = LEVEL_1_EXP_REQUIREMENT * pow(LEVEL_EXP_GROWTH, early)
+	for l in range(GROWTH_EASE_FROM_LEVEL + 1, level + 1):
+		var ease: float = pow(GROWTH_EASE, l - GROWTH_EASE_FROM_LEVEL)
+		requirement *= LATE_EXP_GROWTH + (LEVEL_EXP_GROWTH - LATE_EXP_GROWTH) * ease
+	return requirement
 
 
 func revaluate_exp_barand_milestone() -> void:

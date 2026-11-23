@@ -100,6 +100,14 @@ func handle_death() -> void:
 	AchievementManager.register_enemy_death(self)
 	process_mode = Node.PROCESS_MODE_DISABLED
 
+	if marks.has("freeze"):
+		# Frozen: shatters into ice instead of corroding.
+		global.WORLD.audio_2d_play(global.ENEMY_DEATH_STREAM_02, global_position, "game_world", randf_range(1.4, 1.8))
+		global.WORLD.frozenShatter.shatter(self, avatarWrapper, func():
+			drop_exp()
+			queue_free())
+		return
+
 	var mat: ShaderMaterial = global.DEATH_CORRODE_SHADER_MATERIAL
 	avatarWrapper.modulate = Color.WHITE # it held the bob phase for enemy.gdshader
 	avatarWrapper.use_parent_material = true

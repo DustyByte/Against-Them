@@ -2,35 +2,43 @@ class_name GravityBomb
 extends Area2D
 
 const SPEED: float = 1500.0
+## The zone's look (Shaders/gravity_fracture.gdshader): cracks splitting out
+## on impact, held for the duration, closing up at the end.
+const CRACK_OPEN_TIME: float = 0.35
+const CRACK_CLOSE_TIME: float = 0.5
 var pullStrength: float = -1.0
-var dir: Vector2 = Vector2.ZERO
-var target: Vector2
 var isActive: bool = false
 var damageType: int = -1
 var stats: Dictionary = {}
 var _resonance: Dictionary = {}   # enemy in range -> its connected resonate callable
 
 
+## The bomb sits where it will land; only its sprite flies in from
+## `fromGlob` (spinning, speeding up) while its shadow grows on the ground.
 func launch(fromGlob: Vector2, toGlob: Vector2) -> void:
-	global_position = fromGlob
-	dir = fromGlob.direction_to(toGlob)
-	target = toGlob
-	isActive = true
-	requiredTravelDist = (toGlob - fromGlob).length()
+	global_position = toGlob
+	var avatar: Sprite2D = $BombAvatar
+	var shadow: Sprite2D = $Shadow
+	var fallTime: float = (toGlob - fromGlob).length() / SPEED
+	avatar.position = fromGlob - toGlob
+	var tween: Tween = create_tween().set_parallel()
+	tween.tween_property(avatar, "position", Vector2.ZERO, fallTime).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(avatar, "rotation", TAU * 0.6, fallTime)
+	tween.tween_property(shadow, "scale", Vector2(1.1, 0.6), fallTime)
+	tween.tween_property(shadow, "modulate:a", 1.0, fallTime)
+	tween.chain().tween_callback(explode)
 
 
 func explode() -> void:
 	$BombAvatar.queue_free()
-	
-	$outwardEffect.visible = true
-	var outwardEffectTween: Tween = get_tree().create_tween()
-	outwardEffectTween.tween_property($outwardEffect.material, 'shader_parameter/radius', 0.75, 0.5)
-	outwardEffectTween.finished.connect(func():
-		$outwardEffect.queue_free()
-	)
-	
-	$inwardEffect.visible = true
-	get_tree().create_tween().tween_property($inwardEffect.material, 'shader_parameter/wave_color:a', 0.32, 0.3).from(0.0)
+	$Shadow.queue_free()
+	isActive = true
+
+	var zone: Sprite2D = $Zone
+	var mat: ShaderMaterial = zone.material
+	mat.set_shader_parameter("seed", randf() * 100.0)   # every bomb cracks differently
+	zone.visible = true
+	create_tween().tween_method(_set_zone.bind("spawn"), 0.0, 1.0, CRACK_OPEN_TIME)
 	get_tree().create_timer(stats.duration).timeout.connect(handle_exit)
 	
 	global.activeCamera.shake(5.0)
@@ -52,9 +60,14 @@ func hit() -> void:
 
 
 func handle_exit() -> void:
-	var tween: Tween = get_tree().create_tween()
-	tween.tween_property($inwardEffect.material, 'shader_parameter/wave_color:a', 0.0, 0.5)
+	isActive = false
+	var tween: Tween = create_tween()
+	tween.tween_method(_set_zone.bind("collapse"), 0.0, 1.0, CRACK_CLOSE_TIME)
 	tween.finished.connect(queue_free)
+
+
+func _set_zone(value: float, parameter: String) -> void:
+	$Zone.material.set_shader_parameter(parameter, value)
 
 
 func resonate(d: float, resonatedFrom: CharacterBody2D) -> void:
@@ -96,22 +109,12 @@ func _ready() -> void:
 	# the right size, so scale the sprites instead of resizing the shared
 	# textures, which regenerated them on every throw.
 	var r: float = stats.range
-	$outwardEffect.scale = Vector2(r, 0.65 * r)
-	$inwardEffect.scale = Vector2(r, 0.65 * r)
+	$Zone.scale = Vector2(r, 0.65 * r)
 	$CollisionShape2D.shape.radius = 100.0 * r
 
-var travelledDist: float = 0.0
-var requiredTravelDist: float = -1.0
 func _physics_process(delta: float) -> void:
-	if isActive:
-		var step: Vector2 = dir * SPEED * delta
-		travelledDist += step.length()
-		if travelledDist >= requiredTravelDist:
-			explode()
-			isActive = false
-		global_position += step
+	if not isActive:
 		return
-	
 	var enemies: Array[Node2D] = get_overlapping_bodies()
 	for enemy in enemies:
 		enemy.global_position += enemy.global_position.direction_to(global_position) * pullStrength * delta

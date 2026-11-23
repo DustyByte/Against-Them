@@ -74,7 +74,9 @@ const CD_OPTION_FACTORS: Dictionary = {
 	"Hasten The Beast": 0.724,
 	"Faster": 0.683,               # weapons: Torcher 0.4 s -> 0.06 s (Rupture 0.25 s gets there in 4)
 }
-const CD_OPTION_SHORTEN: float = 0.8   # Quicker Wildfire, Rapid Ignition: fire drop 5.0 s -> 1.0 s
+const CD_OPTION_SHORTEN: float = 0.8   # Quicker Wildfire: fire drop -0.8 s a pick
+const RAPID_IGNITION_DAMAGE: float = 3.0   # Rapid Ignition: fire area hit damage +3 a pick
+const QUICKER_WILDFIRE_MAX_PICKS: int = 4
 var _cdOptionPicks: Dictionary = {}    # option name -> times picked this run
 
 
@@ -86,14 +88,15 @@ func is_cooldown_floored(statsKey: String, field: String = "cd") -> bool:
 	return playerStatsActiveModifiers[statsKey][field] <= cooldown_floor(statsKey, field) + 0.0001
 
 
-## Counts a pick of a cooldown option and retires it after CD_OPTION_MAX_PICKS
-## picks or once `floored` (its cooldown can't go any lower). Call it after
+## Counts a pick of a cooldown option and retires it after `maxPicks` picks
+## (CD_OPTION_MAX_PICKS unless the option has its own limit) or once
+## `floored` (its cooldown can't go any lower). Call it after
 ## make_immediate_children_available(): run on a retired option, that would
 ## mark the children as used up instead.
-func _count_cd_option_pick(option: Option, floored: bool) -> void:
+func _count_cd_option_pick(option: Option, floored: bool, maxPicks: int = CD_OPTION_MAX_PICKS) -> void:
 	var picks: int = _cdOptionPicks.get(option.name, 0) + 1
 	_cdOptionPicks[option.name] = picks
-	if picks >= CD_OPTION_MAX_PICKS or floored:
+	if picks >= maxPicks or floored:
 		option.deactivate(true)
 
 
@@ -613,7 +616,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 				optionChosen.deactivate(true)
 		
 		"Cryolite II":
-			playerStatsActiveModifiers.cryoliteStats.damage += 5 * floor(playerStats.currentHP / 100.0)
+			playerStatsActiveModifiers.cryoliteStats.damage += 5 * floor(playerStats.currentHP / 20.0)
 			optionChosen.make_immediate_children_available()
 		
 		"Cryo Increase":
@@ -766,7 +769,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 		"Quicker Wildfire":
 			shorten_cooldown("fieryFieldStats", CD_OPTION_SHORTEN)
 			optionChosen.make_immediate_children_available()
-			_count_cd_option_pick(optionChosen, is_cooldown_floored("fieryFieldStats"))
+			_count_cd_option_pick(optionChosen, is_cooldown_floored("fieryFieldStats"), QUICKER_WILDFIRE_MAX_PICKS)
 		
 		"Brittle Veins":
 			playerStatsActiveModifiers.fieryFieldStats.hasBrittleVeins = true
@@ -776,9 +779,9 @@ func implement_option_choice(optionChosen: Option) -> void:
 		"Rapid Ignition":
 			var s: Dictionary = playerStatsActiveModifiers.fieryFieldStats
 			s.radius *= 1.2
-			shorten_cooldown("fieryFieldStats", CD_OPTION_SHORTEN)
+			s.damage += RAPID_IGNITION_DAMAGE   # each periodic hit of the fire area
 			optionChosen.make_immediate_children_available()
-			# Also grows the radius, so it stays on offer for all 5 picks.
+			# Not a cooldown option any more, but keeps its limit of 5 picks.
 			_count_cd_option_pick(optionChosen, false)
 		
 		"Relentless Pulse":

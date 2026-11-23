@@ -180,10 +180,10 @@ Faster,Faster,Faster
 Faster Orbit,Faster Orbit,Faster Orbit
 Feed the Monster,Feed the Monster,Feed the Monster
 Fiery Field,Fiery Field,Fiery Field
-Fire Area radius +20%. Reduce drop CD by 0.8 sec.,Fire Area radius +20%. Reduce drop CD by 0.8 sec.,炎の範囲の半径+20%。投下のクールダウンを0.8秒短縮する。
+Fire Area radius +20%. Increase damage by 3.,Fire Area radius +20%. Increase damage by 3.,炎の範囲の半径+20%。ダメージが3上昇する。
 Focus,Focus,Focus
-"For every 100 HP you currently have, inccrease Icicle damage by 5.","For every 100 HP you currently have, inccrease Icicle damage by 5.",現在のHP100ごとに、氷柱のダメージが5上昇する。
 "For every 100 HP you currently have, increase Retribution Damage by 10.","For every 100 HP you currently have, increase Retribution Damage by 10.",現在のHP100ごとに、Retributionのダメージが10上昇する。
+"For every 20 HP you currently have, increase Icicle damage by 5.","For every 20 HP you currently have, increase Icicle damage by 5.",現在のHP20ごとに、氷柱のダメージが5上昇する。
 For every enemy killed there is a 1% chance to get +1% Weapon damage.,For every enemy killed there is a 1% chance to get +1% Weapon damage.,敵を倒すたびに1%の確率で武器ダメージ+1%を得る。
 Force,Force,Force
 Fortune,Fortune,Fortune

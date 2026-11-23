@@ -51,14 +51,15 @@ const WARM_MATERIALS: Array[String] = [
 	"res://Shaders/Material/enemy_boss.tres",
 	"res://Shaders/Material/enemy_death_corrode.tres",
 	"res://Shaders/Material/freeze_shader_mat.tres",
-	"res://Shaders/Material/gravity_bomb_explosion_shader_mat.tres",
-	"res://Shaders/Material/gravity_bomb_inward_pull_shader_mat.tres",
 	"res://Shaders/Material/scale_shader_mat.tres",
 	"res://Shaders/Material/tornado_trail_shader_mat.tres",
 	"res://Shaders/Material/wave_heading_fade_mat.tres",
 ]
 const WARM_SHADERS: Array[String] = [
 	"res://Shaders/hit.gdshader",
+	"res://Shaders/frozen_shatter.gdshader",
+	"res://Shaders/ice_dust.gdshader",
+	"res://Shaders/gravity_fracture.gdshader",   # the bomb's zone sprite starts hidden
 	"res://Shaders/starryGlow.gdshader",
 	"res://Shaders/joystick.gdshader",
 	"res://Shaders/Skins/skin_ember_warden.gdshader",

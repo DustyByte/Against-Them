@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bdbgnos3wjblv" path="res://Scenes/HUD/player_health_indicator.tscn" id="6_5v1tr"]
 [ext_resource type="Script" uid="uid://cdihq7gp8lwbm" path="res://Scripts/detection_for_all.gd" id="7_o06y3"]
 [ext_resource type="Script" uid="uid://pim0pd78etau" path="res://Scripts/wave_manager.gd" id="8_k7acu"]
-[ext_resource type="Script" path="res://Scripts/exp_drops.gd" id="9_expdr"]
+[ext_resource type="Script" uid="uid://b6cv6r1r2e0ts" path="res://Scripts/exp_drops.gd" id="9_expdr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_k7acu"]
 resource_local_to_scene = true
@@ -19,7 +19,6 @@ radius = 100.0
 size = Vector2(7, -7)
 
 [sub_resource type="MultiMesh" id="MultiMesh_o06y3"]
-transform_format = 0
 use_colors = true
 custom_aabb = AABB(-50000, -50000, 0, 100000, 100000, 1)
 mesh = SubResource("QuadMesh_5ukr8")
@@ -27,6 +26,8 @@ mesh = SubResource("QuadMesh_5ukr8")
 [node name="World" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_5ukr8")
+metadata/_edit_vertical_guides_ = [403.0]
+metadata/_edit_horizontal_guides_ = [400.0]
 
 [node name="Detection" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_k7acu")

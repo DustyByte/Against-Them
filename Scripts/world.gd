@@ -12,6 +12,8 @@ var elapsedTime: float = 0.0
 ## Floating damage numbers (global.add_damage_text). Made here, before any
 ## child is ready, so it is never missing when the first hit lands.
 var damageNumbers: DamageNumbers = null
+## Frozen enemies die by shattering; it also draws their ice dust.
+var frozenShatter: FrozenShatter = null
 ## Keeps enemies from piling onto each other (they don't collide physically).
 var enemyCrowd: EnemyCrowd = null
 ## Every bleed (Recall Dagger) and its drops (on_run_features.bleed_inflict).
@@ -38,6 +40,9 @@ func _init() -> void:
 	bleedSystem = BleedSystem.new()
 	bleedSystem.name = "BleedSystem"
 	add_child(bleedSystem)
+	frozenShatter = FrozenShatter.new()
+	frozenShatter.name = "FrozenShatter"
+	add_child(frozenShatter)
 	burnSystem = BurnSystem.new()
 	burnSystem.name = "BurnSystem"
 	add_child(burnSystem)

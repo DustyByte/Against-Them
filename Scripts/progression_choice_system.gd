@@ -33,7 +33,7 @@ var c := Option.new("Retribution", {
 	retriStats = {
 		isSummon = true,
 		damage = 20.0,
-		range = 400.0,
+		range = 600.0,
 		severeJudgement = 0,
 		moreFatForYou = 0
 	}
@@ -194,9 +194,9 @@ var n := Option.new("Gravity Bomb", {
 		cd = 5.0,
 		hitCD = 0.5,
 		damageType = global.DAMAGE_TYPES.EXOTIC,
-		pullStrength = 80.0,
+		pullStrength = 90.0,
 		duration = 3.0,
-		range = 1.0,
+		range = 1.3,
 		hasResonance = false
 	}
 }, "Throws a gravity bomb to a random place creating a gravity zone.", 'I', "res://Assets/HUD Elements/OptionIcons/GravityBomb.png", true)
@@ -228,7 +228,7 @@ var oa := Option.new("Quicker Wildfire", {}, "Reduce drop CD by 0.8 sec.", 'II.I
 
 var ob := Option.new("Brittle Veins", {}, "When dropped over frozen enemies, they explode into 3 ice shards, causing bleed upon hitting enemy.", 'II.II', fieryFieldIconPath)
 
-var oaa := Option.new("Rapid Ignition", {}, "Fire Area radius +20%. Reduce drop CD by 0.8 sec.", 'III.I', fieryFieldIconPath)
+var oaa := Option.new("Rapid Ignition", {}, "Fire Area radius +20%. Increase damage by 3.", 'III.I', fieryFieldIconPath)
 
 var oaoba := Option.new("Relentless Pulse", {}, "Damage tick CD Reduced by 33%.", 'III.II', fieryFieldIconPath)
 
@@ -247,7 +247,7 @@ var p := Option.new("Cryolite", {
 	}
 }, "Summon a Crystal that shoots out icicles towards enemy dealing 10 Frost damage & Freezing them.", 'I', cryoliteIconPath, true)
 
-var pa := Option.new("Cryolite II", {}, 'For every 100 HP you currently have, inccrease Icicle damage by 5.', 'II.I', cryoliteIconPath)
+var pa := Option.new("Cryolite II", {}, 'For every 20 HP you currently have, increase Icicle damage by 5.', 'II.I', cryoliteIconPath)
 
 var pb := Option.new("Cryo Increase", {}, "Throw one additional Icicle.", 'II.II', cryoliteIconPath)
 
