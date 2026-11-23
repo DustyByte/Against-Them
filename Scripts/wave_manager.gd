@@ -28,6 +28,10 @@ const ENEMY_HP_GROWTH_JITTER: float = 0.03
 const ENEMY_DAMAGE_GROWTH_PER_STEP: float = 0.03
 const ENEMY_DAMAGE_GROWTH_ACCEL: float = 0.0015
 const ENEMY_DAMAGE_GROWTH_JITTER: float = 0.006
+## Bosses' damage grows faster than other enemies': on top of the wave's
+## damage multiplier, +2% per step (wave 50: 1.34x -> 1.58x, wave 100:
+## 1.86x -> 2.57x). Their health grows like everyone's.
+const BOSS_EXTRA_DAMAGE_PER_STEP: float = 0.02
 
 enum DROP_TYPES {
 	BATCH,
@@ -39,17 +43,24 @@ const DROP_TYPES_RATE: Dictionary = {
 	LONE = 0.50,
 	SEPERATED_MULTIPLE = 0.35
 }
-var enemyPackedScenes: Array[PackedScene] = [
-	preload("res://Scenes/Enemies/enemy_1.tscn"),
-	preload("res://Scenes/Enemies/enemy_4.tscn"),
-	preload("res://Scenes/Enemies/enemy_6.tscn")
+## Which enemies a wave is made of. Each type joins from its first wave as a
+## rare sight and grows more common over ENEMY_TYPE_RAMP_WAVES waves until it
+## reaches its full weight (compared with enemy 1's 100). Ease-in, so the first
+## waves of a new type only bring a few: enemy 4 is about 7% of wave 7, 16% of
+## wave 11 and 37% of wave 15.
+const ENEMY_TYPES: Array[Dictionary] = [
+	{ "scene": preload("res://Scenes/Enemies/enemy_1.tscn"), "from_wave": 1, "weight": 100.0 },
+	{ "scene": preload("res://Scenes/Enemies/enemy_4.tscn"), "from_wave": 7, "weight": 60.0 },
+	{ "scene": preload("res://Scenes/Enemies/enemy_7.tscn"), "from_wave": 14, "weight": 30.0 },
+	{ "scene": preload("res://Scenes/Enemies/enemy_6.tscn"), "from_wave": 20, "weight": 25.0 },
 ]
-var enemyDropWeights: Array[int] = [
-	100,
-	0,
-	0
-]
-var enemyDropTotalWeight: int = 100
+const ENEMY_TYPE_RAMP_WAVES: int = 8
+const ENEMY_TYPE_FIRST_SHARE: float = 0.08   # of its full weight, on its first wave
+## Enemy types that never become the wave's boss (6 explodes; 7 is a
+## ranged prototype without a boss look yet).
+const NO_BOSS_TYPES: Array[int] = [6, 7]
+var _waveTypeWeights: PackedFloat32Array = PackedFloat32Array()
+var _waveTypeTotalWeight: float = 0.0
 @onready var world: Node2D = get_parent()
 @onready var player: Player = $"../Player"
 @onready var features_handle_kill: Callable = global.FEATURE_AND_SUMMON_MANAGEMENT_SYSTEM.handle_kill
@@ -105,16 +116,31 @@ func get_random_drop_type() -> int:
 	return DROP_TYPES[dropTypeKey]
 
 
+## How much of `wave` an enemy type makes up, before normalising (0 before
+## its first wave).
+static func enemy_type_weight(type: Dictionary, wave: int) -> float:
+	var waves_in: int = wave - int(type.from_wave)
+	if waves_in < 0:
+		return 0.0
+	var t: float = clampf(float(waves_in) / ENEMY_TYPE_RAMP_WAVES, 0.0, 1.0)
+	return float(type.weight) * lerpf(ENEMY_TYPE_FIRST_SHARE, 1.0, t * t)
+
+
+func _set_wave_type_weights(wave: int) -> void:
+	_waveTypeWeights.resize(ENEMY_TYPES.size())
+	_waveTypeTotalWeight = 0.0
+	for i in ENEMY_TYPES.size():
+		_waveTypeWeights[i] = enemy_type_weight(ENEMY_TYPES[i], wave)
+		_waveTypeTotalWeight += _waveTypeWeights[i]
+
+
 func get_weighted_random_enemy_type() -> PackedScene:
-	var enemyBP: PackedScene = null
-	var x: int = randi_range(0, enemyDropTotalWeight)
-	for i in range(enemyDropWeights.size()):
-		x -= enemyDropWeights[i]
-		if x <= 0:
-			enemyBP = enemyPackedScenes[i]
-			break
-	
-	return enemyBP
+	var x: float = randf() * _waveTypeTotalWeight
+	for i in _waveTypeWeights.size():
+		x -= _waveTypeWeights[i]
+		if x <= 0.0:
+			return ENEMY_TYPES[i].scene
+	return ENEMY_TYPES[0].scene
 
 
 func get_batch_drop(amount: int) -> Dictionary:
@@ -192,6 +218,7 @@ func get_wave_enemy_amount_range(wave: int) -> Vector2i:
 # depending on how the two threads happened to interleave.
 func _produce_next_wave_drops() -> void:
 	nextWaveDropsReady = false
+	_set_wave_type_weights(currentWave)
 	var generatedDrops: Array[Dictionary] = []
 	var amount_range: Vector2i = get_wave_enemy_amount_range(currentWave)
 	var spawnAmount: int = clampi(randi_range(amount_range.x, amount_range.y), 1, MAX_ENEMIES_PER_WAVE)
@@ -230,20 +257,6 @@ func update_wave_difficulty() -> void:
 		dropInterval.x = max(dropInterval.x * drop_speed_multiplier, minDropInterval)
 		dropInterval.y = max(dropInterval.y * drop_speed_multiplier, minDropInterval * 1.5)
 
-	var x: int = currentWave / 10
-	var xRed: int = x
-	x = clampi(x, 0, enemyDropWeights.size() - 1)
-	for i in range(x):
-		var randWeightShift: int = randi_range(-4, 4)
-		enemyDropWeights[i] += randWeightShift
-		enemyDropTotalWeight += randWeightShift
-		if enemyDropWeights[i] <= 0:
-			enemyDropWeights[i] += 20
-			enemyDropTotalWeight += 20
-	
-	if currentWave % 10 == 0 and xRed < enemyDropWeights.size():
-		enemyDropWeights[xRed] += 10
-		enemyDropTotalWeight += 10
 
 
 func update_wave_enemy_stat_multipliers(wave: int) -> void:
@@ -288,7 +301,7 @@ func begin_current_wave() -> void:
 			var enemy: CharacterBody2D = data[0].instantiate()
 			enemy.global_position = player.global_position + data[1]
 			
-			if enemy.ENEMY_TYPE != 6 and dropBossNow:
+			if enemy.ENEMY_TYPE not in NO_BOSS_TYPES and dropBossNow:
 				enemy.set_as_boss()
 				AchievementManager.register_boss_spawned(enemy)
 				enemy.tree_exited.connect(handle_boss_kill)
@@ -298,6 +311,8 @@ func begin_current_wave() -> void:
 				enemy.tree_exited.connect(handle_enemy_kill)
 			
 			enemy.stats.apply_multipliers(waveEnemyHPMultiplier, waveEnemyDamageMultiplier)
+			if enemy.asBoss:
+				enemy.stats.damage *= 1.0 + BOSS_EXTRA_DAMAGE_PER_STEP * maxi(currentEnemyStatStep, 0)
 			enemy.tree_exited.connect(features_handle_kill)
 			world.add_child.call_deferred(enemy)
 		

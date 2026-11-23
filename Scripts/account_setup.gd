@@ -138,7 +138,7 @@ func _submit() -> void:
 
 
 func _submit_claim() -> void:
-	var username := _username.text.strip_edges()
+	var username := PlayerProfile.normalize_username(_username.text)
 	var password := _password.text
 	var name_problem := PlayerProfile.check_username(username)
 	var password_problem := PlayerProfile.check_password(password)
@@ -162,7 +162,7 @@ func _submit_claim() -> void:
 
 
 func _submit_login() -> void:
-	var username := _username.text.strip_edges()
+	var username := PlayerProfile.normalize_username(_username.text)
 	var password := _password.text
 	_show_error(_username_error, "Enter your username." if username == "" else "")
 	_show_error(_password_error, "Enter your password." if password == "" else "")

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bslklsawkagcq"
-path="res://.godot/imported/Head .png-3621c59230baec17209755ea33806e84.ctex"
+path="res://.godot/imported/Head.png-86a48ac8a18baea1677dd91632b966ed.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/Enemy Type 7/Head .png"
-dest_files=["res://.godot/imported/Head .png-3621c59230baec17209755ea33806e84.ctex"]
+source_file="res://Assets/Enemies/Enemy Type 7/Head.png"
+dest_files=["res://.godot/imported/Head.png-86a48ac8a18baea1677dd91632b966ed.ctex"]
 
 [params]
 

@@ -34,8 +34,19 @@ const PLACEHOLDER_USERNAME := "Guest"
 const PLACEHOLDER_PLAYER_ID := "--------"
 
 ## Same rules the server enforces, checked here first to save a round trip.
-const USERNAME_MIN := 3
+## Letters are A-Z plus accented Latin letters, kana and kanji - any the game's
+## fonts can draw (the server gets the same list from
+## Tools/subset_japanese_font.py).
+const USERNAME_MIN := 2
 const USERNAME_MAX := 16
+const NAME_LETTER_RANGES: Array[Vector2i] = [
+	Vector2i(0x00C0, 0x017F),   # accented Latin (Latin-1, Latin Extended-A)
+	Vector2i(0x3005, 0x3005),   # 々
+	Vector2i(0x3041, 0x309E),   # hiragana
+	Vector2i(0x30A1, 0x30FE),   # katakana, ー
+	Vector2i(0x4E00, 0x9FFF),   # kanji
+	Vector2i(0xFF66, 0xFF9F),   # half-width katakana (the server turns them full-width)
+]
 const PASSWORD_MIN := 8
 const PASSWORD_MAX := 64
 
@@ -118,12 +129,37 @@ func mark_account_prompt_shown() -> void:
 
 ## Returns "" if the username is fine, otherwise what's wrong with it.
 static func check_username(value: String) -> String:
+	value = normalize_username(value)
 	if value.length() < USERNAME_MIN or value.length() > USERNAME_MAX:
 		return TranslationServer.translate("Use %d to %d characters.") % [USERNAME_MIN, USERNAME_MAX]
-	var rule := RegEx.create_from_string("^[A-Za-z][A-Za-z0-9_]*$")
-	if rule.search(value) == null:
-		return "Letters, numbers and _ only, starting with a letter."
+	for i in value.length():
+		var code: int = value.unicode_at(i)
+		var ok: bool = _is_name_letter(code) or (i > 0 and (code == 0x5F or (code >= 0x30 and code <= 0x39)))
+		if not ok:
+			return "Letters, numbers and _ only, starting with a letter."
 	return ""
+
+
+## Full-width A-Z, 0-9 and _ (as a Japanese keyboard types them) become the
+## normal ones, like the server does.
+static func normalize_username(value: String) -> String:
+	value = value.strip_edges()
+	var out := ""
+	for i in value.length():
+		var code: int = value.unicode_at(i)
+		out += char(code - 0xFEE0) if code >= 0xFF01 and code <= 0xFF5E else char(code)
+	return out
+
+
+static func _is_name_letter(code: int) -> bool:
+	if (code >= 0x41 and code <= 0x5A) or (code >= 0x61 and code <= 0x7A):
+		return true
+	if code == 0xD7 or code == 0xF7:   # x and the division sign
+		return false
+	for r in NAME_LETTER_RANGES:
+		if code >= r.x and code <= r.y:
+			return code >= 0xFF66 or SettingsManager.JAPANESE_FONT.has_char(code)
+	return false
 
 
 static func check_password(password: String) -> String:

@@ -7,24 +7,19 @@
 base_font = ExtResource("3_pgxqf")
 spacing_glyph = 10
 
-[sub_resource type="FontVariation" id="FontVariation_spaced"]
-base_font = ExtResource("3_pgxqf")
-spacing_glyph = 4
-
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font = SubResource("FontVariation_wide")
 font_size = 58
 font_color = Color(0.9, 0.95, 1, 1)
 
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("3_pgxqf")
+spacing_glyph = 4
+
 [sub_resource type="LabelSettings" id="LabelSettings_status"]
 font = SubResource("FontVariation_spaced")
 font_size = 15
 font_color = Color(0.55, 0.78, 0.86, 0.85)
-
-[sub_resource type="LabelSettings" id="LabelSettings_percent"]
-font = SubResource("FontVariation_spaced")
-font_size = 13
-font_color = Color(0.45, 0.58, 0.66, 0.75)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_track"]
 bg_color = Color(0.55, 0.78, 0.86, 0.12)
@@ -41,6 +36,11 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 shadow_color = Color(0.4, 0.85, 1, 0.35)
 shadow_size = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_percent"]
+font = SubResource("FontVariation_spaced")
+font_size = 13
+font_color = Color(0.45, 0.58, 0.66, 0.75)
 
 [node name="VFXPreCacher" type="Control"]
 layout_mode = 3

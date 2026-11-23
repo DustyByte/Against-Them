@@ -83,7 +83,9 @@ static func burn_inflict(on: CharacterBody2D, damage: float = 3.0, durationMulti
 
 static func freeze_inflict(on: CharacterBody2D, duration: float = 2.0) -> void:
 	duration *= UpgradeManager.freeze_duration_multiplier() # Cryomancy
-	if on.asBoss:
+	# A dying enemy can't be frozen: the freeze would swap its material and
+	# hide its death animation.
+	if on.asBoss or on.get("dead") == true or on.get("shrinking") == true:
 		return
 	
 	if is_instance_valid(on.freezeEffect) and not on.freezeEffect.is_queued_for_deletion():

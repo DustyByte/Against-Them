@@ -30,6 +30,9 @@ func setup(direction: Vector2, carryDamage: float, carryDamageType: int, carryKn
 
 func hit(body: Node2D) -> void:
 	if body.is_in_group('enemy'):
+		# Freeze first, so an icicle's killing blow shatters the enemy.
+		if freezeDur:
+			global.ON_RUN_FEATURES.freeze_inflict(body, freezeDur)
 		var remHP: float = AchievementManager.hit(body, carryingDamage, &"cryolite")
 		if not explosionSpread.is_empty():
 			explosionSpread.hit[body.get_instance_id()] = true
@@ -38,8 +41,6 @@ func hit(body: Node2D) -> void:
 			explode_into_icicles(body.global_position, 3)
 		body.get_knocked_back(goingTowards, carryingKnockBackIntensity)
 		global.add_damage_text(body.global_position, carryingDamage, carryingDamageType)
-		if freezeDur:
-			global.ON_RUN_FEATURES.freeze_inflict(body, freezeDur)
 		if lifeSteal:
 			global.PLAYER.stats.currentHP += carryingDamage*lifeSteal
 	

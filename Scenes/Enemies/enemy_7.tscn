@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://Scripts/enemy_7.gd" id="1_e7"]
+[ext_resource type="Material" path="res://Shaders/Material/enemy.tres" id="2_mat"]
+[ext_resource type="Texture2D" uid="uid://bxg6ofnaqayr" path="res://Assets/Enemies/Enemy Type 7/Body.png" id="3_body"]
+[ext_resource type="Texture2D" uid="uid://bslklsawkagcq" path="res://Assets/Enemies/Enemy Type 7/Head.png" id="4_head"]
+[ext_resource type="Texture2D" uid="uid://dk0tt02x33oqb" path="res://Assets/Enemies/Enemy Type 7/LegLeft.png" id="5_legf"]
+[ext_resource type="Texture2D" uid="uid://dudc0gh50lv36" path="res://Assets/Enemies/Enemy Type 7/LegRight.png" id="6_legb"]
+
+[sub_resource type="Gradient" id="Gradient_shadow"]
+colors = PackedColorArray(0, 0, 0, 0.6, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_shadow"]
+gradient = SubResource("Gradient_shadow")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e7"]
+radius = 30.0
+
+[node name="Enemy7" type="CharacterBody2D" groups=["attackable", "enemy"]]
+y_sort_enabled = true
+collision_layer = 4
+collision_mask = 0
+motion_mode = 1
+script = ExtResource("1_e7")
+
+[node name="Wrapper" type="Node2D" parent="."]
+material = ExtResource("2_mat")
+position = Vector2(0, 40)
+
+[node name="Shadow" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
+position = Vector2(-18, 0)
+scale = Vector2(1.9, 0.6)
+texture = SubResource("GradientTexture2D_shadow")
+
+[node name="LegBack" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
+position = Vector2(3, -51)
+texture = ExtResource("6_legb")
+offset = Vector2(7, 18)
+
+[node name="LegFront" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
+position = Vector2(-11, -50)
+texture = ExtResource("5_legf")
+offset = Vector2(10, 25)
+
+[node name="Body" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
+position = Vector2(8, -42)
+texture = ExtResource("3_body")
+offset = Vector2(0, -46)
+
+[node name="Head" type="Sprite2D" parent="Wrapper"]
+use_parent_material = true
+position = Vector2(-4, -119)
+texture = ExtResource("4_head")
+offset = Vector2(-33, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_e7")

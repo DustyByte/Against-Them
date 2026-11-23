@@ -19,6 +19,7 @@ const WARM_SCENES: Array[String] = [
 	"res://Scenes/Enemies/enemy_1.tscn",
 	"res://Scenes/Enemies/enemy_4.tscn",
 	"res://Scenes/Enemies/enemy_6.tscn",
+	"res://Scenes/Enemies/enemy_7.tscn",
 	"res://Scenes/Allies&Summons/anomaly.tscn",
 	"res://Scenes/Allies&Summons/aura.tscn",
 	"res://Scenes/Allies&Summons/cryolite.tscn",
@@ -58,13 +59,16 @@ const WARM_MATERIALS: Array[String] = [
 const WARM_SHADERS: Array[String] = [
 	"res://Shaders/hit.gdshader",
 	"res://Shaders/frozen_shatter.gdshader",
-	"res://Shaders/ice_dust.gdshader",
-	"res://Shaders/gravity_fracture.gdshader",   # the bomb's zone sprite starts hidden
 	"res://Shaders/starryGlow.gdshader",
 	"res://Shaders/joystick.gdshader",
 	"res://Shaders/Skins/skin_ember_warden.gdshader",
 	"res://Shaders/Skins/skin_frostbound.gdshader",
 	"res://Shaders/Skins/skin_voidwalker.gdshader",
+]
+## Shaders the game only draws on a MultiMesh, which the Compatibility renderer
+## compiles separately from sprites: each is drawn on a one-instance MultiMesh.
+const WARM_MULTIMESH_SHADERS: Array[String] = [
+	"res://Shaders/ice_dust.gdshader",   # frozen-shatter dust (frozen_shatter.gd)
 ]
 const NEXT_SCENE: String = "res://Scenes/home.tscn"
 
@@ -103,6 +107,7 @@ func _run() -> void:
 	paths.append_array(WARM_SCENES)
 	paths.append_array(WARM_MATERIALS)
 	paths.append_array(WARM_SHADERS)
+	paths.append_array(WARM_MULTIMESH_SHADERS)
 	paths.append(NEXT_SCENE)
 	for path in paths:
 		ResourceLoader.load_threaded_request(path)
@@ -128,7 +133,7 @@ func _run() -> void:
 	# 2. Draw everything once behind the cover.
 	statusLabel.text = "PREPARING EFFECTS"
 	var center: Vector2 = get_viewport_rect().size * 0.5
-	var steps: int = WARM_SCENES.size() + ceili(float(WARM_MATERIALS.size() + WARM_SHADERS.size()) / SPRITES_PER_STEP)
+	var steps: int = WARM_SCENES.size() + ceili(float(WARM_MATERIALS.size() + WARM_SHADERS.size()) / SPRITES_PER_STEP) + 1
 	var done: int = 0
 	for path in WARM_SCENES:
 		var packed: PackedScene = loaded[path]
@@ -169,9 +174,40 @@ func _run() -> void:
 		done += 1
 		_set_progress(LOAD_SHARE + (1.0 - LOAD_SHARE) * done / steps)
 
+	await _warm_multimesh_shaders(loaded, center)
+	done += 1
 	_set_progress(1.0)
 	await get_tree().process_frame
 	get_tree().change_scene_to_packed(loaded[NEXT_SCENE])
+
+
+## Draws each MultiMesh-only shader on a one-instance MultiMesh, with its
+## custom data set the way the game fills it (so the instanced variant gets
+## compiled), all in one step.
+func _warm_multimesh_shaders(loaded: Dictionary, center: Vector2) -> void:
+	var batch: Array[Node] = []
+	for path in WARM_MULTIMESH_SHADERS:
+		if not loaded[path]:
+			continue
+		var quad := QuadMesh.new()
+		quad.size = Vector2(8, 8)
+		var mm := MultiMesh.new()
+		mm.use_custom_data = true
+		mm.mesh = quad
+		mm.instance_count = 1
+		mm.set_instance_transform_2d(0, Transform2D.IDENTITY)
+		mm.set_instance_custom_data(0, Color(0, 0, 0, 0))
+		var mat := ShaderMaterial.new()
+		mat.shader = loaded[path]
+		var mmi := MultiMeshInstance2D.new()
+		mmi.multimesh = mm
+		mmi.material = mat
+		mmi.position = center
+		warmRoot.add_child(mmi)
+		batch.append(mmi)
+	await _hold_frames()
+	for node in batch:
+		node.queue_free()
 
 
 func _hold_frames() -> void:

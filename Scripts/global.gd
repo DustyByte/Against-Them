@@ -45,6 +45,10 @@ const ENEMY_BOSS_BASE_STATS: Dictionary = {
 	Type_4 = {
 		hp = 3000.0,
 		damage = 45.0
+	},
+	Type_7 = {
+		hp = 2500.0,
+		damage = 35.0
 	}
 }
 
@@ -60,6 +64,10 @@ const ENEMY_BASE_STATS: Dictionary = {
 	Type_6 = {
 		hp = 30.0,
 		damage = 30.0
+	},
+	Type_7 = {   # prototype spitter; its blobs hit for `damage` too
+		hp = 35.0,
+		damage = 12.0
 	}
 }
 const ENEMY_BPS: Dictionary = {
