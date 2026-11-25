@@ -12,6 +12,8 @@ var xforms: Array[Transform2D] = []
 var scaleMain: Vector2 = Vector2.ZERO
 var killCountD: int = 0
 var killCountH: int = 0
+## Retribution kills per Severe Judgement / Harvested Vigor reward.
+const KILL_MILESTONE: int = 70
 
 
 func setup(retributionStats: Dictionary) -> void:
@@ -56,20 +58,20 @@ func trigger() -> void:
 	
 	var d: float = stats.damage
 	var killMilestoneDamageIncrease: int = stats.severeJudgement
-	var killMilestoneHPIncrease: int = stats.moreFatForYou
+	var killMilestoneHPIncrease: int = stats.harvestedVigor
 	for enemy in enemies:
 		if enemy:
 			if AchievementManager.hit(enemy, d, &"retribution") <= 0.0:
 				if killMilestoneDamageIncrease:
 					killCountD += 1
-					if killCountD == 500:
+					if killCountD == KILL_MILESTONE:
 						killCountD = 0
-						stats.damage *= 1 + killMilestoneDamageIncrease * stats.killMileStoneIncreaseDBy
+						stats.damage += killMilestoneDamageIncrease * stats.killMileStoneIncreaseDBy   # flat Exotic damage per pick
 				if killMilestoneHPIncrease:
 					killCountH += 1
-					if killCountH == 500:
+					if killCountH == KILL_MILESTONE:
 						killCountH = 0
-						# +100 max HP per pick of More Fat For You, like Severe Judgement stacks
+						# +50 max HP per pick of Harvested Vigor, like Severe Judgement stacks
 						player.stats.increase_max_hp(stats.killMileStoneIncreaseMaxHPBy * killMilestoneHPIncrease)
 			
 			global.add_damage_text(enemy.global_position, d, 4)

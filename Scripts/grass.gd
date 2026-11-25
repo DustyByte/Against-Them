@@ -14,8 +14,10 @@ extends Node2D
 ##
 ## Each block also gets a few boulders (boulder.gd), in the circles kept free
 ## of grass. Where they go is decided on the worker thread with a generator
-## seeded by the block's coordinate, so a block always gets the same boulders
-## when the player comes back. They never overlap: each one's art rect must
+## seeded by the block's coordinate and this run's seed, so a block always gets
+## the same boulders when the player comes back, but every descend is laid out
+## differently. Boulders come in many sizes, either way round, and none lands
+## where Echo starts (SPAWN_CLEAR_RADIUS). They never overlap: each one's art rect must
 ## stay clear of the others' (plus BOULDER_GAP) and inside its own block, so
 ## boulders of neighbouring blocks can't meet either. Grass under a boulder or
 ## its shadow is left out. Boulder nodes are pooled and reused.
@@ -41,10 +43,16 @@ const POINTY_PLANT_SCENES: Array[String] = [
 const BOULDER_SCENE: PackedScene = preload("res://Scenes/WorldObjects/boulder.tscn")
 ## Chance that a circle kept free of grass gets a boulder (about 1-2 a screen).
 const BOULDER_CHANCE: float = 0.6
-const BOULDER_SIZE_MIN: float = 0.85
-const BOULDER_SIZE_MAX: float = 1.1
+## Boulder sizes: mostly mid-sized, now and then a small one or a big one
+## (BOULDER_SIZE_BIAS > 1 makes the big end rarer).
+const BOULDER_SIZE_MIN: float = 0.6
+const BOULDER_SIZE_MAX: float = 1.4
+const BOULDER_SIZE_BIAS: float = 1.4
+## No boulder art within this distance of where Echo starts a descend.
+const SPAWN_CLEAR_RADIUS: float = 320.0
 const BOULDER_GAP: float = 40.0        # least space between two boulders' art
 const BOULDER_SEED: int = 0x5EEDB01D
+var _runSeed: int = 0   # picked in _ready: a new layout every descend
 ## How far a block's grass patches can reach past its edge (circle radius plus
 ## patch radius, with room to spare).
 const GRASS_SPILL: float = 700.0
@@ -179,7 +187,7 @@ func _block_layout(windowCoord: Vector2i) -> Array:
 	var blockCenter: Vector2 = Vector2(windowCoord) * twiceWindowDim
 	var majorGrid: Array[Vector2] = get_major_circle_grid_for_window_at(blockCenter)
 	var rng := RandomNumberGenerator.new()
-	rng.seed = hash(windowCoord) ^ BOULDER_SEED
+	rng.seed = hash(windowCoord) ^ BOULDER_SEED ^ _runSeed
 	for i in range(majorGrid.size() - 1, 0, -1):
 		var j: int = rng.randi_range(0, i)
 		var swap: Vector2 = majorGrid[i]
@@ -246,11 +254,15 @@ func _place_boulders(circles: Array, blockCenter: Vector2, rng: RandomNumberGene
 		if rng.randf() >= BOULDER_CHANCE:
 			continue
 		var at: Vector2 = center + Vector2.from_angle(rng.randf() * TAU) * innerRad * sqrt(rng.randf())
-		var size: float = rng.randf_range(BOULDER_SIZE_MIN, BOULDER_SIZE_MAX)
+		var size: float = lerpf(BOULDER_SIZE_MIN, BOULDER_SIZE_MAX, pow(rng.randf(), BOULDER_SIZE_BIAS))
 		var flip: bool = rng.randf() < 0.5
 		var kind: int = rng.randi() % Boulder.TEXTURES.size()   # which rock
 		var art: Rect2 = Boulder.art_rect_at(at, kind, size, flip)
 		if not inside.encloses(art):
+			continue
+		# Keep Echo's starting spot (the world origin) clear.
+		var nearest: Vector2 = Vector2(clampf(0.0, art.position.x, art.end.x), clampf(0.0, art.position.y, art.end.y))
+		if nearest.length() < SPAWN_CLEAR_RADIUS:
 			continue
 		var spaced: Rect2 = art.grow(BOULDER_GAP)
 		var spacedOut := true
@@ -410,6 +422,7 @@ func _exit_tree() -> void:
 
 
 func _ready() -> void:
+	_runSeed = randi()
 	windowDim = get_window().get_size()
 	twiceWindowDim = windowDim * 2.0
 

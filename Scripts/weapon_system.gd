@@ -60,7 +60,7 @@ func change_player_speed_to(speed: float) -> void:
 
 
 func update_weapon_state_indicator() -> void:
-	if weapon.ammoRemaining:
+	if weapon.ammoRemaining and not weapon.isReloading:   # auto reload shows its bar too
 		ammoIndicatingLabel.visible = true
 		ammoIcon.visible = true
 		reloadProgressBar.visible = false
@@ -72,8 +72,12 @@ func update_weapon_state_indicator() -> void:
 
 
 func shoot() -> void:
-	if weapon.cdRemainig or weapon.isReloading:
+	if weapon.cdRemainig:
 		return
+	if weapon.isReloading:
+		if weapon.ammoRemaining <= 0:
+			return   # empty: has to finish reloading
+		weapon.cancel_reload()   # bullets left (auto reload): firing cancels it
 	
 	if not walkOnShootTimerTime:
 		change_player_speed_to(player.WALK_SPEED)

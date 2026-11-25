@@ -21,7 +21,7 @@ const TITHE_BASE_DAMAGE_PER_BOSS: float = 0.005
 const TITHE_WEAPONS: Array[String] = ["rupture", "torcher"]
 
 ## Base number of options offered on level-up, before Extra Choice.
-const BASE_LEVEL_UP_OPTIONS: int = 6
+const BASE_LEVEL_UP_OPTIONS: int = 4
 const HARVEST_KILLS_PER_ECHO: int = 200
 const REGENERATION_INTERVAL: float = 3.0
 

@@ -215,6 +215,7 @@ HIGHEST WAVE,HIGHEST WAVE,最高ウェーブ
 HOME,HOME,ホーム
 Haptic Feedback,Haptic Feedback,振動
 Harvest,Harvest,Harvest
+Harvested Vigor,Harvested Vigor,Harvested Vigor
 Hasten The Beast,Hasten The Beast,Hasten The Beast
 Have 10 summons active at once,Have 10 summons active at once,召喚を同時に10体出す
 Have 20 summons active at once,Have 20 summons active at once,召喚を同時に20体出す
@@ -331,8 +332,8 @@ Kill a boss within 10 seconds of it spawning,Kill a boss within 10 seconds of it
 Kill a boss without taking damage,Kill a boss without taking damage,ダメージを受けずにボスを倒す
 Kill your first boss,Kill your first boss,初めてボスを倒す
 Killing 100 enemies Regains 20 HP.,Killing 100 enemies Regains 20 HP.,敵を100体倒すとHPを20回復する。
-Killing 500 enemies with Retribution Increases your Max HP by 100.,Killing 500 enemies with Retribution Increases your Max HP by 100.,Retributionで敵を500体倒すと、最大HPが100増加する。
-Killing 500 enemies with Retribution increases Retribution Damage by 40%,Killing 500 enemies with Retribution increases Retribution Damage by 40%,Retributionで敵を500体倒すと、Retributionのダメージが40%上昇する
+Killing 70 enemies with Retribution Increases your Max HP by 50.,Killing 70 enemies with Retribution Increases your Max HP by 50.,Retributionで敵を70体倒すと、最大HPが50増加する。
+Killing 70 enemies with Retribution increases Retribution Damage by 20 Exotic.,Killing 70 enemies with Retribution increases Retribution Damage by 20 Exotic.,Retributionで敵を70体倒すと、RetributionのExoticダメージが20上昇する。
 Killing a boss increases weapon damage by +5% & increases chances of Rhythm,Killing a boss increases weapon damage by +5% & increases chances of Rhythm,ボスを倒すと武器ダメージが+5%上昇し、Rhythmの確率も上がる
 "Killing a boss permanently adds 0.5% of the weapon's base damage, for all future descends. Only the weapon that dealt the last blow gains it.","Killing a boss permanently adds 0.5% of the weapon's base damage, for all future descends. Only the weapon that dealt the last blow gains it.",ボスを倒すと、その武器の基礎ダメージの0.5%が今後のすべての降下で永続的に加算される。とどめを刺した武器だけが得る。
 LANGUAGE,LANGUAGE,LANGUAGE
@@ -363,7 +364,6 @@ Menu taps and buttons,Menu taps and buttons,メニューのタップとボタン
 Miniature Star,Miniature Star,Miniature Star
 Momentum Pickups,Momentum Pickups,Momentum Pickups
 Monster Hunter,Monster Hunter,Monster Hunter
-More Fat For You,More Fat For You,More Fat For You
 More Fusion,More Fusion,More Fusion
 More Power Rabit!,More Power Rabit!,More Power Rabit!
 More languages are on their way.,More languages are on their way.,他の言語も準備中です。

@@ -15,6 +15,13 @@ var ammoBP: PackedScene = null
 var barrel: Node2D = null
 var gunHolder: CharacterBody2D = null
 var selfRefHangerCard: HangerWeaponCard = null
+## Auto reload: a weapon that hasn't fired for AUTO_RELOAD_IDLE seconds (and
+## isn't full) starts its normal reload - also while it's holstered after a
+## swap. It doesn't count as emptying the magazine, so it doesn't set off
+## Retribution. A weapon with a cooldown longer than that waits a little past
+## its cooldown, so holding fire never reloads it.
+const AUTO_RELOAD_IDLE: float = 0.5
+var _sinceShot: float = 0.0
 
 
 ### A function to be called at ready of individual weapons
@@ -43,6 +50,7 @@ func shoot_bullet_only(gunHoldersKnockBackIntensityBuff: float = 0,  gunHoldersD
 	
 	ammoRemaining -= 1
 	selfRefHangerCard.set_ammo_count(ammoRemaining)
+	_sinceShot = 0.0
 	
 	cdRemainig = stats.cd
 	
@@ -80,12 +88,26 @@ func reload() -> void:
 	selfRefHangerCard.switch_state_reload()
 
 
+## Stops a reload partway (the player fired with bullets still in the mag):
+## the progress is lost and the mag keeps what it had.
+func cancel_reload() -> void:
+	isReloading = false
+	reloadedTime = 0.0
+	selfRefHangerCard.switch_state_ammo()
+	selfRefHangerCard.set_ammo_count(ammoRemaining)
+
+
 func project_self_to_reload_bar() -> void:
 	reloadProgressBar.maxValue = stats.reloadTime
 	reloadProgressBar.change_value(reloadedTime)
 
 
 func _process(delta: float) -> void:
+	if not isReloading and ammoRemaining < stats.maxAmmo:
+		_sinceShot += delta
+		if _sinceShot >= maxf(AUTO_RELOAD_IDLE, stats.cd + 0.1):
+			reload()
+			global.PLAYERS_WEAPON_SYSTEM.update_weapon_state_indicator()
 	if isReloading:
 		reloadedTime += delta
 		selfRefHangerCard.set_reload_bar_values(reloadedTime, stats.reloadTime)

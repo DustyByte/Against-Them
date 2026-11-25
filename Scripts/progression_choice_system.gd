@@ -35,17 +35,17 @@ var c := Option.new("Retribution", {
 		damage = 20.0,
 		range = 600.0,
 		severeJudgement = 0,
-		moreFatForYou = 0
+		harvestedVigor = 0
 	}
 }, "Summon a temporal space distortion near every enemy nearby dealing 20 Exotic Damage.", 'I', "res://Assets/HUD Elements/OptionIcons/Retri.png", true)
 
 var ca := Option.new("Severe Judgement", {
-	killMileStoneIncreaseDBy = 0.4
-}, 'Killing 500 enemies with Retribution increases Retribution Damage by 40%', 'II.I', "res://Assets/HUD Elements/OptionIcons/Retri.png")
+	killMileStoneIncreaseDBy = 20.0   # flat Retribution damage added
+}, 'Killing 70 enemies with Retribution increases Retribution Damage by 20 Exotic.', 'II.I', "res://Assets/HUD Elements/OptionIcons/Retri.png")
 
-var cb := Option.new("More Fat For You", {
-	killMileStoneIncreaseMaxHPBy = 100.0
-}, "Killing 500 enemies with Retribution Increases your Max HP by 100.", 'II.II', "res://Assets/HUD Elements/OptionIcons/Retri.png")
+var cb := Option.new("Harvested Vigor", {
+	killMileStoneIncreaseMaxHPBy = 50.0
+}, "Killing 70 enemies with Retribution Increases your Max HP by 50.", 'II.II', "res://Assets/HUD Elements/OptionIcons/Retri.png")
 
 var cacba := Option.new('Holy Might', {}, 'For every 100 HP you currently have, increase Retribution Damage by 10.', 'III.I', "res://Assets/HUD Elements/OptionIcons/Retri.png")
 
@@ -171,7 +171,7 @@ var kakba := Option.new("Rhythm Accumulate", {}, "Ammo +1. If the chance to gain
 var kaakakbaa := Option.new("Slayer's Tithe", {}, "Killing a boss permanently adds 0.5% of the weapon's base damage, for all future descends. Only the weapon that dealt the last blow gains it.", 'IV.I', "res://Assets/HUD Elements/OptionIcons/StrongerWeapon.png")
 
 var l := Option.new("Greed", {
-	pickUpRangeMultiplier = 1.5
+	pickUpRangeBonus = 0.5   # of the base pickup range; adds up, doesn't multiply
 }, "Pickup Range +50%", 'I', "res://Assets/HUD Elements/OptionIcons/Greed.png", true)
 
 var la : = Option.new("Momentum Pickups", {}, "Picking up an exp has 0.5% chance to increases attack speed.", 'II.I', "res://Assets/HUD Elements/OptionIcons/Greed.png")
@@ -272,10 +272,23 @@ var r := Option.new("Enrage The Beast", {}, "All Summon damage +30%", 'I', enrag
 var allOptions: Array[Option] = []
 
 
+## Options that only do something once Echo has a summon: they aren't offered
+## before then. The cooldown ones need a summon with a cooldown (Lightning
+## Strike has none).
+func _needs_missing_summon(option: Option) -> bool:
+	var features: Node = global.FEATURE_AND_SUMMON_MANAGEMENT_SYSTEM
+	match option.name:
+		"Hasten The Beast", "Rapid Manifestation", "Summon Adrenaline":
+			return features._summon_cooldown_keys().is_empty()
+		"Enrage The Beast":
+			return not features.has_summon()
+	return false
+
+
 func give_selectable_options(amountOfOptionsToReturn: int) -> Array[Option]:
 	var availableOptions: Array[Option] = []
 	for option in allOptions:
-		if option.isAvailable:
+		if option.isAvailable and not _needs_missing_summon(option):
 			availableOptions.append(option)
 	
 	amountOfOptionsToReturn = clamp(amountOfOptionsToReturn, 0, availableOptions.size())

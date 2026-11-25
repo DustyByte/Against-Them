@@ -100,6 +100,15 @@ func _count_cd_option_pick(option: Option, floored: bool, maxPicks: int = CD_OPT
 		option.deactivate(true)
 
 
+## True once Echo has at least one summon.
+func has_summon() -> bool:
+	for key in playerStatsActiveModifiers:
+		var val = playerStatsActiveModifiers[key]
+		if val is Dictionary and val.has('isSummon'):
+			return true
+	return false
+
+
 ## Summon stat keys that have a cooldown (Lightning Strike has none).
 func _summon_cooldown_keys() -> Array:
 	var keys: Array = []
@@ -366,9 +375,9 @@ func implement_option_choice(optionChosen: Option) -> void:
 			retriStats['killMileStoneIncreaseDBy'] = optionChosen.modifiers.killMileStoneIncreaseDBy
 			optionChosen.make_immediate_children_available()
 		
-		"More Fat For You":
+		"Harvested Vigor":
 			var retriStats: Dictionary = playerStatsActiveModifiers.retriStats
-			retriStats['moreFatForYou'] += 1
+			retriStats['harvestedVigor'] += 1
 			retriStats['killMileStoneIncreaseMaxHPBy'] = optionChosen.modifiers.killMileStoneIncreaseMaxHPBy
 			optionChosen.make_immediate_children_available()
 		
@@ -565,7 +574,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 			optionChosen.deactivate(true)
 		
 		"Greed":
-			$"../ExpManagementSystem/Range".shape.radius *= optionChosen.modifiers.pickUpRangeMultiplier
+			expManager.add_pickup_bonus(optionChosen.modifiers.pickUpRangeBonus)   # +50% of the base each
 			optionChosen.make_immediate_children_available()
 			pickUpRangeCount += 1
 			if pickUpRangeCount >= 5:
@@ -842,7 +851,7 @@ func handle_player_level_up() -> void:
 		return
 	
 	isHandlingLevelUp = true
-	var options: Array[Option] = global.PROGRESSION_CHOICE_SYSTEM.give_selectable_options(UpgradeManager.level_up_option_count()) # 6, +1 with Extra Choice
+	var options: Array[Option] = global.PROGRESSION_CHOICE_SYSTEM.give_selectable_options(UpgradeManager.level_up_option_count()) # 4, +1 with Extra Choice
 	global.ON_RUN_HUD.show_options(options)
 
 	if global.ON_RUN_HUD.activeOptionDisplay == null:

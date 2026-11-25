@@ -37,7 +37,7 @@ const UPGRADES: Array[Dictionary] = [
 
 	# --- Utility -----------------------------------------------------------------
 	{ "id": "swiftness", "category": "Utility", "title": "Swiftness", "description": "+%s movement speed", "steps": [8, 11, 17, 26, 38], "base_cost": 35, "cost_growth": 1.6 },
-	{ "id": "magnetism", "category": "Utility", "title": "Magnetism", "description": "+%s%% pickup radius", "steps": [4, 6, 8, 13, 19], "base_cost": 25, "cost_growth": 1.6 },
+	{ "id": "magnetism", "category": "Utility", "title": "Magnetism", "description": "+%s%% pickup radius", "steps": [3, 4, 6, 9, 13], "base_cost": 25, "cost_growth": 1.6 },
 	{ "id": "fortune", "category": "Utility", "title": "Fortune", "description": "+%s%% EXP gain", "steps": [6, 7, 8, 10, 12, 14, 17, 21, 25, 30], "base_cost": 40, "cost_growth": 1.35 },
 	{ "id": "extra_choice", "category": "Utility", "title": "Extra Choice", "description": "+1 option on every level-up", "steps": [1], "base_cost": 2000, "cost_growth": 1.0 },
 

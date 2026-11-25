@@ -10,6 +10,10 @@ extends MultiMeshInstance2D
 ## update_pickup() every frame. Drops resting on the ground are indexed in a
 ## grid of CELL-sized cells, so finding the ones in reach only looks at the
 ## few cells around the player.
+##
+## Drops being pulled in draw a short comet tail behind them: a second
+## MultiMesh (_trails) with one tapered, fading quad per slot, shown only while
+## that drop flies. One extra transform per flying drop per frame, no shader.
 
 const CELL: float = 128.0
 const GROW_BY: int = 512
@@ -27,6 +31,15 @@ var _amount: PackedFloat32Array = []
 var _color: PackedColorArray = []
 var _cells: Dictionary = {}             # Vector2i -> Array of resting slots
 var _flying: PackedInt32Array = []      # slots being pulled towards the player
+var _flyAge: PackedFloat32Array = []    # seconds each slot has been flying (grows its tail)
+var _trails: MultiMeshInstance2D = null
+var _trailRid: RID
+const TRAIL_LENGTH: float = 40.0        # px, once fully grown (was 30)
+const TRAIL_WIDTH: float = 9.0          # (was 6)
+const TRAIL_GROW_TIME: float = 0.08     # the tail stretches out instead of popping in
+## A drop swells to this size while it's pulled in (over TRAIL_GROW_TIME), so
+## the pull reads as a snap of energy, not a dot sliding along.
+const FLYING_DROP_SCALE: float = 1.6
 
 ## A boss's spray: drops leave its spot one after another over SPRAY_TIME and
 ## each hops out to a spot inside a circle of SPRAY_RADIUS, landing after
@@ -49,6 +62,7 @@ var _hops: Array = []       # [slot, from, to, age]
 
 func _ready() -> void:
 	_rid = multimesh.get_rid()
+	_make_trails()
 	_grow()
 	set_process(false)   # only while a boss's drops are flying out
 
@@ -134,6 +148,7 @@ func _take_slot(at: Vector2, type: Dictionary) -> int:
 		slot = _used
 		_used += 1
 		RenderingServer.multimesh_set_visible_instances(_rid, _used)
+		RenderingServer.multimesh_set_visible_instances(_trailRid, _used)
 
 	var color: Color = type.color
 	_pos[slot] = at
@@ -171,9 +186,18 @@ func update_pickup(target: Vector2, reach: float, speed: float, delta: float) ->
 			_release(slot)
 			_flying.remove_at(i)
 		else:
-			p += p.direction_to(target) * step
+			var dir: Vector2 = p.direction_to(target)
+			p += dir * step
 			_pos[slot] = p
-			RenderingServer.multimesh_instance_set_transform_2d(_rid, slot, Transform2D(DROP_ROTATION, p))
+			var age: float = _flyAge[slot] + delta
+			_flyAge[slot] = age
+			var grown: float = minf(age / TRAIL_GROW_TIME, 1.0)
+			var size: float = lerpf(1.0, FLYING_DROP_SCALE, grown)
+			RenderingServer.multimesh_instance_set_transform_2d(_rid, slot, Transform2D(DROP_ROTATION, Vector2(size, size), 0.0, p))
+			# Tail: from the drop back along where it came from, growing in.
+			var length: float = TRAIL_LENGTH * grown
+			var tail := Transform2D(dir.angle(), Vector2(length, TRAIL_WIDTH), 0.0, p - dir * length * 0.5)
+			RenderingServer.multimesh_instance_set_transform_2d(_trailRid, slot, tail)
 	return collected
 
 
@@ -191,6 +215,8 @@ func _start_pulling(center: Vector2, radius: float) -> void:
 				var slot: int = cell[k]
 				if _pos[slot].distance_squared_to(center) <= radiusSq:
 					_flying.append(slot)
+					_flyAge[slot] = 0.0
+					RenderingServer.multimesh_instance_set_color(_trailRid, slot, _color[slot])
 					cell.remove_at(k)
 			if cell.is_empty():
 				_cells.erase(key)
@@ -198,7 +224,38 @@ func _start_pulling(center: Vector2, radius: float) -> void:
 
 func _release(slot: int) -> void:
 	RenderingServer.multimesh_instance_set_transform_2d(_rid, slot, HIDDEN)
+	RenderingServer.multimesh_instance_set_transform_2d(_trailRid, slot, HIDDEN)
 	_free.append(slot)
+
+
+## The tails' MultiMesh, drawn behind the drops. Its texture is a comet made
+## once here: bright and full width at the head (right), thin and clear at the
+## end (left); the instance color tints it to the drop's color.
+func _make_trails() -> void:
+	var w: int = 64
+	var h: int = 16
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	for x in w:
+		var along: float = float(x) / (w - 1)          # 0 at the end, 1 at the head
+		var half: float = 0.5 * (0.25 + 0.75 * along)  # tapers towards the end
+		for y in h:
+			var across: float = absf((y + 0.5) / h - 0.5)
+			var edge: float = clampf((half - across) / 0.12, 0.0, 1.0)
+			img.set_pixel(x, y, Color(1, 1, 1, pow(along, 1.6) * edge * 0.75))
+	var quad := QuadMesh.new()
+	quad.size = Vector2(1, 1)
+	var mm := MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_2D
+	mm.use_colors = true
+	mm.custom_aabb = multimesh.custom_aabb
+	mm.mesh = quad
+	_trails = MultiMeshInstance2D.new()
+	_trails.name = "Trails"
+	_trails.multimesh = mm
+	_trails.texture = ImageTexture.create_from_image(img)
+	_trails.show_behind_parent = true
+	add_child(_trails)
+	_trailRid = mm.get_rid()
 
 
 ## Makes room for GROW_BY more drops, keeping the ones already drawn.
@@ -208,6 +265,7 @@ func _grow() -> void:
 	_pos.resize(_capacity)
 	_amount.resize(_capacity)
 	_color.resize(_capacity)
+	_flyAge.resize(_capacity)
 
 	# Reallocating clears the MultiMesh, so rebuild it from the data. Empty
 	# slots are left zero-sized. Layout per instance: a 2x4 transform, then the color.
@@ -237,3 +295,9 @@ func _grow() -> void:
 	RenderingServer.multimesh_allocate_data(_rid, _capacity, RenderingServer.MULTIMESH_TRANSFORM_2D, true, false)
 	RenderingServer.multimesh_set_buffer(_rid, buffer)
 	RenderingServer.multimesh_set_visible_instances(_rid, _used)
+	# Tails start hidden (zero-sized); flying drops redraw theirs next frame.
+	var hidden := PackedFloat32Array()
+	hidden.resize(_capacity * 12)
+	RenderingServer.multimesh_allocate_data(_trailRid, _capacity, RenderingServer.MULTIMESH_TRANSFORM_2D, true, false)
+	RenderingServer.multimesh_set_buffer(_trailRid, hidden)
+	RenderingServer.multimesh_set_visible_instances(_trailRid, _used)
