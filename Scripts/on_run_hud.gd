@@ -17,6 +17,9 @@ var _fireRippleTween: Tween
 ## aim. Its look is fire_button.gdshader.
 const FIRE_TOUCH_RADIUS: float = 86.0   # where a touch picks it up (as the old button)
 const FIRE_RING_RADIUS: float = 82.0    # the ring (the shader's radius); past it = firing
+## While aiming the ring widens by this share (the shader's aim_grow), giving
+## the knob more room before it fires.
+const FIRE_AIM_RING_GROW: float = 0.35
 const FIRE_AIM_DEADZONE: float = 14.0   # drag this far before it aims instead of tapping
 var _fireFinger: int = -1
 var _fireAiming: bool = false
@@ -30,12 +33,33 @@ var pauseMenu: Control = null
 var activeOptionDisplay: OptionDisplay = null
 var pendingOptionChoices: Array = []
 
+## Played when a level-up choice opens ("overclock": a servo whirr, a glitch,
+## a lock-in click over a dark chord). Its own player keeps running while the
+## game is paused for the choice.
+const LEVEL_UP_SOUND: AudioStream = preload("res://Assets/SFX/LevelUp.wav")
+const LEVEL_UP_VOLUME_DB: float = -4.0
+var _levelUpPlayer: AudioStreamPlayer = null
+
+
+func _play_level_up_sound() -> void:
+	if not global.SFX_TYPES_PERM["game_world"]:
+		return
+	if _levelUpPlayer == null:
+		_levelUpPlayer = AudioStreamPlayer.new()
+		_levelUpPlayer.stream = LEVEL_UP_SOUND
+		_levelUpPlayer.volume_db = LEVEL_UP_VOLUME_DB
+		_levelUpPlayer.process_mode = Node.PROCESS_MODE_ALWAYS
+		add_child(_levelUpPlayer)
+	_levelUpPlayer.play()
+
+
 func show_options(options: Array[Option]) -> void:
 	if activeOptionDisplay != null:
 		pendingOptionChoices.append(options)
 		return
 	
 	get_tree().paused = true
+	_play_level_up_sound()
 	
 	var optionDisplay: OptionDisplay = load("res://Scenes/HUD/option_display.tscn").instantiate()
 	activeOptionDisplay = optionDisplay
@@ -104,9 +128,10 @@ func _input(event: InputEvent) -> void:
 			_tween_fire_aim(1.0, 0.12)
 		var direction: Vector2 = offset / dist
 		global.PLAYERS_WEAPON_SYSTEM.set_manual_aim(direction)
-		_fireMat.set_shader_parameter("knob_offset", direction * minf(dist, FIRE_RING_RADIUS))
+		var ring: float = FIRE_RING_RADIUS * (1.0 + FIRE_AIM_RING_GROW)
+		_fireMat.set_shader_parameter("knob_offset", direction * minf(dist, ring))
 		_fireMat.set_shader_parameter("bullet_angle", direction.angle() + PI * 0.5)
-		_set_fire_shooting(dist > FIRE_RING_RADIUS)
+		_set_fire_shooting(dist > ring)
 
 
 func _process(_delta: float) -> void:

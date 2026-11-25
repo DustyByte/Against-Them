@@ -39,7 +39,6 @@ var _now: float = 0.0
 var _flame_clock: float = 0.0   # _now wrapped to CLOCK_WRAP, for the shader
 var _rid: RID
 var _next_slot: int = 0
-var _used: int = 1
 # Particles are spawned into slots in ring order, so they also expire in that
 # order: _oldest is the oldest live one, _live how many there are. Expired
 # slots are emptied (size 0) so the wrapping clock can never bring one back.
@@ -71,7 +70,11 @@ func _init() -> void:
 	# Slot 0 starts empty (size 0), so the shader is drawn (and compiled) from
 	# the start of the run instead of on the first burn.
 	multimesh.set_instance_custom_data(0, Color(0.0, 0.0, 0.0, 0.0))
-	multimesh.visible_instance_count = _used
+	# Draw every slot from the start and never change the count: growing the
+	# visible instance count while slots are being written crashed the game
+	# (signal 11) in the Compatibility renderer. Unused slots are size 0 and
+	# draw nothing; the vertex shader collapses them.
+	multimesh.visible_instance_count = -1
 	_spawn_time.resize(CAPACITY)
 	_mat = ShaderMaterial.new()
 	_mat.shader = preload("res://Shaders/burn_flames.gdshader")
@@ -174,9 +177,6 @@ func _spawn_flame(at: Vector2) -> void:
 		_live -= 1
 	_live += 1
 	_spawn_time[slot] = _now
-	if _used < CAPACITY and slot >= _used:
-		_used = slot + 1
-		RenderingServer.multimesh_set_visible_instances(_rid, _used)
 	var offset := Vector2.from_angle(randf() * TAU) * FLAME_SPREAD * sqrt(randf())
 	RenderingServer.multimesh_instance_set_transform_2d(_rid, slot, Transform2D(0.0, at + offset))
 	RenderingServer.multimesh_instance_set_custom_data(_rid, slot, Color(randf(), _flame_clock,

@@ -94,8 +94,10 @@ func get_knocked_back(knockBackDirection: Vector2, knockBackIntensity: float = 0
 
 
 const REVIVE_SHOCKWAVE_RADIUS := 450.0
-const REVIVE_SHOCKWAVE_PUSH_NEAR := 240.0
-const REVIVE_SHOCKWAVE_PUSH_FAR := 140.0
+## Knockback for enemies right next to Echo / at the edge of the radius. An
+## enemy slides about (push x 3)^2 / 1200 px: about 680 px near, 240 px far.
+const REVIVE_SHOCKWAVE_PUSH_NEAR := 300.0   # was 240
+const REVIVE_SHOCKWAVE_PUSH_FAR := 180.0    # was 140
 
 ## Called once the player revives: pushes every nearby enemy away so the
 ## player isn't surrounded the moment the world resumes. Knockback only.

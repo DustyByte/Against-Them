@@ -59,6 +59,10 @@ const WARM_MATERIALS: Array[String] = [
 const WARM_SHADERS: Array[String] = [
 	"res://Shaders/hit.gdshader",
 	"res://Shaders/frozen_shatter.gdshader",
+	"res://Shaders/wisp_flame.gdshader",   # the Wisp builds its look in code
+	"res://Shaders/wisp_sparks.gdshader",
+	"res://Shaders/wisp_beam.gdshader",
+	"res://Shaders/wisp_burst.gdshader",
 	"res://Shaders/starryGlow.gdshader",
 	"res://Shaders/joystick.gdshader",
 	"res://Shaders/Skins/skin_ember_warden.gdshader",

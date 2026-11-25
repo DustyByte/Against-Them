@@ -256,13 +256,13 @@ Kill 1 enemy,Kill 1 enemy,敵を1体倒す
 "Kill 1,000 enemies with Cryolite","Kill 1,000 enemies with Cryolite","Cryoliteで敵を1,000体倒す"
 "Kill 1,000 enemies with Fiery Field","Kill 1,000 enemies with Fiery Field","Fiery Fieldで敵を1,000体倒す"
 "Kill 1,000 enemies with Gravity Bomb","Kill 1,000 enemies with Gravity Bomb","Gravity Bombで敵を1,000体倒す"
-"Kill 1,000 enemies with Laser Orb","Kill 1,000 enemies with Laser Orb","Laser Orbで敵を1,000体倒す"
 "Kill 1,000 enemies with Lightning Strike or Hexa Snail","Kill 1,000 enemies with Lightning Strike or Hexa Snail","Lightning StrikeまたはHexa Snailで敵を1,000体倒す"
 "Kill 1,000 enemies with Miniature Star","Kill 1,000 enemies with Miniature Star","Miniature Starで敵を1,000体倒す"
 "Kill 1,000 enemies with Recall Dagger","Kill 1,000 enemies with Recall Dagger","Recall Daggerで敵を1,000体倒す"
 "Kill 1,000 enemies with Rupture","Kill 1,000 enemies with Rupture","Ruptureで敵を1,000体倒す"
 "Kill 1,000 enemies with Silver Storm","Kill 1,000 enemies with Silver Storm","Silver Stormで敵を1,000体倒す"
 "Kill 1,000 enemies with Torcher","Kill 1,000 enemies with Torcher","Torcherで敵を1,000体倒す"
+"Kill 1,000 enemies with Wisp","Kill 1,000 enemies with Wisp","Wispで敵を1,000体倒す"
 "Kill 1,000 enemies with bleed","Kill 1,000 enemies with bleed","出血で敵を1,000体倒す"
 "Kill 1,000,000 enemies","Kill 1,000,000 enemies","敵を1,000,000体倒す"
 Kill 10 bosses,Kill 10 bosses,ボスを10体倒す
@@ -277,13 +277,13 @@ Kill 10 enemies within 1 second,Kill 10 enemies within 1 second,1秒以内に敵
 "Kill 10,000 enemies with Cryolite","Kill 10,000 enemies with Cryolite","Cryoliteで敵を10,000体倒す"
 "Kill 10,000 enemies with Fiery Field","Kill 10,000 enemies with Fiery Field","Fiery Fieldで敵を10,000体倒す"
 "Kill 10,000 enemies with Gravity Bomb","Kill 10,000 enemies with Gravity Bomb","Gravity Bombで敵を10,000体倒す"
-"Kill 10,000 enemies with Laser Orb","Kill 10,000 enemies with Laser Orb","Laser Orbで敵を10,000体倒す"
 "Kill 10,000 enemies with Lightning Strike or Hexa Snail","Kill 10,000 enemies with Lightning Strike or Hexa Snail","Lightning StrikeまたはHexa Snailで敵を10,000体倒す"
 "Kill 10,000 enemies with Miniature Star","Kill 10,000 enemies with Miniature Star","Miniature Starで敵を10,000体倒す"
 "Kill 10,000 enemies with Recall Dagger","Kill 10,000 enemies with Recall Dagger","Recall Daggerで敵を10,000体倒す"
 "Kill 10,000 enemies with Rupture","Kill 10,000 enemies with Rupture","Ruptureで敵を10,000体倒す"
 "Kill 10,000 enemies with Silver Storm","Kill 10,000 enemies with Silver Storm","Silver Stormで敵を10,000体倒す"
 "Kill 10,000 enemies with Torcher","Kill 10,000 enemies with Torcher","Torcherで敵を10,000体倒す"
+"Kill 10,000 enemies with Wisp","Kill 10,000 enemies with Wisp","Wispで敵を10,000体倒す"
 "Kill 10,000 enemies with bleed","Kill 10,000 enemies with bleed","出血で敵を10,000体倒す"
 Kill 100 bosses,Kill 100 bosses,ボスを100体倒す
 Kill 100 enemies,Kill 100 enemies,敵を100体倒す
@@ -291,13 +291,13 @@ Kill 100 enemies in one run,Kill 100 enemies in one run,1回のランで敵を10
 Kill 100 enemies with Cryolite,Kill 100 enemies with Cryolite,Cryoliteで敵を100体倒す
 Kill 100 enemies with Fiery Field,Kill 100 enemies with Fiery Field,Fiery Fieldで敵を100体倒す
 Kill 100 enemies with Gravity Bomb,Kill 100 enemies with Gravity Bomb,Gravity Bombで敵を100体倒す
-Kill 100 enemies with Laser Orb,Kill 100 enemies with Laser Orb,Laser Orbで敵を100体倒す
 Kill 100 enemies with Lightning Strike or Hexa Snail,Kill 100 enemies with Lightning Strike or Hexa Snail,Lightning StrikeまたはHexa Snailで敵を100体倒す
 Kill 100 enemies with Miniature Star,Kill 100 enemies with Miniature Star,Miniature Starで敵を100体倒す
 Kill 100 enemies with Recall Dagger,Kill 100 enemies with Recall Dagger,Recall Daggerで敵を100体倒す
 Kill 100 enemies with Rupture,Kill 100 enemies with Rupture,Ruptureで敵を100体倒す
 Kill 100 enemies with Silver Storm,Kill 100 enemies with Silver Storm,Silver Stormで敵を100体倒す
 Kill 100 enemies with Torcher,Kill 100 enemies with Torcher,Torcherで敵を100体倒す
+Kill 100 enemies with Wisp,Kill 100 enemies with Wisp,Wispで敵を100体倒す
 Kill 100 enemies with bleed,Kill 100 enemies with bleed,出血で敵を100体倒す
 Kill 100 enemies with both weapons in one run,Kill 100 enemies with both weapons in one run,1回のランで両方の武器でそれぞれ敵を100体倒す
 "Kill 100,000 enemies","Kill 100,000 enemies","敵を100,000体倒す"
@@ -344,7 +344,6 @@ LEFT TODAY,LEFT TODAY,本日の残り
 LIFETIME,LIFETIME,累計
 LOADING...,LOADING...,読み込み中...
 LONGEST SURVIVAL,LONGEST SURVIVAL,最長生存時間
-Laser Orb,Laser Orb,Laser Orb
 Lasting Anomaly,Lasting Anomaly,Lasting Anomaly
 "Letters, numbers and _ only, starting with a letter.","Letters, numbers and _ only, starting with a letter.",英字で始まり、英数字と _ のみ使用できます。
 Life,Life,Life
@@ -487,12 +486,12 @@ Striking a burning enemy with lightning takes critical damage.,Striking a burnin
 Summon & shoot out an ice storm every 3 seconds. Deals 15 Frost Damage to enemies on its path.,Summon & shoot out an ice storm every 3 seconds. Deals 15 Frost Damage to enemies on its path.,3秒ごとに氷の嵐を召喚して放つ。通り道の敵に15のFrostダメージを与える。
 Summon Adrenaline,Summon Adrenaline,Summon Adrenaline
 Summon a Crystal that shoots out icicles towards enemy dealing 10 Frost damage & Freezing them.,Summon a Crystal that shoots out icicles towards enemy dealing 10 Frost damage & Freezing them.,敵に氷柱を放つクリスタルを召喚し、10のFrostダメージを与えて凍結させる。
+Summon a Wisp that shoots a weak laser beam towards nearest enemy. Inflicts short burn.,Summon a Wisp that shoots a weak laser beam towards nearest enemy. Inflicts short burn.,最も近い敵に弱いレーザーを撃つWispを召喚する。短い燃焼を付与する。
 "Summon a large dagger that shoots outwards and flies back to you, dealing 10 Damage to enemies on its path. Inflicts bleed.","Summon a large dagger that shoots outwards and flies back to you, dealing 10 Damage to enemies on its path. Inflicts bleed.",外へ飛び出して手元に戻る大きなダガーを召喚し、通り道の敵に10ダメージを与える。出血を付与する。
 Summon a lightning strike on a nearby enemy every 3rd weapon's shot. Lightning deals 20 Electro Damage.,Summon a lightning strike on a nearby enemy every 3rd weapon's shot. Lightning deals 20 Electro Damage.,武器を3発撃つごとに近くの敵に落雷を召喚する。落雷は20のElectroダメージを与える。
 Summon a mini star that orbits around you and deals 15 Inferno Daamge. Inflicts burn.,Summon a mini star that orbits around you and deals 15 Inferno Daamge. Inflicts burn.,周囲を回るMiniature Starを召喚し、15のInfernoダメージを与える。燃焼を付与する。
 Summon a snail friend that strikes a random enemy with lightning every 3 seconds dealing 20 Electro Damage.,Summon a snail friend that strikes a random enemy with lightning every 3 seconds dealing 20 Electro Damage.,3秒ごとにランダムな敵へ雷を落とすカタツムリの仲間を召喚する。20のElectroダメージを与える。
 Summon a temporal space distortion near every enemy nearby dealing 20 Exotic Damage.,Summon a temporal space distortion near every enemy nearby dealing 20 Exotic Damage.,近くの敵すべての周囲に時空の歪みを召喚し、20のExoticダメージを与える。
-Summon an Orb that shoots a weak laser beam towards nearest enemy. Inflicts short burn.,Summon an Orb that shoots a weak laser beam towards nearest enemy. Inflicts short burn.,最も近い敵に弱いレーザーを撃つオーブを召喚する。短い燃焼を付与する。
 Summons,Summons,召喚
 Survival,Survival,生存
 Survive 1 hour,Survive 1 hour,1時間生き延びる
@@ -560,6 +559,7 @@ Weapons,Weapons,武器
 "Weapons, enemies and pickups","Weapons, enemies and pickups",武器、敵、アイテム取得
 "When dropped over frozen enemies, they explode into 3 ice shards, causing bleed upon hitting enemy.","When dropped over frozen enemies, they explode into 3 ice shards, causing bleed upon hitting enemy.",凍結した敵の上に落とすと、敵は3つの氷片となって弾け、当たった敵に出血を与える。
 "While Focus is locked on, the beam grows 20% thicker and stronger every second, up to 3x.","While Focus is locked on, the beam grows 20% thicker and stronger every second, up to 3x.",Focusでロックオン中、ビームは毎秒20%太く強くなる（最大3倍）。
+Wisp,Wisp,Wisp
 World Sounds,World Sounds,ゲーム内の音
 YOU HAVE,YOU HAVE,所持数
 You need %d more Echoes.,You need %d more Echoes.,Echoesがあと%d必要です。

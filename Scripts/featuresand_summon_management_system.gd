@@ -664,7 +664,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 			optionChosen.make_immediate_children_available()
 			optionChosen.deactivate(true)
 		
-		"Laser Orb":
+		"Wisp":
 			if not playerStatsActiveModifiers.has('orbStats'):
 				_set_new_modifiers_into_player_stats(optionChosen.modifiers)
 				optionChosen.make_immediate_children_available()

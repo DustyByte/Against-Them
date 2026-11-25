@@ -14,8 +14,9 @@ extends RefCounted
 ##              the achievement is not tracked yet and stays at 0.
 ##   threshold- (optional) for yes/no achievements: complete once stat >= threshold.
 ##
-## Reward scale: regular play earns roughly 3 Echoes per minute (about 90 per
-## 30 minutes), so a reward is sized to the play time and skill it usually takes:
+## Reward scale: sized when regular play earned roughly 3 Echoes per minute
+## (about 90 per 30 minutes; runs now pay about 2.5x that, 3 per wave and 10
+## per boss), so a reward is sized to the play time and skill it usually takes:
 ##   5        happens on its own in the first minutes
 ##   10 - 20  one normal descend, or a light condition
 ##   25 - 40  a long descend, or a real skill/build condition
@@ -132,9 +133,9 @@ const ACHIEVEMENTS: Array[Dictionary] = [
 	{ "id": "star_power", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 100 enemies with Miniature Star", "target": 100, "reward": 15, "stat": "kills_star" },
 	{ "id": "star_power_ii", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 1,000 enemies with Miniature Star", "target": 1000, "reward": 40, "stat": "kills_star" },
 	{ "id": "star_power_iii", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 10,000 enemies with Miniature Star", "target": 10000, "reward": 120, "stat": "kills_star" },
-	{ "id": "focus_fire", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 100 enemies with Laser Orb", "target": 100, "reward": 15, "stat": "kills_laser_orb" },
-	{ "id": "focus_fire_ii", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 1,000 enemies with Laser Orb", "target": 1000, "reward": 40, "stat": "kills_laser_orb" },
-	{ "id": "focus_fire_iii", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 10,000 enemies with Laser Orb", "target": 10000, "reward": 120, "stat": "kills_laser_orb" },
+	{ "id": "focus_fire", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 100 enemies with Wisp", "target": 100, "reward": 15, "stat": "kills_laser_orb" },
+	{ "id": "focus_fire_ii", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 1,000 enemies with Wisp", "target": 1000, "reward": 40, "stat": "kills_laser_orb" },
+	{ "id": "focus_fire_iii", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 10,000 enemies with Wisp", "target": 10000, "reward": 120, "stat": "kills_laser_orb" },
 	{ "id": "event_horizon", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 100 enemies with Gravity Bomb", "target": 100, "reward": 15, "stat": "kills_gravity_bomb" },
 	{ "id": "event_horizon_ii", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 1,000 enemies with Gravity Bomb", "target": 1000, "reward": 40, "stat": "kills_gravity_bomb" },
 	{ "id": "event_horizon_iii", "category": "Summons", "type": TYPE_LIFETIME, "title": "Kill 10,000 enemies with Gravity Bomb", "target": 10000, "reward": 120, "stat": "kills_gravity_bomb" },

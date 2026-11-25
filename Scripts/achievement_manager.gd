@@ -59,7 +59,7 @@ const SUMMON_SOURCES: Array[StringName] = [
 # Level-up options that give the player a summon.
 const SUMMON_OPTIONS: Array[String] = [
 	"Lightning Strike", "Hexa Snail", "Retribution", "Silver Storm", "Recall Dagger",
-	"Aura", "Miniature Star", "Laser Orb", "Gravity Bomb", "Fiery Field", "Cryolite",
+	"Aura", "Miniature Star", "Wisp", "Gravity Bomb", "Fiery Field", "Cryolite",
 ]
 
 var _stats: Dictionary = {}

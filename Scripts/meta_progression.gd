@@ -12,8 +12,8 @@ const SAVE_VERSION: int = 1
 # each completed wave is worth a small amount, and each boss killed is worth
 # more. Starting and immediately abandoning a run awards zero because no wave
 # has actually been completed yet.
-const ECHOES_PER_WAVE: int = 1
-const ECHOES_PER_BOSS: int = 5
+const ECHOES_PER_WAVE: int = 3
+const ECHOES_PER_BOSS: int = 10
 
 ## Home screen Echoes notch: watch a rewarded ad for Echoes, a few times a day.
 ## The counter resets at local midnight and lives in this save, so it follows

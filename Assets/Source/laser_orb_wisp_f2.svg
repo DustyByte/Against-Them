@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Laser Orb: a wisp. An ember-red flame of Umbra's night with a bright
+       star-eye at its heart, where the beam comes from. Flicker frame 2. -->
+  <defs>
+    <radialGradient id="halo" cx="64" cy="74" r="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0.25" stop-color="#ff8a7a" stop-opacity="0.32"/>
+      <stop offset="0.65" stop-color="#d9505a" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#d9505a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="outer" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#5c1426"/>
+      <stop offset="0.45" stop-color="#b0303f" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffb0a6" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="mid" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#e2525c"/>
+      <stop offset="0.6" stop-color="#ff8f8a" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#ffd2cc" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="inner" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#fff0ee"/>
+      <stop offset="0.7" stop-color="#ffc9c2" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#ffc9c2" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="body" cx="64" cy="82" r="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#ffe3df"/>
+      <stop offset="0.8" stop-color="#ff8478" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#c8404c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="under" cx="64" cy="104" r="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffb0a6" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffb0a6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <circle cx="64" cy="74" r="54" fill="url(#halo)"/>
+  <ellipse cx="64" cy="104" rx="22" ry="7" fill="url(#under)"/>
+
+  <!-- flame: outer, middle, inner layers -->
+  <path d="M64 102 C 41 102, 34 85, 39 71 C 44 60, 50 54, 47 41 C 56 47, 61 51, 62 43 C 63 33, 58 25, 64 12 C 69 28, 80 34, 85 46 C 88 38, 88 32, 95 27 C 96 46, 97 61, 91 79 C 86 95, 78 102, 64 102 Z" fill="url(#outer)"/>
+  <path d="M64 99 C 47 99, 42 87, 45 77 C 49 67, 55 63, 54 53 C 61 58, 65 59, 66 50 C 67 41, 66 35, 71 28 C 75 43, 83 53, 84 66 C 85 86, 76 99, 64 99 Z" fill="url(#mid)"/>
+  <path d="M64 96 C 53 96, 50 89, 51 81 C 53 73, 59 70, 58 62 C 63 66, 67 65, 68 58 C 73 65, 78 72, 76 82 C 74 92, 70 96, 64 96 Z" fill="url(#inner)"/>
+  <!-- cold rim light on the left edge -->
+  <path d="M64 102 C 41 102, 34 85, 39 71 C 44 60, 50 54, 47 41 C 56 47, 61 51, 62 43 C 63 33, 58 25, 64 12 C 69 28, 80 34, 85 46 C 88 38, 88 32, 95 27 C 96 46, 97 61, 91 79 C 86 95, 78 102, 64 102 Z" fill="none" stroke="#ffd2cc" stroke-width="1.2" opacity="0.35"/>
+
+  <!-- body glow -->
+  <circle cx="64" cy="82" r="20" fill="url(#body)"/>
+  <!-- the star-eye: a bright point with a cross glint, the beam's source -->
+  <path d="M64 70 L66.2 80 L76 82 L66.2 84 L64 94 L61.8 84 L52 82 L61.8 80 Z" fill="#ffffff" opacity="0.9"/>
+  <circle cx="64" cy="82" r="4.2" fill="#ffffff"/>
+  <circle cx="64" cy="82" r="1.8" fill="#ffc4bc"/>
+  <!-- sparks drifting up -->
+  <g fill="#ffd9d3"><circle cx="78" cy="8" r="1.7" opacity="0.7"/><circle cx="44" cy="20" r="1.4" opacity="0.55"/><circle cx="100" cy="34" r="1.2" opacity="0.5"/><circle cx="34" cy="48" r="1.2" opacity="0.5"/></g>
+</svg>

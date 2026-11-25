@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Laser Orb: a wisp. An ember-red flame of Umbra's night with a bright
+       star-eye at its heart, where the beam comes from. Main pose. -->
+  <defs>
+    <radialGradient id="halo" cx="64" cy="74" r="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0.25" stop-color="#ff8a7a" stop-opacity="0.32"/>
+      <stop offset="0.65" stop-color="#d9505a" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#d9505a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="outer" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#5c1426"/>
+      <stop offset="0.45" stop-color="#b0303f" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffb0a6" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="mid" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#e2525c"/>
+      <stop offset="0.6" stop-color="#ff8f8a" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#ffd2cc" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="inner" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#fff0ee"/>
+      <stop offset="0.7" stop-color="#ffc9c2" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#ffc9c2" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="body" cx="64" cy="82" r="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#ffe3df"/>
+      <stop offset="0.8" stop-color="#ff8478" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#c8404c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="under" cx="64" cy="104" r="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffb0a6" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffb0a6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- body glow -->
+  <circle cx="64" cy="82" r="20" fill="url(#body)"/>
+  <!-- the star-eye: a bright point with a cross glint, the beam's source -->
+  <path d="M64 70 L66.2 80 L76 82 L66.2 84 L64 94 L61.8 84 L52 82 L61.8 80 Z" fill="#ffffff" opacity="0.9"/>
+  <circle cx="64" cy="82" r="4.2" fill="#ffffff"/>
+  <circle cx="64" cy="82" r="1.8" fill="#ffc4bc"/>
+  
+</svg>

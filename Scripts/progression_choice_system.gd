@@ -119,7 +119,7 @@ var gagba := Option.new("Anomaly", {}, "Star collapses into a black hole.", 'III
 
 var gagbaa := Option.new("Feed the Monster", {},  "Black holes Event horizon enlargens by 10%", 'IV.I', "res://Assets/HUD Elements/OptionIcons/MiniStar.png")
 
-var h := Option.new("Laser Orb", {
+var h := Option.new("Wisp", {
 	orbStats = {
 		isSummon = true,
 		damage = 5.0,
@@ -128,7 +128,7 @@ var h := Option.new("Laser Orb", {
 		beamThickness = 3.0,
 		hasLock = false
 	}
-}, "Summon an Orb that shoots a weak laser beam towards nearest enemy. Inflicts short burn.", 'I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png", true)
+}, "Summon a Wisp that shoots a weak laser beam towards nearest enemy. Inflicts short burn.", 'I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png", true)
 
 var ha := Option.new("Thiccer Beam", {}, "Increase Beam Thickness and damage", 'II.I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
 
@@ -171,7 +171,7 @@ var kakba := Option.new("Rhythm Accumulate", {}, "Ammo +1. If the chance to gain
 var kaakakbaa := Option.new("Slayer's Tithe", {}, "Killing a boss permanently adds 0.5% of the weapon's base damage, for all future descends. Only the weapon that dealt the last blow gains it.", 'IV.I', "res://Assets/HUD Elements/OptionIcons/StrongerWeapon.png")
 
 var l := Option.new("Greed", {
-	pickUpRangeBonus = 0.5   # of the base pickup range; adds up, doesn't multiply
+	pickUpRangeBonus = 0.5   # of the base pickup range; adds up, never multiplies
 }, "Pickup Range +50%", 'I', "res://Assets/HUD Elements/OptionIcons/Greed.png", true)
 
 var la : = Option.new("Momentum Pickups", {}, "Picking up an exp has 0.5% chance to increases attack speed.", 'II.I', "res://Assets/HUD Elements/OptionIcons/Greed.png")
@@ -338,7 +338,7 @@ func _ready() -> void:
 	gagba.augment_child(gagbaa)
 #endregion
 	
-#region Laser Orb
+#region Wisp
 	h.augment_children([ha, hb])
 	hb.augment_child(hba)
 	hba.augment_child(hahbaa)

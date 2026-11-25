@@ -17,6 +17,7 @@ uniform float aim : hint_range(0.0, 1.0) = 0.0;       // 0 = button .. 1 = aim s
 uniform vec2 knob_offset = vec2(0.0);                 // px from the centre, within the ring
 uniform float bullet_angle = 0.0;                     // radians the bullet turns (0 = up)
 uniform float firing : hint_range(0.0, 1.0) = 0.0;    // knob pulled past the ring
+uniform float aim_grow = 0.35;                        // the ring is this much bigger while aiming
 
 float ring(float d, float width) {
 	return 1.0 - smoothstep(width * 0.5 - 0.75, width * 0.5 + 0.75, abs(d));
@@ -46,12 +47,13 @@ vec2 rotated(vec2 v, float a) {
 
 void fragment() {
 	vec2 p = UV * rect_size - rect_size * 0.5;
-	float rad = radius * (1.0 - 0.05 * pressed * (1.0 - aim));   // pushed in (button only)
+	// pushed in (button only); the ring widens while aiming, the knob stays its size
+	float rad = radius * (1.0 - 0.05 * pressed * (1.0 - aim)) * (1.0 + aim_grow * aim);
 	float r = length(p);
 	float ripple_r = mix(rad, rad + 26.0, ripple);
 	// The face: the whole disc as a button, a half-size knob while aiming.
 	vec2 kc = knob_offset * aim;
-	float kr = mix(rad, rad * 0.5, aim);
+	float kr = mix(rad, radius * 0.5, aim);
 	vec2 pk = p - kc;
 	float rk = length(pk);
 	if (r > max(rad + 14.0, ripple_r + 3.0) && rk > kr + 14.0) {

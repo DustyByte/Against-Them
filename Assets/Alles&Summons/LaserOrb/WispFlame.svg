@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Laser Orb: a wisp. An ember-red flame of Umbra's night with a bright
+       star-eye at its heart, where the beam comes from. Main pose. -->
+  <defs>
+    <radialGradient id="halo" cx="64" cy="74" r="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0.25" stop-color="#ff8a7a" stop-opacity="0.32"/>
+      <stop offset="0.65" stop-color="#d9505a" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#d9505a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="outer" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#5c1426"/>
+      <stop offset="0.45" stop-color="#b0303f" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffb0a6" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="mid" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#e2525c"/>
+      <stop offset="0.6" stop-color="#ff8f8a" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#ffd2cc" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="inner" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#fff0ee"/>
+      <stop offset="0.7" stop-color="#ffc9c2" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#ffc9c2" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="body" cx="64" cy="82" r="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#ffe3df"/>
+      <stop offset="0.8" stop-color="#ff8478" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#c8404c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="under" cx="64" cy="104" r="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffb0a6" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffb0a6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <circle cx="64" cy="74" r="54" fill="url(#halo)"/>
+  <ellipse cx="64" cy="104" rx="22" ry="7" fill="url(#under)"/>
+
+  
+  <path d="M64 102 C 42 102, 34 84, 40 70 C 45 58, 52 54, 50 40 C 58 46, 62 52, 64 44 C 66 34, 62 26, 70 14 C 72 30, 82 36, 86 48 C 88 40, 86 34, 92 28 C 94 46, 96 60, 90 78 C 86 94, 78 102, 64 102 Z" fill="url(#outer)"/>
+  <path d="M64 99 C 48 99, 42 86, 46 76 C 50 66, 56 62, 56 52 C 62 58, 66 60, 68 50 C 70 42, 70 36, 76 30 C 78 44, 84 54, 84 66 C 84 86, 76 99, 64 99 Z" fill="url(#mid)"/>
+  <path d="M64 96 C 54 96, 50 88, 52 80 C 54 72, 60 70, 60 62 C 64 66, 68 66, 70 58 C 74 66, 78 72, 76 82 C 74 92, 70 96, 64 96 Z" fill="url(#inner)"/>
+  <!-- cold rim light on the left edge -->
+  <path d="M64 102 C 42 102, 34 84, 40 70 C 45 58, 52 54, 50 40 C 58 46, 62 52, 64 44 C 66 34, 62 26, 70 14 C 72 30, 82 36, 86 48 C 88 40, 86 34, 92 28 C 94 46, 96 60, 90 78" fill="none" stroke="#ffd2cc" stroke-width="1.2" opacity="0.35"/>
+
+  </svg>
