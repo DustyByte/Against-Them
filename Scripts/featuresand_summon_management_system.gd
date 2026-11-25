@@ -300,6 +300,21 @@ func _set_new_modifiers_into_player_stats(modifiers: Dictionary) -> void:
 
 var notAnomalyOnceTaken: bool = true
 var moreFusionCount: int = 0
+## Most of the stars Miniature Star gives (one per pick).
+const MAX_STARS: int = 3
+## Options whose children open only after several picks (all others open
+## theirs on the first). The option card shows the progress as pips.
+const UNLOCK_AFTER_PICKS: Dictionary = {"More Fusion": 4}
+
+
+## How far `option` is towards opening its children: (picks so far, picks
+## needed). Needed is 1 for options that open them on the first pick.
+func unlock_progress(option: Option) -> Vector2i:
+	var needed: int = UNLOCK_AFTER_PICKS.get(option.name, 1)
+	match option.name:
+		"More Fusion":
+			return Vector2i(moreFusionCount, needed)
+	return Vector2i(0, needed)
 var feedTheMonsterCount: int = 0
 var thickerBeamCount: int = 0
 var fasterOrbitCount: int = 0
@@ -395,16 +410,15 @@ func implement_option_choice(optionChosen: Option) -> void:
 				add_star()
 			
 			miniatureStarCount += 1
-			if miniatureStarCount >= 2:
+			if miniatureStarCount >= MAX_STARS:
 				optionChosen.deactivate(true)
 		
 		"More Fusion":
 			starOrbital.increase_all_star_size(1.20)
 			moreFusionCount += 1
-			if moreFusionCount >= 2:
+			if moreFusionCount >= UNLOCK_AFTER_PICKS["More Fusion"]:   # opens Anomaly
 				optionChosen.make_immediate_children_available()
-				if moreFusionCount == 3:
-					optionChosen.deactivate(true)
+				optionChosen.deactivate(true)
 		
 		"Faster Orbit":
 			scale_cooldown("starStats", CD_OPTION_FACTORS[optionChosen.name])
@@ -417,12 +431,12 @@ func implement_option_choice(optionChosen: Option) -> void:
 		
 		"Anomaly":
 			if notAnomalyOnceTaken:
-				starOrbital.nowAsBH = true
-				starOrbital.collapse_all_stars_into_blackhole()
+				starOrbital.merge_stars_into_blackhole()   # all stars collide into one
 				optionChosen.make_immediate_children_available()
-				optionChosen.deactivate(true)
+				optionChosen.deactivate(true)   # once per run
 				notAnomalyOnceTaken = false
 				global.PROGRESSION_CHOICE_SYSTEM.ga.deactivate(true) # More Fusion is gone once the star is a black hole
+				global.PROGRESSION_CHOICE_SYSTEM.g.deactivate(true)  # and no new stars join the black hole
 		
 		"Feed the Monster":
 			starOrbital.increase_all_star_size(1.1)

@@ -62,10 +62,17 @@ func into_display_inject_option(option: Option) -> void:
 	for node in existingPreviewNodes:
 		node.queue_free()
 	
+	var progress: Vector2i = global.FEATURE_AND_SUMMON_MANAGEMENT_SYSTEM.unlock_progress(option)
 	for child in option.children:
 		var oIconChildPrev: OptionIcon = optionIconBP.instantiate()
 		oIconChildPrev.set_option(child)
 		wouldGetUnlockedGrid.add_child(oIconChildPrev)
+		if progress.y > 1:   # takes several picks: show how far along
+			var pips := UnlockPips.new()
+			pips.setup(progress.x, progress.y)
+			oIconChildPrev.add_child(pips)
+			var icon_size: Vector2 = oIconChildPrev.texture.get_size() if oIconChildPrev.texture else oIconChildPrev.size
+			pips.position = Vector2((icon_size.x - pips.size.x) * 0.5, icon_size.y + 10.0)
 
 
 func into_display_inject_child_preview(childOption: Option) -> void:

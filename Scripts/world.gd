@@ -120,7 +120,7 @@ func audio_play(AS: AudioStream, sfxType: StringName, pitch: float = 0.0, vdb: f
 ## repeat (the loop point is set in the file's import settings). Keeps
 ## playing through pauses and level-up choices. Follows the Music setting.
 const RUN_MUSIC: AudioStream = preload("res://Assets/Music/descend_music.wav")
-const RUN_MUSIC_VOLUME_DB: float = -4.0
+const RUN_MUSIC_VOLUME_DB: float = -6.0   # was -4
 var runMusic: AudioStreamPlayer = null
 
 

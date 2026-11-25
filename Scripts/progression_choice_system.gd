@@ -334,8 +334,7 @@ func _ready() -> void:
 	
 #region Star
 	g.augment_children([ga, gb])
-	ga.augment_child(gagba)
-	gb.augment_child(gagba)
+	ga.augment_child(gagba)   # Anomaly: only after More Fusion x4 (see FEATURE_AND_SUMMON_MANAGEMENT_SYSTEM)
 	gagba.augment_child(gagbaa)
 #endregion
 	
