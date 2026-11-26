@@ -1,52 +1,59 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://Scripts/achievement_card.gd" id="1_card"]
 [ext_resource type="FontFile" uid="uid://djy2kn1f2i5ef" path="res://Resources/Copperplate.otf" id="2_font"]
 
+[sub_resource type="FontVariation" id="FontVariation_spaced"]
+base_font = ExtResource("2_font")
+spacing_glyph = 3
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
-bg_color = Color(0.16078432, 0.16078432, 0.16078432, 0.92)
-border_width_left = 6
-border_color = Color(0.32, 0.36, 0.38, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+bg_color = Color(0.035, 0.05, 0.075, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.88, 0.95, 0.2)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="Theme" id="Theme_card"]
-Label/colors/font_color = Color(0.74509805, 0.9254902, 0.9254902, 1)
+Label/colors/font_color = Color(0.78, 0.84, 0.9, 1)
 Label/font_sizes/font_size = 22
-Label/fonts/font = ExtResource("2_font")
+Label/fonts/font = SubResource("FontVariation_spaced")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
-bg_color = Color(0.07, 0.08, 0.09, 1)
+bg_color = Color(0.62, 0.88, 0.95, 0.1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.3, 0.34, 0.36, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+border_color = Color(0.62, 0.88, 0.95, 0.25)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_fill"]
-bg_color = Color(0.45, 0.85, 0.88, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+bg_color = Color(0.62, 0.88, 0.95, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reward"]
-bg_color = Color(0.1, 0.1, 0.11, 1)
+bg_color = Color(0.95, 0.8, 0.42, 0.06)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.85, 0.7, 0.35, 0.6)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+border_color = Color(0.95, 0.8, 0.42, 0.4)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [node name="AchievementCard" type="Panel"]
 custom_minimum_size = Vector2(0, 130)
@@ -82,6 +89,8 @@ alignment = 1
 
 [node name="NameLabel" type="Label" parent="Margin/HBox/Info"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.96, 1, 1)
+theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 24
 text = "Achievement"
 text_overrun_behavior = 3
@@ -118,6 +127,7 @@ show_percentage = false
 [node name="ProgressLabel" type="Label" parent="Margin/HBox/Info/ProgressRow"]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.88, 0.95, 1)
 text = "0/1"
 horizontal_alignment = 2
 
@@ -135,7 +145,7 @@ alignment = 1
 
 [node name="RewardCaption" type="Label" parent="Margin/HBox/Reward/RewardVBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_colors/font_color = Color(0.45, 0.62, 0.7, 0.9)
 theme_override_font_sizes/font_size = 14
 text = "REWARD"
 horizontal_alignment = 1
@@ -149,8 +159,8 @@ horizontal_alignment = 1
 
 [node name="RewardCurrency" type="Label" parent="Margin/HBox/Reward/RewardVBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.8, 0.42, 0.8)
-theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.55, 0.7, 0.78, 0.9)
+theme_override_font_sizes/font_size = 14
 text = "Echoes"
 horizontal_alignment = 1
 

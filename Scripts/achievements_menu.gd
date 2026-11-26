@@ -61,19 +61,24 @@ func _add_card(achievement: Dictionary) -> void:
 
 
 func _make_category_header(category: String) -> Control:
+	# Same heading look as the Upgrades screen: spaced Copperplate in cyan.
+	var font := FontVariation.new()
+	font.base_font = HEADER_FONT
+	font.spacing_glyph = 4
+
 	var header := Label.new()
 	# Category names stay English in every language (a style choice for the
 	# Japanese version); only the achievements under them are translated.
 	header.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	header.text = category.to_upper()
-	header.add_theme_font_override("font", HEADER_FONT)
-	header.add_theme_font_size_override("font_size", 26)
-	header.add_theme_color_override("font_color", Color(0.95, 0.8, 0.42, 1))
+	header.add_theme_font_override("font", font)
+	header.add_theme_font_size_override("font_size", 22)
+	header.add_theme_color_override("font_color", Color(0.62, 0.88, 0.95, 1))
 
 	# Extra space above each heading so categories read as separate groups.
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_top", 16)
-	margin.add_theme_constant_override("margin_left", 6)
+	margin.add_theme_constant_override("margin_left", 4)
 	margin.mouse_filter = Control.MOUSE_FILTER_PASS
 	margin.add_child(header)
 	return margin

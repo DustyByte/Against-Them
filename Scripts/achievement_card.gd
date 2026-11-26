@@ -3,9 +3,14 @@ extends Panel
 ## Emitted when the player taps CLAIM on a completed, unclaimed achievement.
 signal claim_requested(achievement_id: String)
 
-const COLOR_ACCENT_LOCKED := Color(0.32, 0.36, 0.38, 1)
-const COLOR_ACCENT_DONE := Color(0.95, 0.8, 0.42, 1)
-const COLOR_ACCENT_CLAIMED := Color(0.45, 0.85, 0.88, 1)
+# Card border per state, in the same navy/cyan look as the Upgrades and Shop
+# cards: faint cyan while in progress, gold once it can be claimed, brighter
+# cyan once claimed.
+const COLOR_ACCENT_LOCKED := Color(0.62, 0.88, 0.95, 0.2)
+const COLOR_ACCENT_DONE := Color(0.95, 0.8, 0.42, 0.75)
+const COLOR_ACCENT_CLAIMED := Color(0.62, 0.88, 0.95, 0.45)
+const GOLD := Color(0.95, 0.8, 0.42, 1)
+const CYAN := Color(0.62, 0.88, 0.95, 1)
 
 @onready var _name_label: Label = $Margin/HBox/Info/NameLabel
 @onready var _progress_bar: ProgressBar = $Margin/HBox/Info/ProgressRow/ProgressBar
@@ -42,9 +47,9 @@ func _ready() -> void:
 		_style_panel_locked = _panel_style(base, COLOR_ACCENT_LOCKED)
 		_style_panel_done = _panel_style(base, COLOR_ACCENT_DONE)
 		_style_panel_claimed = _panel_style(base, COLOR_ACCENT_CLAIMED)
-		_style_claim_disabled = _make_claim_style(Color(0.22, 0.22, 0.23, 1), Color(0.3, 0.3, 0.32, 1))
-		_style_claim_ready = _make_claim_style(Color(0.95, 0.8, 0.42, 1), Color(1, 0.93, 0.7, 1))
-		_style_claim_done = _make_claim_style(Color(0.12, 0.2, 0.21, 1), Color(0.45, 0.85, 0.88, 0.6))
+		_style_claim_disabled = _make_claim_style(Color(CYAN, 0.04), Color(CYAN, 0.15))
+		_style_claim_ready = _make_claim_style(Color(GOLD, 0.16), Color(GOLD, 0.85))
+		_style_claim_done = _make_claim_style(Color(CYAN, 0.06), Color(CYAN, 0.35))
 		_style_badge_run = _badge_style(TINT_RUN)
 		_style_badge_lifetime = _badge_style(TINT_LIFETIME)
 
@@ -83,19 +88,19 @@ func set_claimed(claimed: bool) -> void:
 func _refresh_state() -> void:
 	if _claimed:
 		_claim_label.text = "CLAIMED"
-		_claim_label.add_theme_color_override("font_color", Color(0.45, 0.85, 0.88, 0.7))
+		_claim_label.add_theme_color_override("font_color", Color(CYAN, 0.75))
 		_claim_button.add_theme_stylebox_override("panel", _style_claim_done)
 		add_theme_stylebox_override("panel", _style_panel_claimed)
 		modulate = Color(1, 1, 1, 0.75)
 	elif is_completed():
 		_claim_label.text = "CLAIM"
-		_claim_label.add_theme_color_override("font_color", Color(0.08, 0.08, 0.08, 1))
+		_claim_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.6, 1))
 		_claim_button.add_theme_stylebox_override("panel", _style_claim_ready)
 		add_theme_stylebox_override("panel", _style_panel_done)
 		modulate = Color.WHITE
 	else:
 		_claim_label.text = "CLAIM"
-		_claim_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 1))
+		_claim_label.add_theme_color_override("font_color", Color(0.45, 0.58, 0.64, 0.8))
 		_claim_button.add_theme_stylebox_override("panel", _style_claim_disabled)
 		add_theme_stylebox_override("panel", _style_panel_locked)
 		modulate = Color.WHITE
@@ -124,10 +129,10 @@ static func _panel_style(base: StyleBoxFlat, accent: Color) -> StyleBoxFlat:
 
 static func _badge_style(tint: Color) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(tint, 0.12)
-	style.border_color = Color(tint, 0.7)
+	style.bg_color = Color(tint, 0.08)
+	style.border_color = Color(tint, 0.45)
 	style.set_border_width_all(1)
-	style.set_corner_radius_all(6)
+	style.set_corner_radius_all(4)
 	style.content_margin_left = 8
 	style.content_margin_right = 8
 	style.content_margin_top = 2
@@ -139,6 +144,6 @@ static func _make_claim_style(bg: Color, border: Color) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = bg
 	style.border_color = border
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(10)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(6)
 	return style
