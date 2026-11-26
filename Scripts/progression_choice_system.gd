@@ -128,15 +128,15 @@ var h := Option.new("Wisp", {
 		beamThickness = 3.0,
 		hasLock = false
 	}
-}, "Summon a Wisp that shoots a weak laser beam towards nearest enemy. Inflicts short burn.", 'I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png", true)
+}, "Summon a Wisp that shoots a weak laser beam towards nearest enemy. Inflicts short burn.", 'I', "res://Assets/HUD Elements/OptionIcons/Wisp.png", true)
 
-var ha := Option.new("Thiccer Beam", {}, "Increase Beam Thickness and damage", 'II.I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
+var ha := Option.new("Thiccer Beam", {}, "Increase Beam Thickness and damage", 'II.I', "res://Assets/HUD Elements/OptionIcons/Wisp.png")
 
-var hb := Option.new("Quicker Strikes", {}, "Reduce Laser CD by 28%.", 'II.II', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
+var hb := Option.new("Quicker Strikes", {}, "Reduce Laser CD by 28%.", 'II.II', "res://Assets/HUD Elements/OptionIcons/Wisp.png")
 
-var hba := Option.new("Focus", {}, "Locks on and Keeps beaming an enemy until it dies. No effect on Boss.", 'III.I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
+var hba := Option.new("Focus", {}, "Locks on and Keeps beaming an enemy until it dies. No effect on Boss.", 'III.I', "res://Assets/HUD Elements/OptionIcons/Wisp.png")
 
-var hahbaa := Option.new("Eliminate", {}, "While Focus is locked on, the beam grows 20% thicker and stronger every second, up to 3x.", 'IV.I', "res://Assets/HUD Elements/OptionIcons/LaserOrb.png")
+var hahbaa := Option.new("Eliminate", {}, "While Focus is locked on, the beam grows 20% thicker and stronger every second, up to 3x.", 'IV.I', "res://Assets/HUD Elements/OptionIcons/Wisp.png")
 
 var i := Option.new("Overload", {
 	overload = true,

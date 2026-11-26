@@ -1,6 +1,7 @@
 extends Control
 
 ## Leaderboards screen, opened from the button beside the Home profile notch.
+## A full screen like Upgrades and Achievements (title, content, Home button).
 ## One tab per board (see Leaderboards.BOARDS), each listing the top 100 players
 ## with their portrait, name and value. Tapping a player opens their profile card.
 ##
@@ -22,13 +23,11 @@ const RANK_COLORS: Array[Color] = [
 ]
 const RANK_COLOR := Color(0.55, 0.7, 0.78, 0.9)
 
-@onready var _dim: ColorRect = $Dim
-@onready var _dialog: PanelContainer = $Center/Dialog
-@onready var _tabs: HBoxContainer = $Center/Dialog/VBox/Tabs
-@onready var _scroll: ScrollContainer = $Center/Dialog/VBox/ListFrame/Scroll
-@onready var _lists: VBoxContainer = $Center/Dialog/VBox/ListFrame/Scroll/Lists
-@onready var _status: Label = $Center/Dialog/VBox/ListFrame/Status
-@onready var _return_btn: Panel = $Center/Dialog/VBox/ReturnButton
+@onready var _tabs: HBoxContainer = $MarginContainer/VBoxContainer/ContentMargin/VBox/Tabs
+@onready var _scroll: ScrollContainer = $MarginContainer/VBoxContainer/ContentMargin/VBox/ListFrame/Scroll
+@onready var _lists: VBoxContainer = $MarginContainer/VBoxContainer/ContentMargin/VBox/ListFrame/Scroll/Lists
+@onready var _status: Label = $MarginContainer/VBoxContainer/ContentMargin/VBox/ListFrame/Status
+@onready var _return_btn: Panel = $MarginContainer/VBoxContainer/ReturnMargin/ReturnButton
 
 var _home: Node
 var _on_tap: Callable   # home.gd's tap handler: plays the menu sound, then runs the action
@@ -41,6 +40,9 @@ var _tab_style := _box(0.035, 0.16)
 var _tab_style_on := _box(0.16, 0.8)
 var _row_style := _box(0.03, 0.08)
 var _row_style_you := _box(0.12, 0.6)
+## Top three rows: gold, silver and copper border and fill (your own row too,
+## if you're up there).
+var _row_style_podium: Array[StyleBoxFlat] = [_podium_box(0), _podium_box(1), _podium_box(2)]
 
 
 func _ready() -> void:
@@ -49,7 +51,6 @@ func _ready() -> void:
 	_build_tabs()
 	_return_btn.gui_input.connect(_on_tap.bind(_return_btn, func(): returnPressed.emit()))
 	_status.gui_input.connect(_on_tap.bind(_status, _load))   # tap to retry
-	_play_entrance()
 	_load()
 
 
@@ -140,7 +141,10 @@ func _build_row(rank: int, entry: Dictionary, is_time: bool) -> Control:
 	var row := PanelContainer.new()
 	row.custom_minimum_size.y = ROW_HEIGHT
 	row.mouse_filter = Control.MOUSE_FILTER_PASS   # lets the list scroll from a drag
-	row.add_theme_stylebox_override("panel", _row_style_you if you else _row_style)
+	var style: StyleBoxFlat = _row_style_you if you else _row_style
+	if rank <= _row_style_podium.size():
+		style = _row_style_podium[rank - 1]
+	row.add_theme_stylebox_override("panel", style)
 
 	var hbox := HBoxContainer.new()
 	hbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -181,9 +185,12 @@ func _label(text: String, font_size: int, color: Color) -> Label:
 	return label
 
 
+## Dark navy (as the Upgrades cards) tinted towards the accent by `bg_alpha`,
+## nearly opaque so the planet behind doesn't show through the text.
 static func _box(bg_alpha: float, border_alpha: float) -> StyleBoxFlat:
 	var box := StyleBoxFlat.new()
-	box.bg_color = Color(ACCENT, bg_alpha)
+	box.bg_color = Color(0.035, 0.05, 0.075).lerp(ACCENT, bg_alpha)
+	box.bg_color.a = 0.94
 	box.border_color = Color(ACCENT, border_alpha)
 	box.set_border_width_all(1)
 	box.set_corner_radius_all(8)
@@ -192,13 +199,12 @@ static func _box(bg_alpha: float, border_alpha: float) -> StyleBoxFlat:
 	return box
 
 
-func _play_entrance() -> void:
-	_dim.modulate.a = 0.0
-	_dialog.modulate.a = 0.0
-	await get_tree().process_frame   # let the panel lay out first
-	_dialog.pivot_offset = _dialog.size * 0.5
-	_dialog.scale = Vector2(0.96, 0.96)
-	var tween := create_tween().set_parallel()
-	tween.tween_property(_dim, "modulate:a", 1.0, 0.2)
-	tween.tween_property(_dialog, "modulate:a", 1.0, 0.18)
-	tween.tween_property(_dialog, "scale", Vector2.ONE, 0.28).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+## Navy tinted with the medal colour, edged in it.
+static func _podium_box(place: int) -> StyleBoxFlat:
+	var medal: Color = RANK_COLORS[place]
+	var box := _box(0.0, 0.0)
+	box.bg_color = Color(0.035, 0.05, 0.075).lerp(medal, 0.2)
+	box.bg_color.a = 0.94
+	box.border_color = Color(medal, 0.9)
+	box.set_border_width_all(2)
+	return box
