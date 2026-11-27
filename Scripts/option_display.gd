@@ -51,6 +51,67 @@ func present_options(options: Array[Option]) -> void:
 		)
 	
 	into_display_inject_option(options[0])
+	_play_entrance()
+
+
+## Entrance: the frozen fight behind dims, the option icons pop in one after
+## another, then the card and the buttons rise into place. Taps are held off
+## until it has nearly finished, so a tap meant for the fight can't pick an
+## option by accident. Plain tweens (they run while the game is paused, as
+## this node does): no shaders, nothing left running afterwards.
+const DIM_COLOR := Color(0.0, 0.01, 0.02, 0.55)
+const ICON_STAGGER: float = 0.07
+const ICON_POP_TIME: float = 0.34
+const PANEL_RISE: float = 36.0
+const PANEL_TIME: float = 0.32
+const INPUT_DELAY: float = 0.4
+
+func _play_entrance() -> void:
+	var screen: Vector2 = get_viewport_rect().size
+	var dim := ColorRect.new()
+	dim.color = Color(DIM_COLOR, 0.0)
+	dim.position = -screen * 0.5
+	dim.size = screen
+	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(dim)
+	move_child(dim, 0)   # behind everything else here
+
+	var blocker := Control.new()
+	blocker.position = -screen * 0.5
+	blocker.size = screen
+	blocker.mouse_filter = Control.MOUSE_FILTER_STOP   # swallows taps until removed
+	add_child(blocker)
+
+	var icons: Array[Node] = iconHolder.get_children()
+	for icon: Control in icons:
+		icon.modulate.a = 0.0
+	cardDisplay.modulate.a = 0.0
+	buttonHolder.modulate.a = 0.0
+	await get_tree().process_frame   # let the icon row lay out first
+	if not is_inside_tree():
+		return
+
+	var tween := create_tween().set_parallel()
+	tween.tween_property(dim, "color:a", DIM_COLOR.a, 0.25)
+	for i in icons.size():
+		var icon: Control = icons[i]
+		if not is_instance_valid(icon):
+			continue
+		icon.pivot_offset = icon.size * 0.5
+		icon.scale = Vector2.ONE * 0.4
+		var delay: float = 0.05 + ICON_STAGGER * i
+		tween.tween_property(icon, "modulate:a", 1.0, 0.16).set_delay(delay)
+		tween.tween_property(icon, "scale", Vector2.ONE, ICON_POP_TIME).set_delay(delay) \
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	for j in 2:
+		var panel: Control = cardDisplay if j == 0 else buttonHolder
+		var rest_y: float = panel.position.y
+		panel.position.y = rest_y + PANEL_RISE
+		var delay: float = 0.12 + 0.08 * j
+		tween.tween_property(panel, "modulate:a", 1.0, 0.2).set_delay(delay)
+		tween.tween_property(panel, "position:y", rest_y, PANEL_TIME).set_delay(delay) \
+			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	get_tree().create_timer(INPUT_DELAY, true).timeout.connect(blocker.queue_free)
 
 
 func into_display_inject_option(option: Option) -> void:
