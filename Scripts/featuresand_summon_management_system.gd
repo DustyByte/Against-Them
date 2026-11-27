@@ -72,7 +72,7 @@ const CD_OPTION_FACTORS: Dictionary = {
 	"Relentless Pulse": 0.669,     # fire field tick 0.74 s -> 0.1 s
 	"Rapid Manifestation": 0.724,  # every summon: none starts more than 5x its floor
 	"Hasten The Beast": 0.724,
-	"Faster": 0.683,               # weapons: Torcher 0.4 s -> 0.06 s (Rupture 0.25 s gets there in 4)
+	"Faster": 0.8,                 # weapons: +25% attack speed a pick (cooldown / 1.25); 5 picks: Torcher 0.4 s -> 0.13 s, Rupture 0.25 s -> 0.08 s
 }
 const CD_OPTION_SHORTEN: float = 0.8   # Quicker Wildfire: fire drop -0.8 s a pick
 const RAPID_IGNITION_DAMAGE: float = 3.0   # Rapid Ignition: fire area hit damage +3 a pick
@@ -85,7 +85,59 @@ func cooldown_floor(statsKey: String, field: String = "cd") -> float:
 
 
 func is_cooldown_floored(statsKey: String, field: String = "cd") -> bool:
-	return playerStatsActiveModifiers[statsKey][field] <= cooldown_floor(statsKey, field) + 0.0001
+	return _real_cd(playerStatsActiveModifiers[statsKey], field) <= cooldown_floor(statsKey, field) + 0.0001
+
+
+# Adrenaline / Summon Adrenaline: +60% attack speed (cooldown / 1.6) for a few
+# seconds after a hit. While a boost is on, each boosted stats dictionary's
+# own (unboosted) cooldown is kept here; cooldown options picked meanwhile
+# change that value and the boosted one follows, so the boost ending puts
+# back exactly the cooldown it would have had without it.
+const ADRENALINE_ATTACK_SPEED: float = 0.6
+const ADRENALINE_TIME: float = 5.0
+var _boosts: Array = []   # [stats Dictionary, unboosted cd] pairs
+
+
+func _boost_index(s: Dictionary) -> int:
+	for i in _boosts.size():
+		if is_same(_boosts[i][0], s):
+			return i
+	return -1
+
+
+## A cooldown as it is without any running Adrenaline boost.
+func _real_cd(s: Dictionary, field: String = "cd") -> float:
+	var i: int = _boost_index(s) if field == "cd" else -1
+	return _boosts[i][1] if i != -1 else s[field]
+
+
+## Sets a cooldown's real value, keeping any running boost on top of it.
+func _set_real_cd(s: Dictionary, value: float, field: String = "cd") -> void:
+	var i: int = _boost_index(s) if field == "cd" else -1
+	if i == -1:
+		s[field] = value
+		return
+	_boosts[i][1] = value
+	s.cd = value / (1.0 + ADRENALINE_ATTACK_SPEED)
+
+
+## Starts a boost on the given stats (those already boosted are skipped) and
+## ends it ADRENALINE_TIME seconds later.
+func _boost_cooldowns(statDicts: Array) -> void:
+	var boosted: Array[Dictionary] = []
+	for s: Dictionary in statDicts:
+		if _boost_index(s) != -1:
+			continue
+		_boosts.append([s, s.cd])
+		s.cd /= 1.0 + ADRENALINE_ATTACK_SPEED
+		boosted.append(s)
+	get_tree().create_timer(ADRENALINE_TIME).timeout.connect(func():
+		for s in boosted:
+			var i: int = _boost_index(s)
+			if i != -1:
+				s.cd = _boosts[i][1]
+				_boosts.remove_at(i)
+	)
 
 
 ## Counts a pick of a cooldown option and retires it after `maxPicks` picks
@@ -122,18 +174,18 @@ func _summon_cooldown_keys() -> Array:
 ## Multiplies a summon cooldown, never going below its floor.
 func scale_cooldown(statsKey: String, factor: float, field: String = "cd") -> void:
 	var s: Dictionary = playerStatsActiveModifiers[statsKey]
-	s[field] = maxf(s[field] * factor, MIN_COOLDOWNS.get("%s.%s" % [statsKey, field], DEFAULT_MIN_COOLDOWN))
+	_set_real_cd(s, maxf(_real_cd(s, field) * factor, cooldown_floor(statsKey, field)), field)
 
 
 ## Takes seconds off a summon cooldown, never going below its floor.
 func shorten_cooldown(statsKey: String, seconds: float, field: String = "cd") -> void:
 	var s: Dictionary = playerStatsActiveModifiers[statsKey]
-	s[field] = maxf(s[field] - seconds, MIN_COOLDOWNS.get("%s.%s" % [statsKey, field], DEFAULT_MIN_COOLDOWN))
+	_set_real_cd(s, maxf(_real_cd(s, field) - seconds, cooldown_floor(statsKey, field)), field)
 
 
 ## Multiplies a weapon's cooldown (attack speed), never going below the floor.
-static func scale_weapon_cooldown(weaponStats: Dictionary, factor: float) -> void:
-	weaponStats.cd = maxf(weaponStats.cd * factor, MIN_WEAPON_COOLDOWN)
+func scale_weapon_cooldown(weaponStats: Dictionary, factor: float) -> void:
+	_set_real_cd(weaponStats, maxf(_real_cd(weaponStats) * factor, MIN_WEAPON_COOLDOWN))
 var lifeStealCount: int = 0
 var regenCount: int = 0
 
@@ -598,7 +650,7 @@ func implement_option_choice(optionChosen: Option) -> void:
 			var weaponsFloored: bool = true
 			for weapon in global.PLAYERS_WEAPON_SYSTEM.carryingWeapons:
 				scale_weapon_cooldown(weapon.stats, CD_OPTION_FACTORS[optionChosen.name])
-				if weapon.stats.cd > MIN_WEAPON_COOLDOWN + 0.0001:
+				if _real_cd(weapon.stats) > MIN_WEAPON_COOLDOWN + 0.0001:
 					weaponsFloored = false
 			optionChosen.make_immediate_children_available()
 			fasterCount += 1
@@ -703,32 +755,24 @@ func implement_option_choice(optionChosen: Option) -> void:
 					return
 				
 				isAdrenalineActive = true
+				# +60% to both speeds, then Echo's current speed follows whichever
+				# it's using (running, or walking while shooting). The current
+				# speed is never added to or taken from directly: Echo may switch
+				# between the two during the boost.
 				var addedRunSpd: float = player.RUN_SPEED * 0.6
 				var addedWalkSpd: float = player.WALK_SPEED * 0.6
-				var addedSpd: float = player.speed * 0.6
 				player.RUN_SPEED += addedRunSpd
 				player.WALK_SPEED += addedWalkSpd
-				player.speed += addedSpd
-				
-				var removedCD: Array[float] = []
-				var size: int = playerCarryingWeaponsStats.size()
-				removedCD.resize(size)
-				
-				for i in range(size):
-					var s: Dictionary = playerCarryingWeaponsStats[i]
-					var rcd: float = s.cd * 0.6
-					s.cd -= rcd
-					removedCD[i] = rcd
-				
-				get_tree().create_timer(5.0).timeout.connect(func():
+				player.speed = player.WALK_SPEED if player.isWalking else player.RUN_SPEED
+
+				# +60% attack speed; Faster or Momentum during it still count in full.
+				_boost_cooldowns(playerCarryingWeaponsStats)
+
+				get_tree().create_timer(ADRENALINE_TIME).timeout.connect(func():
 					player.RUN_SPEED -= addedRunSpd
 					player.WALK_SPEED -= addedWalkSpd
-					player.speed -= addedSpd
+					player.speed = player.WALK_SPEED if player.isWalking else player.RUN_SPEED
 					isAdrenalineActive = false
-					
-					for i in range(size):
-						var s: Dictionary = playerCarryingWeaponsStats[i]
-						s.cd += removedCD[i]
 				)
 			
 			player.got_hit.connect(method)
@@ -750,21 +794,14 @@ func implement_option_choice(optionChosen: Option) -> void:
 					return
 				
 				isSummonAdrenalineActive = true
-				var keys: Array = playerStatsActiveModifiers.keys()
-				var statDics: Array[Dictionary] = []
-				var removedAmounts: Array[float] = []
-				for key in keys:
-					var val = playerStatsActiveModifiers[key]
-					if val is Dictionary and val.has('isSummon') and val.has('cd'): # Lightning Strike has no cooldown
-						statDics.append(val)
-						var removedAmount: float = val.cd * 0.6
-						removedAmounts.append(removedAmount)
-						val.cd -= removedAmount
-				
-				get_tree().create_timer(5.0).timeout.connect(func():
-					var size: int = statDics.size()
-					for i in range(size):
-						statDics[i].cd += removedAmounts[i]
+				# +60% attack speed for every summon with a cooldown (Lightning
+				# Strike has none); cooldown options picked during it count in full.
+				var statDics: Array = []
+				for key in _summon_cooldown_keys():
+					statDics.append(playerStatsActiveModifiers[key])
+				_boost_cooldowns(statDics)
+
+				get_tree().create_timer(ADRENALINE_TIME).timeout.connect(func():
 					isSummonAdrenalineActive = false
 				)
 			

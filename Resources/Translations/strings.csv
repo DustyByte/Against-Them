@@ -386,7 +386,7 @@ PLAYER PROFILE,PLAYER PROFILE,プレイヤープロフィール
 PLEASE WAIT...,PLEASE WAIT...,お待ちください...
 PREPARING EFFECTS,PREPARING EFFECTS,エフェクトを準備中
 PRICE,PRICE,価格
-Pick Faster 6 times in one run,Pick Faster 6 times in one run,1回のランで「Faster」を6回選ぶ
+Pick Faster 5 times in one run,Pick Faster 5 times in one run,1回のランで「Faster」を5回選ぶ
 Pick Greed 5 times in one run,Pick Greed 5 times in one run,1回のランで「Greed」を5回選ぶ
 Pick a unique username and a password to make this account yours.,Pick a unique username and a password to make this account yours.,ユーザー名とパスワードを決めて、このアカウントを自分のものにしましょう。
 Picking up an exp has 0.5% chance to increases attack speed.,Picking up an exp has 0.5% chance to increases attack speed.,EXPを拾うと0.5%の確率で攻撃速度が上昇する。
@@ -554,7 +554,7 @@ Watch an ad,Watch an ad,広告を見る
 Wave %d,Wave %d,Wave %d
 Wave 999,Wave 999,Wave 999
 Wave Milestones,Wave Milestones,ウェーブ到達
-Weapon CD Reduced by 32%.,Weapon CD Reduced by 32%.,武器のクールダウンが32%短縮される。
+Increases weapon attack speed by 25%.,Increases weapon attack speed by 25%.,武器の攻撃速度が25%上昇する。
 Weapon Damage +10%,Weapon Damage +10%,武器ダメージ+10%
 Weapons,Weapons,武器
 "Weapons, enemies and pickups","Weapons, enemies and pickups",武器、敵、アイテム取得
@@ -574,3 +574,8 @@ Your username,Your username,ユーザー名
 Your username is locked in. Remember your password.,Your username is locked in. Remember your password.,ユーザー名を登録しました。パスワードを忘れないでください。
 ANIM_IDLE,IDLE,待機
 ANIM_RUN,RUN,走る
+REPORT NAME,REPORT NAME,名前を通報
+TAP AGAIN TO REPORT,TAP AGAIN TO REPORT,もう一度タップで通報
+REPORTING...,REPORTING...,通報中...
+REPORTED,REPORTED,通報済み
+COULDN'T REPORT,COULDN'T REPORT,通報できませんでした

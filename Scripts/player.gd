@@ -63,24 +63,61 @@ func get_all_enemies_in_rad(rad: float) -> Array[Node2D]:
 	return enemies
 
 
-## Registers damage and returns current HP.
-func get_hit(incomingDamage: float) -> float:
+## After a hit Echo is pushed away from whatever hit it and can't be hurt for
+## a moment (blinking while it lasts). The push starts at HIT_PUSH x 3 px/s and
+## slows by knockBackDecay a frame: about 75 px over half a second.
+const HIT_PUSH: float = 100.0
+const HIT_INVINCIBLE_TIME: float = 0.75
+const INVINCIBLE_BLINK_RATE: float = 14.0   # blinks a second
+var _invincibleTime: float = 0.0
+
+
+func is_invincible() -> bool:
+	return _invincibleTime > 0.0
+
+
+## Registers damage and returns current HP. `hitFrom` is where the hit came
+## from (the enemy or projectile): Echo is pushed the opposite way. Hits
+## during the invincible moment after a hit do nothing (no damage, no push,
+## no got_hit, so Adrenaline doesn't fire on them either).
+func get_hit(incomingDamage: float, hitFrom: Vector2 = Vector2.INF) -> float:
+	if is_invincible():
+		return stats.currentHP
 	incomingDamage *= UpgradeManager.damage_taken_multiplier() # Resilience
-	if not avatarWrapperNode.isHitAnimationPlaying:
-		avatarWrapperNode.handle_hit_animation()
-		global.activeCamera.shake(8.0)
-		
-		stats.currentHP -= incomingDamage
-		if incomingDamage > 0.0:
-			AchievementManager.register_player_damaged()
-		global.add_damage_text(global_position, incomingDamage, 5)
-		
-		global.WORLD.audio_2d_play(hitAS, global_position, "game_world", randf_range(0.75, 1.1))
-		global.vibrate_handheld(100, 0.1)
-	
+	avatarWrapperNode.handle_hit_animation()
+	global.activeCamera.shake(8.0)
+
+	stats.currentHP -= incomingDamage
+	if incomingDamage > 0.0:
+		AchievementManager.register_player_damaged()
+	global.add_damage_text(global_position, incomingDamage, 5)
+
+	global.WORLD.audio_2d_play(hitAS, global_position, "game_world", randf_range(0.75, 1.1))
+	global.vibrate_handheld(100, 0.1)
+
+	if hitFrom.is_finite():
+		var away: Vector2 = hitFrom.direction_to(global_position)
+		if away == Vector2.ZERO:
+			away = Vector2.RIGHT.rotated(randf() * TAU)
+		knockBackVelocity = Vector2.ZERO   # one clean push, not added to an old one
+		get_knocked_back(away, HIT_PUSH)
+	_invincibleTime = HIT_INVINCIBLE_TIME
+
 	got_hit.emit()
-	
+
 	return stats.currentHP
+
+
+## Counts down the invincible moment and blinks Echo while it lasts.
+func _update_invincibility(delta: float) -> void:
+	if _invincibleTime <= 0.0:
+		return
+	_invincibleTime -= delta
+	if _invincibleTime > 0.0:
+		var on: bool = fmod(_invincibleTime * INVINCIBLE_BLINK_RATE, 1.0) < 0.5
+		avatarWrapperNode.modulate.a = 1.0 if on else 0.35
+	else:
+		avatarWrapperNode.modulate.a = 1.0
 
 
 func take_heal(regenHP: float) -> void:
@@ -191,6 +228,7 @@ func _physics_process(_delta: float) -> void:
 	if knockBackVelocity:
 		knockBackVelocity = knockBackVelocity.move_toward(Vector2.ZERO, knockBackDecay)
 
+	_update_invincibility(_delta)
 	if not _touchingEnemies.is_empty():
 		_process_contact_damage(_delta)
 
@@ -200,36 +238,44 @@ func _on_hit_detection_area_body_entered(body: Node2D) -> void:
 		_touchingEnemies.append(body)
 		var incomingDamage: float = body.stats.damage
 		if body.get("leaping") == true:   # enemy 4's leap
+			if is_invincible():
+				body.end_leap()
+				return
 			incomingDamage *= body.LEAP_DAMAGE_MULTIPLIER
 			body.end_leap()
-		_contact_hit(incomingDamage)
+		_contact_hit(incomingDamage, body.global_position)
 
 
 func _on_hit_detection_area_body_exited(body: Node2D) -> void:
 	_touchingEnemies.erase(body)
 
 
-func _contact_hit(incomingDamage: float) -> void:
+func _contact_hit(incomingDamage: float, hitFrom: Vector2) -> void:
+	if is_invincible():
+		return   # the contact timer keeps running: it hits once this wears off
 	_contactDamageTimer = CONTACT_DAMAGE_INTERVAL
-	if get_hit(incomingDamage) <= 0:
+	if get_hit(incomingDamage, hitFrom) <= 0:
 		handle_death()
 
 
 ## Enemies that stay on Echo keep hurting: every CONTACT_DAMAGE_INTERVAL the
-## hardest-hitting enemy still touching deals its damage again. Runs only
-## while something is touching.
+## hardest-hitting enemy still touching deals its damage again (not while
+## Echo is invincible; then right as it ends). Runs only while something is
+## touching.
 func _process_contact_damage(delta: float) -> void:
 	_contactDamageTimer -= delta
-	if _contactDamageTimer > 0.0:
+	if _contactDamageTimer > 0.0 or is_invincible():
 		return
 	var strongest: float = -1.0
+	var hitter: Node2D = null
 	var i: int = _touchingEnemies.size() - 1
 	while i >= 0:
 		var e = _touchingEnemies[i]
 		if not is_instance_valid(e):
 			_touchingEnemies.remove_at(i)
-		elif not e.get("dead") and not e.get("shrinking"):
-			strongest = maxf(strongest, e.stats.damage)
+		elif not e.get("dead") and not e.get("shrinking") and e.stats.damage > strongest:
+			strongest = e.stats.damage
+			hitter = e
 		i -= 1
-	if strongest >= 0.0:
-		_contact_hit(strongest)
+	if hitter:
+		_contact_hit(strongest, hitter.global_position)

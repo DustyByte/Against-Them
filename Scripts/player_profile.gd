@@ -286,15 +286,47 @@ func set_avatar(index: int) -> void:
 
 # --- Server ------------------------------------------------------------------
 
-## Creates the guest account if there isn't one yet and sends any change made
-## offline. A normal launch with nothing pending makes no request at all.
+## Creates the guest account if there isn't one yet, picks up changes made on
+## the server (a username changed by moderation, or the account deleted) and
+## sends any change made offline. One small request per launch.
 func _sync() -> void:
 	if signed_out:
 		return
 	if not is_registered():
 		await _register()
+	elif not await _refresh_from_server():
+		return
 	if _avatar_unsynced and is_registered():
 		_push_avatar()
+
+
+## Reads this account from the server. Returns false if it can't be used
+## (deleted or signed in elsewhere; handled here). An unreachable server
+## changes nothing.
+func _refresh_from_server() -> bool:
+	var res := await _request(HTTPClient.METHOD_GET, "/players/me")
+	if res.code == 200:
+		if str(res.data.get("username", username)) != username or bool(res.data.get("claimed", claimed)) != claimed:
+			_apply(res.data, false)
+	elif res.code == 401:
+		handle_auth_failure(res)
+		return false
+	return true
+
+
+## Reports another player's username to the moderators. Returns true once the
+## server has it (also when this player had reported them already).
+func report_player(other_id: String) -> bool:
+	if not can_sync():
+		return false
+	if not is_registered():
+		await _register()
+		if not is_registered():
+			return false
+	var res := await _request(HTTPClient.METHOD_POST, "/players/%s/report" % other_id)
+	if res.code == 401:
+		handle_auth_failure(res)
+	return res.code == 200 or res.code == 201
 
 
 func _register() -> void:

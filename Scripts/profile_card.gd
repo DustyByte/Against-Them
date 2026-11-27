@@ -40,6 +40,14 @@ var other: Dictionary = {}
 var _on_tap: Callable   # home.gd's tap handler: plays the menu sound, then runs the action
 var _closing := false
 
+## Report button on other players' cards: first tap asks to tap again, the
+## second sends the report. Players reported this session show as reported.
+const REPORT_COLOR := Color(0.95, 0.5, 0.48)
+static var _reported_ids: Dictionary = {}
+var _report_btn: Panel = null
+var _report_armed := false
+var _reporting := false
+
 
 func _ready() -> void:
 	_on_tap = $"../.."._check_if_touch_then_execute
@@ -84,6 +92,7 @@ func _show_other() -> void:
 	_edit_btn.visible = false
 	_claim_btn.visible = false
 	_claim_gap.visible = false
+	_add_report_button()
 
 	var profile: Dictionary = await Leaderboards.get_profile(str(other.get("id", "")))
 	if not is_inside_tree():
@@ -171,6 +180,52 @@ func _on_avatar_picked(index: int) -> void:
 # --- Closing -----------------------------------------------------------------
 
 ## Backdrops swallow every touch (so nothing behind reacts) and act on a tap.
+## A copy of the Claim button in a soft red, where the Claim button sits on
+## your own card.
+func _add_report_button() -> void:
+	_report_btn = _claim_btn.duplicate()
+	var style: StyleBoxFlat = _claim_btn.get_theme_stylebox("panel").duplicate()
+	style.bg_color = Color(REPORT_COLOR, 0.08)
+	style.border_color = Color(REPORT_COLOR, 0.55)
+	_report_btn.add_theme_stylebox_override("panel", style)
+	_report_btn.visible = true
+	_report_btn.custom_minimum_size.x = 330.0   # room for "TAP AGAIN TO REPORT"
+	_claim_gap.visible = true
+	_claim_btn.add_sibling(_report_btn)
+	_report_btn.gui_input.connect(_on_tap.bind(_report_btn, _on_report_tapped))
+	_set_report_label("REPORTED" if _reported_ids.has(str(other.get("id", ""))) else "REPORT NAME")
+
+
+func _set_report_label(text: String) -> void:
+	var label: Label = _report_btn.get_node("Label")
+	label.text = text
+	var done := text == "REPORTED"
+	label.add_theme_color_override("font_color", Color(REPORT_COLOR, 0.5 if done else 1.0))
+	_report_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE if done else Control.MOUSE_FILTER_STOP
+
+
+func _on_report_tapped() -> void:
+	if _reporting:
+		return
+	if not _report_armed:
+		_report_armed = true
+		_set_report_label("TAP AGAIN TO REPORT")
+		return
+	_reporting = true
+	_set_report_label("REPORTING...")
+	var id := str(other.get("id", ""))
+	var ok: bool = await PlayerProfile.report_player(id)
+	_reporting = false
+	_report_armed = false
+	if not is_inside_tree():
+		return
+	if ok:
+		_reported_ids[id] = true
+		_set_report_label("REPORTED")
+	else:
+		_set_report_label("COULDN'T REPORT")
+
+
 func _on_backdrop_input(event: InputEvent, backdrop: Control, action: Callable) -> void:
 	if event is InputEventScreenTouch:
 		accept_event()

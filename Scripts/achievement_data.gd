@@ -171,7 +171,7 @@ const ACHIEVEMENTS: Array[Dictionary] = [
 	{ "id": "pandemic", "category": "Status Effects", "type": TYPE_RUN, "title": "Spread bleed to 20 enemies with one icicle explosion", "target": 20, "reward": 60, "stat": "best_icicle_explosion_spread" },
 
 	# Build and upgrades
-	{ "id": "faster", "category": "Build & Upgrades", "type": TYPE_RUN, "title": "Pick Faster 6 times in one run", "target": 6, "reward": 20, "stat": "best_run_faster_picks" },
+	{ "id": "faster", "category": "Build & Upgrades", "type": TYPE_RUN, "title": "Pick Faster 5 times in one run", "target": 5, "reward": 20, "stat": "best_run_faster_picks" },
 	{ "id": "greedy", "category": "Build & Upgrades", "type": TYPE_RUN, "title": "Pick Greed 5 times in one run", "target": 5, "reward": 20, "stat": "best_run_greed_picks" },
 	{ "id": "level_25", "category": "Build & Upgrades", "type": TYPE_RUN, "title": "Reach level 25 in one run", "target": 25, "reward": 20, "stat": "best_run_level" },
 	{ "id": "level_35", "category": "Build & Upgrades", "type": TYPE_RUN, "title": "Reach level 35 in one run", "target": 35, "reward": 40, "stat": "best_run_level" },

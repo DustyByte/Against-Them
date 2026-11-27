@@ -53,6 +53,6 @@ func _physics_process(delta: float) -> void:
 
 	var player: CharacterBody2D = global.PLAYER
 	if is_instance_valid(player) and global_position.distance_squared_to(player.global_position + PLAYER_CENTRE_OFFSET) < HIT_DISTANCE * HIT_DISTANCE:
-		if player.get_hit(damage) <= 0.0:
+		if player.get_hit(damage, global_position) <= 0.0:
 			player.handle_death()
 		queue_free()

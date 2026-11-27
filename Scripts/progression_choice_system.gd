@@ -178,7 +178,7 @@ var la : = Option.new("Momentum Pickups", {}, "Picking up an exp has 0.5% chance
 
 var laa := Option.new("Recycle", {}, "Picking up an exp has 5% chance to refill 1 ammo of the selected Weapon.", 'III.I', "res://Assets/HUD Elements/OptionIcons/Greed.png")
 
-var m := Option.new("Faster", {}, "Weapon CD Reduced by 32%.", 'I', "res://Assets/HUD Elements/OptionIcons/Faster.png", true)
+var m := Option.new("Faster", {}, "Increases weapon attack speed by 25%.", 'I', "res://Assets/HUD Elements/OptionIcons/Faster.png", true)
 
 var ma := Option.new('Adrenaline', {}, "Taking damage increases movement speed & attack speed by 60% for 5 seconds.", 'II.I', "res://Assets/HUD Elements/OptionIcons/Faster.png")
 
